@@ -297,9 +297,9 @@
       URI template is passed to SPARQL using a special variable binding <code>?this</code> (path
       variables from the URI template match, if any, are not used since URIs are opaque). Starting
       with the default query <code>DESCRIBE ?this</code>, we can specialize it with a graph pattern,
-      for example to include descriptions of resources connected to ?this resource. The query forms
-      are limited to <code>DESCRIBE</code> and <code>CONSTRUCT</code>, as the required result is RDF
-      graph.</para>
+      for example to include descriptions of resources connected to <code>?this</code> resource. The
+      query forms are limited to <code>DESCRIBE</code> and <code>CONSTRUCT</code>, as the required
+      result is RDF graph.</para>
 
     <para>An important feature of LDT templates is <firstterm>annotation inheritance</firstterm>,
       which enables code reuse but requires reasoning. It mimics object-oriented multiple
@@ -514,14 +514,28 @@ Content-Type: text/turtle
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp:   <http://spinrdf.org/sp#> .
 
+# ontology
 : a ldt:Ontology ;
   owl:imports ldt: .
 
+# template
 :PersonDocument a ldt:Template ;
   ldt:path "/people/{familyName}" ;
+  ldt:query :DescribeWithPrimaryTopic ;
   ldt:update :DeleteWithPrimaryTopic ;
   rdfs:isDefinedBy : .
 
+# query
+:DescribeWithPrimaryTopic a sp:Describe, ldt:Query ;
+  sp:text """PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
+DESCRIBE ?this ?primaryTopic
+WHERE
+  { ?this ?p ?o
+    OPTIONAL
+      { ?this foaf:primaryTopic ?primaryTopic }
+  }""" .
+
+# update
 :DeleteWithPrimaryTopic a sp:DeleteWhere, ldt:Update ;
   sp:text """PREFIX  foaf: <http://xmlns.com/foaf/0.1/>
 DELETE {
@@ -534,8 +548,7 @@ WHERE
       { ?this foaf:primaryTopic ?primaryTopic .
         ?primaryTopic ?primaryTopicP ?primaryTopicO
       }
-  }""" .
-]]></programlisting>
+  }""" .]]></programlisting>
 
         <para>The variable binding <code>(?this,
             &lt;http://linkeddatahub.com/people/Berners-Lee&gt;)</code> is applied on the
@@ -581,12 +594,16 @@ Location: http://linkeddatahub.com/people/Berners-Lee
 
         <para>The client can choose to follow the link to the newly created resource URI, and
           retrieve the same representation that was included with the initial <code>PUT</code>
-          request (we omit that response):</para>
+          request:</para>
 
         <programlisting language="http"><![CDATA[GET /people/Berners-Lee HTTP/1.1
 Host: linkeddatahub.com
 Accept: text/turtle
 ]]></programlisting>
+
+        <para>We omit the response, but note that the application would use the
+            <code>DESCRIBE</code> query associated with the matching template to generate the
+          representation.</para>
 
       </section>
 
