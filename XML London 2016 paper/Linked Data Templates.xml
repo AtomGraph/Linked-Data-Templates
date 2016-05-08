@@ -519,7 +519,7 @@ Content-Type: text/turtle
   owl:imports ldt: .
 
 # template
-:PersonDocument a ldt:Template ;
+:PersonDocument a rdfs:Class, ldt:Template ;
   ldt:path "/people/{familyName}" ;
   ldt:query :DescribeWithPrimaryTopic ;
   ldt:update :DeleteWithPrimaryTopic ;
