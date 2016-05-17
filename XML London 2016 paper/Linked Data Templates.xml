@@ -304,7 +304,7 @@
     <para>An important feature of LDT templates is <firstterm>annotation inheritance</firstterm>,
       which enables code reuse but requires reasoning. It mimics object-oriented multiple
       inheritance: a class inherits annotation properties from its superclasses via the
-        <code>rdfs:subClassOf</code> relation, unless it defines one or own properties of its own
+        <code>rdfs:subClassOf</code> relation, unless it defines one or more properties of its own
       which override the inherited ones. SPIN takes a similar object-oriented world-view and uses
       subclass-based inheritance.</para>
 
@@ -500,7 +500,7 @@ Content-Type: text/turtle
   foaf:primaryTopic <#this> .
 
 <#this> a foaf:Person ;
-  foaf:primaryTopic <> ;
+  foaf:isPrimaryTopicOf <> ;
   owl:sameAs <https://www.w3.org/People/Berners-Lee/card#i> .
 ]]></programlisting>
 
@@ -578,7 +578,7 @@ INSERT DATA {
   <people/Berners-Lee> a ldt:Document .
   <people/Berners-Lee> foaf:primaryTopic <people/Berners-Lee#this> .
   <people/Berners-Lee#this> a foaf:Person .
-  <people/Berners-Lee#this> foaf:primaryTopic <people/Berners-Lee> .
+  <people/Berners-Lee#this> foaf:isPrimaryTopicOf <people/Berners-Lee> .
   <people/Berners-Lee#this> owl:sameAs
 <https://www.w3.org/People/Berners-Lee/card#i> .
 }
