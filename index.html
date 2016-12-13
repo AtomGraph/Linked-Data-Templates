@@ -25,10 +25,9 @@
       dt { float: left; }
       dl a.internalDFN { font-style: italic; }
       #abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
-      #domains dt::after, #valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
+      #domains dt::after { content: "\00a0=\00a0"; font-weight: normal; }
       #functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
       #functions dd { font-style: italic; }
-      #valuation-functions dt { font-weight: normal; }
     </style>
   </head>
   <body>
@@ -206,32 +205,6 @@
       </section>
       <section id="valuation-functions">
         <h3>Valuation functions</h3>
-        <p>Evaluation of response to <a>Request</a> (over application <a>App</a>):</a></p>
-        <p>
-          <dfn>response</dfn> 	: <a>Request</a> × <a>Dataset</a>Before → <a>Response</a> × <a>Dataset</a>After
-        </p>
-        <dl>
-          <dt>response [[<a>RDFRequest</a>]]</dt>
-          <dd>response [[<a>RDFRequest</a>]] (app(iri [[RDFRequest]]))</dd>
-          <dt>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>app</a>(<a>iri</a> [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]]))</dt>
-          <dd>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dd>
-          <dt>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
-          <dd>status [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>) <a>exec</a>(<a>command</a> [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>), <a>dataset</a>(<a>App</a>))</dd>
-          <dt>command [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
-          <dd><a>apply</a>(<a>context</a>(<a>iri</a> [[<a>IRI</a>]]), <a>command</a>(<a>method</a> [[<a>Method</a>]], <a>match</a> [[<a>IRI</a>]] (<a>App</a>), <a>body</a> [[<a>Dataset</a>Request]]))</dd>
-          <dt>status [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
-          <dd>match [[<a>IRI</a>]] (<a>App</a>) = {} → <code>NotFound</code> []<br/>
-        	 method [[<a>Method</a>]] ∈ { <code>Create</code> } → <code>Created</code> []<br/>
-            method [[<a>Method</a>]] ∈ { <code>Delete</code> } → <code>NoContent</code> [] <code>OK</code></dd>
-          <dt>match [[<a>IRI</a>]] (<a>App</a>)</dt>
-          <dd>match(<a>iri</a> [[<a>IRI</a>]]) (<a>base</a>(<a>App</a>), <a>ontology</a>(<a>App</a>))</dd>
-          <dt>iri [[<a>IRI</a>]]</dt>
-          <dd><a>IRI</a></dd>
-          <dt>method [[<a>Method</a>]]</dt>
-          <dd><a>Method</a></dd>
-          <dt>body [[<a>Dataset</a>]]</dt>
-          <dd><a>Dataset</a></dd>
-        </dl>
       </section>
     </section>
     <section id="ldt-http">
