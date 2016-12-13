@@ -22,6 +22,13 @@
       };
     </script>
     <style type="text/css">
+      dt { float: left; }
+      dl a.internalDFN { font-style: italic; }
+      #abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
+      #domains dt::after, #valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
+      #functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
+      #functions dd { font-style: italic; }
+      #valuation-functions dt { font-weight: normal; }
     </style>
   </head>
   <body>
@@ -59,19 +66,19 @@
         <p>In this section we define the abstract syntax REpresentational State Transfer. It sufficient to model a RESTful read-write API independently of the transport protocol.</p>
         <dl>
           <dt><dfn>Request</dfn></dt>
-          <dd>∈ Request</dd>
+          <dd>Request</dd>
           <dt><dfn>Response</dfn></dt>
-          <dd>∈ Response</dd>
+          <dd>Response</dd>
           <dt><dfn>Body</dfn></dt>
-          <dd>∈ Message-body</dd>
+          <dd>Message-body</dd>
           <dt><dfn>MediaType</dfn></dt>
-          <dd>∈ Media-type</dd>
+          <dd>Media-type</dd>
           <dt><dfn>Status</dfn></dt>
-          <dd>∈ Status</dd>
+          <dd>Status</dd>
           <dt><dfn>IRI</dfn></dt>
-          <dd>∈ Absolute-IRI</dd>
+          <dd>Absolute-IRI</dd>
           <dt><dfn>Method</dfn></dt>
-          <dd>∈ Interaction-method</dd>
+          <dd>Interaction-method</dd>
         </dl>
         <pre class="grammar"><a>Request</a>  := <a>Method</a> <a>IRI</a> | <a>Method</a> <a>IRI</a> <a>Body</a>
 <a>Response</a> := <a>Status</a> <a>Body</a> | <a>Status</a> <a>IRI</a></pre>
@@ -81,17 +88,17 @@
         <p>In this section, we specialize the REST abstract syntax by constraining the request/response representations to syntaxes of the RDF data model.</p>
         <dl>
           <dt><dfn>RDFRequest</dfn></dt>
-          <dd>∈ RDF-Request ⊂ <a>Request</a></dd>
+          <dd>RDF-Request ⊂ <a>Request</a></dd>
           <dt><dfn>RDFResponse</dfn></dt>
-          <dd>∈ RDF-Response ⊂ <a>Response</a></dd>
+          <dd>RDF-Response ⊂ <a>Response</a></dd>
           <dt><dfn>RDFBody</dfn></dt>
-          <dd>∈ RDF-body ⊂ <a>Body</a></dd>
+          <dd>RDF-body ⊂ <a>Body</a></dd>
           <dt><dfn>RDFMediaType</dfn></dt>
-          <dd>∈ RDF-media-type ⊂ <a>MediaType</a></dd>
+          <dd>RDF-media-type ⊂ <a>MediaType</a></dd>
 		  <dt><dfn>Dataset</dfn></dt>
-          <dd>∈ RDF-dataset</dd>
+          <dd>RDF-dataset</dd>
         </dl><pre><a>RDFBody</a>     := <a>Dataset</a> <a>RDFMediaType</a>
-<a>RDFRequest</a>  := <a>Method</a> <a>IRI</a> | <a>Method</a> <a>IRI</a> <a>RDFBody</a>	
+<a>RDFRequest</a>  := <a>Method</a> <a>IRI</a> | <a>Method</a> <a>IRI</a> <a>RDFBody</a>
 <a>RDFResponse</a> := <a>Status</a> <a>RDFBody</a> | <a>Status</a> <a>IRI</a></pre>
       </section>
     </section>
@@ -101,43 +108,130 @@
         <h3>Domains</h3>
         <dl>
           <dt><a>IRI</a></dt>
-          <dd>= absolute IRI identifier</dd>
+          <dd>absolute IRI identifier</dd>
           <dt><dfn>Ontology</dfn></dt>
-          <dd>= { <a>Operation</a>1, …, <a>Operation</a>N }</dd>
+          <dd>{ <a>Operation</a>1, …, <a>Operation</a>N }</dd>
           <dt><a>Dataset</a></dt>
-          <dd>= RDF dataset</dd>
+          <dd>RDF dataset</dd>
           <dt><dfn>App</dfn></dt>
-          <dd>= <a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
+          <dd><a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
           <dt><dfn>QueryBinding</dfn></dt>
-          <dd>= Query Variable × RDFTerm</dd>
+          <dd>Query Variable × RDFTerm</dd>
           <dt><dfn>Query</dfn></dt>
-          <dd>= Describe + Construct = SPARQL query</dd>
+          <dd>Describe + Construct = SPARQL query</dd>
           <dt><dfn>Update</dfn></dt>
-          <dd>= Delete + InsertData</dd>
+          <dd>Delete + InsertData</dd>
           <dt><dfn>Command</dfn></dt>
-          <dd>= <a>Query</a> + <a>Update</a></dd>
+          <dd><a>Query</a> + <a>Update</a></dd>
           <dt><dfn>IRIPattern</dfn></dt>
-          <dd>= URI template</dd>
-          <dt><dfn>ReadCommand</dfn></dt>
-          <dd>= { <code>Read</code> } × <a>Query</a></dd>
-          <dt><dfn>WriteCommand</dfn></dt>
-          <dd>= { <code>Create</code>, <code>Delete</code>, <code>Update</code> } × <a>Update</a></dd>
+          <dd>URI template</dd>
+          <dt><dfn>ReadInvocation</dfn></dt>
+          <dd>{ <code>Read</code> } × <a>Query</a></dd>
+          <dt><dfn>WriteInvocation</dfn></dt>
+          <dd>{ <code>Create</code>, <code>Delete</code>, <code>Update</code> } × <a>Update</a></dd>
+          <dt><dfn>Invocation</dfn></dt>
+          <dd><a>ReadInvocation</a> + <a>WriteInvocation</a></dd>
           <dt><dfn>Operation</dfn></dt>
-          <dd><del>= <a>IRIPattern</a> × <a>Method</a> × <a>Command</a> × Priority</del></dd>
-          <dd>= <a>IRIPattern</a> × (<a>ReadCommand</a> + <a>WriteCommand</a>) × Priority</dd>
+          <dd><a>IRIPattern</a> × <a>Invocation</a> × Priority</dd>
+          <dd><del><a>IRIPattern</a> × <a>Method</a> × <a>Command</a> × Priority</del></dd>
           <dt><a>Status</a></dt>
-          <dd>= { <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
+          <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
           <dt><a>Method</a></dt>
-          <dd>= { <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
+          <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
           <dt><a>RDFRequest</a></dt>
-          <dd>= <a>Method</a> × <a>IRI</a> × <a>Dataset</a></dd>
+          <dd><a>Method</a> × <a>IRI</a> × <a>Dataset</a></dd>
       </dl>
       </section>
       <section id="functions">
         <h3>Functions</h3>
+        <dl>
+          <dt><dfn>absolutePath</dfn></dt>
+          <dd><a>IRI</a> → <a>IRI</a></dd>
+          <dd>absolutePath(absoluteIri) = substring-before(absoluteIri, "?") = absolutePath ∈ IRI</dd>
+          <dt><dfn>method</dfn></dt>
+          <dd><a>RDFRequest</a>↓1 → <a>Method</a>
+          <dt><dfn>iri</dfn></dt>
+          <dd><a>RDFRequest</a>↓2 → <a>IRI</a></dd>
+          <dt><dfn>data</dfn></dt>
+          <dd><a>RDFRequest</a>↓3 → <a>Dataset</a></dd>
+          <dt><dfn>base</dfn></dt>
+          <dd><a>App</a>↓1 → <a>IRI</a>
+          <dt><dfn>ontology</dfn></dt>
+          <dd><a>App</a>↓2 → <a>Ontology</a>
+          <dt><dfn>dataset</dfn></dt>
+          <dd><a>App</a>↓3 → <a>Dataset</a></dd>
+          <dt><dfn>relativize</dfn></dt>
+          <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRIrel</dfn></dd>
+          <dd>relativize(absoluteIri1, absoluteIri2) = relativeIri</dd>
+          <dt><dfn>app</dfn></dt>
+          <dd><a>IRI</a> → <a>App</a></dd>
+          <dd>app(iri) = appminPath ∈ App such that<br/>
+            fn:string-length(<a>relativize</a>(<a>base</a>(appminPath), iri)) &lt; fn:string-length(<a>relativize</a>(<a>base</a>(app), iri))<br/>
+          for all app ∈ <a>App</a> : app ≠ appminPath</dd>
+          <dt><dfn>context</dfn></dt>
+          <dd><a>IRI</a> → <a>QueryBinding</a></dd>
+          <dt><dfn>apply</dfn></dt>
+          <dd><a>Command</a> × <a>QueryBinding</a> → <a>Command</a></dd>
+          <dt><dfn>insertData</dfn></dt>
+          <dd><a>Dataset</a>Request → <a>InsertData</a></dd>
+          <dt><dfn>exec</dfn></dt>
+          <dd><a>Command</a> × <a>Dataset</a>Before → <a>Dataset</a>Result × <a>Dataset</a>After
+          <dt><dfn>execQuery</dfn></dt>
+          <dd><a>Query</a> × <a>Dataset</a>Before → <a>Dataset</a></dd>
+          <dt><dfn>execUpdate</dfn></dt>
+          <dd><a>Update</a> × <a>Dataset</a>Before → <a>Dataset</a>After
+          <dt><dfn>method</dfn></dt>
+          <dd><a>Invocation</a>↓1 → <a>Method</a></dd>
+          <dt><dfn>command</dfn></dt>
+          <dd><a>Invocation</a>↓2 → <a>Command</a></dd>
+          <dt><dfn>iriPattern</dfn></dt>
+          <dd><a>Operation</a>↓1 → <a>IRIPattern</a></dd>
+          <dt><dfn>invocation</dfn></dt>
+          <dd><a>Operation</a>↓2 → <a>Invocation</a></dd>
+          <dt><dfn>priority</dfn></dt>
+          <dd><a>Operation</a>↓3 → <a>Priority</a></dd>
+          <dt><dfn>matchIRIPattern</dfn></dt>
+          <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
+          <dt><dfn>matchrel</dfn></dt>
+          <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
+          <dd>matchrel(irirel) (Ontology) = operationmatch ∈ Ontology :<br/>
+          		<a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operationmatch)) = true</dd>
+          <dt><dfn>match</dfn></dt>
+          <dd><a>IRI</a> × <a>IRI</a>base × <a>Ontology</a> → <a>Operation</a></dd>
+          <dd>match(iri) (IRIbase, Ontology) = <a>matchrel</a>(<a>relativize</a>(IRIbase, <a>absolutePath</a>(iri))) (Ontology) = operationmatch ∈ Operation</dd>
+          <dt><dfn>command</dfn></dt>
+          <dd><a>Method</a> × <a>Template</a> × <a>Dataset</a> → <a>Command</a></dd>
+          <dd>command(method, template, dataset) = method ∈ { <code>Read</code> } → <a>query</a>(template) [] <a>data</a>(<a>update</a>(template), dataset)</dd>
+        </dl>
       </section>
       <section id="valuation-functions">
         <h3>Valuation functions</h3>
+        <p>Evaluation of response to <a>Request</a> (over application <a>App</a>):</a></p>
+        <p>
+          <dfn>response</dfn> 	: <a>Request</a> × <a>Dataset</a>Before → <a>Response</a> × <a>Dataset</a>After
+        </p>
+        <dl>
+          <dt>response [[<a>RDFRequest</a>]]</dt>
+          <dd>response [[<a>RDFRequest</a>]] (app(iri [[RDFRequest]]))</dd>
+          <dt>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>app</a>(<a>iri</a> [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]]))</dt>
+          <dd>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dd>
+          <dt>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
+          <dd>status [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>) <a>exec</a>(<a>command</a> [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>), <a>dataset</a>(<a>App</a>))</dd>
+          <dt>command [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
+          <dd><a>apply</a>(<a>context</a>(<a>iri</a> [[<a>IRI</a>]]), <a>command</a>(<a>method</a> [[<a>Method</a>]], <a>match</a> [[<a>IRI</a>]] (<a>App</a>), <a>body</a> [[<a>Dataset</a>Request]]))</dd>
+          <dt>status [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
+          <dd>match [[<a>IRI</a>]] (<a>App</a>) = {} → <code>NotFound</code> []<br/>
+        	 method [[<a>Method</a>]] ∈ { <code>Create</code> } → <code>Created</code> []<br/>
+            method [[<a>Method</a>]] ∈ { <code>Delete</code> } → <code>NoContent</code> [] <code>OK</code></dd>
+          <dt>match [[<a>IRI</a>]] (<a>App</a>)</dt>
+          <dd>match(<a>iri</a> [[<a>IRI</a>]]) (<a>base</a>(<a>App</a>), <a>ontology</a>(<a>App</a>))</dd>
+          <dt>iri [[<a>IRI</a>]]</dt>
+          <dd><a>IRI</a></dd>
+          <dt>method [[<a>Method</a>]]</dt>
+          <dd><a>Method</a></dd>
+          <dt>body [[<a>Dataset</a>]]</dt>
+          <dd><a>Dataset</a></dd>
+        </dl>
       </section>
     </section>
     <section id="ldt-http">
