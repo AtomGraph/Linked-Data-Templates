@@ -161,7 +161,7 @@
           <dt><dfn>dataset</dfn></dt>
           <dd><a>App</a>↓3 → <a>Dataset</a></dd>
           <dt><dfn>relativize</dfn></dt>
-          <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRIrel</dfn></dd>
+          <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRIrel</dfn> ⊂ <a>IRI</a></dd>
           <dd>relativize(absoluteIri1, absoluteIri2) = relativeIri</dd>
           <dt><dfn>app</dfn></dt>
           <dd><a>IRI</a> → <a>App</a></dd>
@@ -180,6 +180,8 @@
           <dd><a>Query</a> × <a>Dataset</a>Before → <a>Dataset</a></dd>
           <dt><dfn>execUpdate</dfn></dt>
           <dd><a>Update</a> × <a>Dataset</a>Before → <a>Dataset</a>After
+          <dt><dfn>join</dfn></dt>
+          <dd><a>Update</a> × <a>Update</a> → <a>Update</a>
           <dt><dfn>method</dfn></dt>
           <dd><a>Invocation</a>↓1 → <a>Method</a></dd>
           <dt><dfn>command</dfn></dt>
@@ -195,24 +197,24 @@
           <dt><dfn>matchrel</dfn></dt>
           <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>matchrel(irirel) (Ontology) = operationmatch ∈ Ontology :<br/>
-          		<a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operationmatch)) = true</dd>
+          		<a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operationmatch)) = <code>true</code></dd>
           <dt><dfn>match</dfn></dt>
           <dd><a>IRI</a> × <a>IRI</a>base × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>match(iri) (IRIbase, Ontology) = <a>matchrel</a>(<a>relativize</a>(IRIbase, <a>absolutePath</a>(iri))) (Ontology) = operationmatch ∈ Operation</dd>
-          <dt><dfn>command</dfn></dt>
-          <dd><a>Method</a> × <a>Template</a> × <a>Dataset</a> → <a>Command</a></dd>
-          <dd>command(method, template, dataset) = method ∈ { <code>Read</code> } → <a>query</a>(template) [] <a>data</a>(<a>update</a>(template), dataset)</dd>
+          <dt><dfn>build</dfn></dt>
+          <dd><a>Invocation</a> × <a>Dataset</a>Request → <a>Command</a></dd>
+          <dd>build(invocation, dataset) = invocation ∈ <a>ReadInvocation</a> → <a>command</a>(nvocation) [] <a>join</a>(<a>command</a>(invocation), <a>insertData</a>(dataset))</dd>
         </dl>
       </section>
       <section id="valuation-functions">
         <h3>Valuation functions</h3>
-        <p>Evaluation of response to <a>Request</a> (over application <a>App</a>):</a></p>
+        <p>Evaluation of response to <a>Request</a> (over application <a>App</a>):</p>
         <p>
           <dfn>response</dfn> 	: <a>Request</a> × <a>Dataset</a>Before → <a>Response</a> × <a>Dataset</a>After
         </p>
         <dl>
           <dt>response [[<a>RDFRequest</a>]]</dt>
-          <dd>response [[<a>RDFRequest</a>]] (app(iri [[RDFRequest]]))</dd>
+          <dd>response [[<a>RDFRequest</a>]] (<a>app</a>(<a>iri</a> [[RDFRequest]]))</dd>
           <dt>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>app</a>(<a>iri</a> [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]]))</dt>
           <dd>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dd>
           <dt>response [[<a>Method</a> <a>IRI</a> <a>Dataset</a>Request]] (<a>App</a>)</dt>
