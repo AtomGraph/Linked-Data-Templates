@@ -284,7 +284,7 @@
 			<a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
 		    <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
 			<a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) [] {}</dd>
-		  <dd class="ednote">Does is address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
+		  <dd class="ednote">Does this address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
 		  <dd><a>conneg</a>(request)</dd>
 		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
