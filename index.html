@@ -22,13 +22,12 @@
       };
     </script>
     <style type="text/css">
-      dt { float: left; }
-      dl a.internalDFN { font-style: italic; }
+      #abstract-syntax dt , #semantics dt { float: left; }
+      #abstract-syntax .internalDFN, #semantics .internalDFN { font-style: italic; }
       #abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
       #domains dt::after, #valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
       #functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
       #functions dd { font-style: italic; }
-      /* #valuation-functions dt { font-weight: normal; } */
 	  var { font-weight: bold; }
 	  var:before { content: "?"; }
     </style>
