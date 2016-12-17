@@ -150,6 +150,7 @@
           <dt><dfn>Operation</dfn></dt>
           <dd><a>IRIPattern</a> × <a>Invocation</a> × Priority</dd>
 		  <dt><dfn>Class</dfn></dt>
+		  <dd></dd>
       </dl>
       </section>
       <section id="functions">
@@ -229,7 +230,7 @@
           <dd><a>Operation</a>↓3 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
           <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
-		  <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation)</a> [[!JAX-RS]]</dd>
+		  <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
           <dt><dfn>matchrel</dfn></dt>
           <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
@@ -238,8 +239,8 @@
           <dd><a>IRI</a> × <a>IRI</a>base × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>match(iri, iribase, ontology) = <a>matchrel</a>(<a>relativize</a>(iribase, <a>absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
 		  <dt><dfn>appMatch</dfn></dt>
-		  <dd><a>IRI</a> × <a>App</a> → <a>Operation</a></dt></dd>
-		  <dd>appMatch(iri, app) = <a>match</a>(iri, <a>base</a>(app), <a>ontology</a>(app))</dd></dd>
+		  <dd><a>IRI</a> × <a>App</a> → <a>Operation</a></dd>
+		  <dd>appMatch(iri, app) = <a>match</a>(iri, <a>base</a>(app), <a>ontology</a>(app))</dd>
 		  <dt><dfn>type</dfn></dt>
 		  <dd><a>RDFTerm</a> → <a>Class</a></dd>
 		  <dd>type(term) = class ∈ Class</dd>
@@ -287,7 +288,7 @@
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
 		  <dd><a>conneg</a>(request)</dd>
 		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
-		  <dd><a>method</a>(request) = { <code>Create</code> } → <a>created</a>(request) [] {}</a>
+		  <dd><a>method</a>(request) = <code>Create</code> → <a>created</a>(request) [] {}</dd>
         </dl>
       </section>
     </section>
