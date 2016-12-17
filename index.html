@@ -127,8 +127,12 @@
 		  -->
           <dt><dfn>App</dfn></dt>
           <dd><a>IRI</a>Abs × <a>Ontology</a> × <a>Dataset</a></dd>
+		  <dt><dfn>QueryVariable</dfn></dt>
+		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
+		  <dt><dfn>RDFTerm</dfn></dt>
+		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn>QueryBinding</dfn></dt>
-          <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> × <a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
+          <dd><a>QueryVariable</a> × <a>RDFTerm</a></dd>
           <dt><dfn>Query</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> + <a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
           <dt><dfn>Update</dfn></dt>
@@ -145,6 +149,7 @@
           <dd><a>ReadInvocation</a> + <a>WriteInvocation</a></dd>
           <dt><dfn>Operation</dfn></dt>
           <dd><a>IRIPattern</a> × <a>Invocation</a> × Priority</dd>
+		  <dt><dfn>Class</dfn></dt>
       </dl>
       </section>
       <section id="functions">
@@ -180,8 +185,8 @@
 		    <table>
 			  <thead>
 			    <tr>
-				  <th>Variable</th>
-				  <th>RDFTerm</th>
+				  <th><a>QueryVariable</a></th>
+				  <th><a>RDFTerm</a></th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -235,6 +240,14 @@
 		  <dt><dfn>appMatch</dfn></dt>
 		  <dd><a>IRI</a> × <a>App</a> → <a>Operation</a></dt></dd>
 		  <dd>appMatch(iri, app) = <a>match</a>(iri, <a>base</a>(app), <a>ontology</a>(app))</dd></dd>
+		  <dt><dfn>type</dfn></dt>
+		  <dd><a>RDFTerm</a> → <a>Class</a></dd>
+		  <dt><dfn>skolemizeTerm</dfn></dt>
+		  <dd><a>RDFTerm</a> → <a>IRI</a></dd>
+		  <dd>skolemizeTerm(term) = build(pathTemplate(<a>type</a>(term)), propertyNames(term))</dd>
+		  <dt><dfn>skolemize</dfn></dt>
+		  <dd><a>Dataset</a> → <a>Dataset</a></dd>
+		  <dd>skolemize(dataset) = <a>skolemizeTerm</a>(bNode), bNode ∈ dataset : <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank(term)</a> = <code>true</code> [[!sparql11-query]]</dd>
 		  <dt><dfn>conneg</dfn></dt>
 		  <dd><a>RDFRequest</a> → <a>RDFMediaType</a></dd>
 		  <dd>The processor MUST implement <a>conneg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
@@ -255,18 +268,20 @@
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>IRI</a>]] (request)</dt>
           <dd><a>RDFResponse</a> [[<a>Status</a> <a>IRI</a>]] (<a>app</a>(<a>iri</a>(request))) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>RDFBody</a>]] (app) (request)</dt>
-		  <dd><a>RDFResponse</a> [[<a>Status</a>]] (request) <a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)
+		  <dd><a>RDFResponse</a> [[<a>Status</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>IRI</a>]] (app) (request)</dt>
 		  <dd><a>RDFResponse</a> [[<a>Status</a>]] (app) (request) <a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)
 		  <dt><a>RDFResponse</a> [[<a>Status</a>]] (app) (request)</dt>
           <dd><a>appMatch</a>(<a>iri</a>(request), app) = {} → <code>NotFound</code> []<br/>
-        	 <a>method</a>(request) ∈ { <code>Create</code> } → <code>Created</code> []<br/>
-             <a>method</a>(request) ∈ { <code>Delete</code> } → <code>NoContent</code> [] <code>OK</code></dd>
+        	 <a>method</a>(request) = <code>Create</code> → <code>Created</code> []<br/>
+             <a>method</a>(request) = <code>Delete</code> → <code>NoContent</code> [] <code>OK</code></dd>
           <dt><a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)</dt>
 		  <dd><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
-          <dd><a>method</a>(request) = { <code>Read</code> } → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) []<br/>
-		    <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request))))</dd>
+          <dd><a>method</a>(request) = <code>Read</code>  → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) []<br/>
+			<a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
+		    <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
+			<a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))))</dd>
 		  <dd class="ednote">Does is address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
 		  <dd><a>conneg</a>(request)</dd>
