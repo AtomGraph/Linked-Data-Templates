@@ -267,17 +267,11 @@
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
           <dd><a>method</a>(request) = { <code>Read</code> } → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) []<br/>
 		    <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request))))</dd>
-		  <dd class="ednote">Does not address <a>Dataset</a>After (<a>update</a> side-effects) properly. Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
+		  <dd class="ednote">Does is address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
 		  <dd><a>conneg</a>(request)</dd>
 		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
 		  <dd><a>method</a>(request) = { <code>Create</code> } → <a>created</a>(request) [] {}</a>
-          <dt><a>IRI</a> [[<a>IRI</a>]]</dt>
-          <dd><a>IRI</a></dd>
-		  <dt><a>Method</a> [[<a>Method</a>]]</dt>
-          <dd><a>Method</a></dd>
-          <dt><a>Dataset</a> [[<a>Dataset</a>]]</dt>
-          <dd><a>Dataset</a></dd>
         </dl>
       </section>
     </section>
