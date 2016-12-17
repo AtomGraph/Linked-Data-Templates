@@ -29,6 +29,8 @@
       #functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
       #functions dd { font-style: italic; }
       /* #valuation-functions dt { font-weight: normal; } */
+	  var { font-weight: bold; }
+	  var:before { content: "?"; }
     </style>
   </head>
   <body>
@@ -108,30 +110,34 @@
       <section id="domains">
         <h3>Domains</h3>
         <dl>
-          <dt><a>IRI</a></dt>
-          <dd>absolute IRI identifier</dd>
+          <dt><a>IRI</a>Abs</dt>
+          <dd>non-relative <a href="https://www.w3.org/TR/rdf11-concepts/#section-IRIs">IRI identifier</a> [[!rdf11-concepts]]</dd>
           <dt><a>Method</a></dt>
           <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
 		  <dt><a>Dataset</a></dt>
-          <dd>RDF dataset</dd>
+          <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
           <dt><a>RDFRequest</a></dt>
-          <dd><a>Method</a> × <a>IRI</a> × <a>Dataset</a></dd>
+          <dd><a>Method</a> × <a>IRI</a>Abs × <a>Dataset</a></dd>
 		  <dt><a>Status</a></dt>
           <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
 		  <dt><dfn>Ontology</dfn></dt>
           <dd>{ <a>Operation</a>1, …, <a>Operation</a>N }</dd>
+		  <!--
+		  <dt><dfn>Service</a></dt>
+		  <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
+		  -->
           <dt><dfn>App</dfn></dt>
-          <dd><a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
+          <dd><a>IRI</a>Abs × <a>Ontology</a> × <a>Dataset</a></dd>
           <dt><dfn>QueryBinding</dfn></dt>
-          <dd>Query Variable × RDFTerm</dd>
+          <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> × <a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn>Query</dfn></dt>
-          <dd>Describe + Construct = SPARQL query</dd>
+          <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> + <a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
           <dt><dfn>Update</dfn></dt>
-          <dd>Delete + InsertData</dd>
+          <dd><a href="https://www.w3.org/TR/sparql11-update/#delete">DELETE</a> + <a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
           <dt><dfn>Command</dfn></dt>
           <dd><a>Query</a> + <a>Update</a></dd>
           <dt><dfn>IRIPattern</dfn></dt>
-          <dd>URI template</dd>
+          <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
           <dt><dfn>ReadInvocation</dfn></dt>
           <dd>{ <code>Read</code> } × <a>Query</a></dd>
           <dt><dfn>WriteInvocation</dfn></dt>
@@ -140,19 +146,18 @@
           <dd><a>ReadInvocation</a> + <a>WriteInvocation</a></dd>
           <dt><dfn>Operation</dfn></dt>
           <dd><a>IRIPattern</a> × <a>Invocation</a> × Priority</dd>
-          <dd><del><a>IRIPattern</a> × <a>Method</a> × <a>Command</a> × Priority</del></dd>
       </dl>
       </section>
       <section id="functions">
         <h3>Functions</h3>
         <dl>
           <dt><dfn>absolutePath</dfn></dt>
-          <dd><a>IRI</a> → <a>IRI</a></dd>
-          <dd>absolutePath(absoluteIri) = substring-before(absoluteIri, "?") = absolutePath ∈ IRI</dd>
+          <dd><a>IRI</a> → <a>IRI</a>Abs</dd>
+          <dd>absolutePath(iri) = <a href="https://www.w3.org/TR/xpath-functions-3/#func-substring-before">fn:substring-before</a>(absoluteIri, "<code>?</code>") = absolutePath ∈ <a>IRI</a>Abs [[!xpath-functions-31]]</dd>
           <dt><dfn>method</dfn></dt>
-          <dd><a>RDFRequest</a>↓1 → <a>Method</a>
+          <dd><a>Request</a>↓1 → <a>Method</a>
           <dt><dfn>iri</dfn></dt>
-          <dd><a>RDFRequest</a>↓2 → <a>IRI</a></dd>
+          <dd><a>Request</a>↓2 → <a>IRI</a></dd>
           <dt><dfn>data</dfn></dt>
           <dd><a>RDFRequest</a>↓3 → <a>Dataset</a></dd>
           <dt><dfn>base</dfn></dt>
@@ -164,13 +169,38 @@
           <dt><dfn>relativize</dfn></dt>
           <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRIrel</dfn> ⊂ <a>IRI</a></dd>
           <dd>relativize(absoluteIri1, absoluteIri2) = relativeIri</dd>
+		  <dd>The processor MUST implement <a>relativize</a> as defined in <a href="https://tools.ietf.org/html/rfc3986#section-5.2">Relative Resolution</a> [[!rfc3986]].</dd>
           <dt><dfn>app</dfn></dt>
           <dd><a>IRI</a> → <a>App</a></dd>
           <dd>app(iri) = appminPath ∈ App such that<br/>
-            fn:string-length(<a>relativize</a>(<a>base</a>(appminPath), iri)) &lt; fn:string-length(<a>relativize</a>(<a>base</a>(app), iri))<br/>
-          for all app ∈ <a>App</a> : app ≠ appminPath</dd>
+            <a href="https://www.w3.org/TR/xpath-functions-3/#func-string-length">fn:string-length</a>(<a>relativize</a>(<a>base</a>(appminPath), iri)) &#8804; <a href="https://www.w3.org/TR/xpath-functions-3/#func-string-length">fn:string-length</a>(<a>relativize</a>(<a>base</a>(app), iri))<br/>
+          for all app ∈ <a>App</a> : app ≠ appminPath [[xpath-functions-31]]</dd>
           <dt><dfn>context</dfn></dt>
-          <dd><a>IRI</a> → <a>QueryBinding</a></dd>
+          <dd><a>Request</a> → <a>QueryBinding</a></dd>
+		  <dd>context(request) =
+		    <table>
+			  <thead>
+			    <tr>
+				  <th>Variable</th>
+				  <th>RDFTerm</th>
+				</tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+				  <td><var>this</var></td>
+				  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
+				</tr>
+			    <tr>
+				  <td><var>absolutePath</var></td>
+				  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
+				</tr>
+			    <tr>
+				  <td><var>requestUri</var></td>
+				  <td><a>iri</a>(request)</td>
+				</tr>
+			  </tbody>
+			</table>
+		  </dd>
           <dt><dfn>apply</dfn></dt>
           <dd><a>Command</a> × <a>QueryBinding</a> → <a>Command</a></dd>
           <dt><dfn>insertData</dfn></dt>
@@ -205,9 +235,12 @@
 		  <dt><dfn>appMatch</dfn></dt>
 		  <dd><a>IRI</a> × <a>App</a> → <a>Operation</a></dt></dd>
 		  <dd>appMatch(iri, app) = <a>match</a>(iri, <a>base</a>(app), <a>ontology</a>(app))</dd></dd>
-          <dt><dfn>build</dfn></dt>
-          <dd><a>Invocation</a> × <a>Dataset</a>Request → <a>Command</a></dd>
-          <dd>build(invocation, dataset) = invocation ∈ <a>ReadInvocation</a> → <a>command</a>(invocation) [] <a>join</a>(<a>command</a>(invocation), <a>insertData</a>(dataset))</dd>
+		  <dt><dfn>conneg</dfn></dt>
+		  <dd><a>RDFRequest</a> → <a>RDFMediaType</a></dd>
+		  <dd>The processor MUST provide an implementation of <a>conneg</a></dd>
+		  <dt><dfn>created</dfn></dt>
+		  <dd><a>RDFRequest</a> → <a>IRI</a></dd>
+		  <dd>The processor MUST provide an implementation of <a>created</a></dd>
         </dl>
       </section>
       <section id="valuation-functions">
@@ -232,15 +265,18 @@
           <dt><a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)</dt>
 		  <dd><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
-          <dd><a>method</a>(request) = { <code>Read</code> } → <a>execQuery</a>(<a>apply</a>(<a>context</a>(<a>iri</a>(request))), <a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app)))) []<br/>
-		    <a>execUpdate</a>(...) <!-- TO-DO --></dd>
+          <dd><a>method</a>(request) = { <code>Read</code> } → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) []<br/>
+		    <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request))))</dd>
+		  <dd class="ednote">Does not address <a>Dataset</a>After (<a>update</a> side-effects) properly. Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
+          <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
+		  <dd><a>conneg</a>(request)</dd>
 		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
-		  <dd>IRI [[<a>IRI</a>]]</a>
-          <dt>IRI [[<a>IRI</a>]]</dt>
+		  <dd><a>method</a>(request) = { <code>Create</code> } → <a>created</a>(request) [] {}</a>
+          <dt><a>IRI</a> [[<a>IRI</a>]]</dt>
           <dd><a>IRI</a></dd>
-		  <dt>method [[<a>Method</a>]]</dt>
+		  <dt><a>Method</a> [[<a>Method</a>]]</dt>
           <dd><a>Method</a></dd>
-          <dt>data [[<a>Dataset</a>]]</dt>
+          <dt><a>Dataset</a> [[<a>Dataset</a>]]</dt>
           <dd><a>Dataset</a></dd>
         </dl>
       </section>
