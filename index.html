@@ -35,7 +35,7 @@
   <body>
     <!-- https://www.w3.org/TR/qaframe-spec/ -->
     <section id="abstract">
-      <p>Linked Data Templates is a uniform protocol for read-write Linked Data. This document defines an abstract syntax (a data model) of Linked Data applications with SPARQL backends, and semantics of CRUD interactions against their resources. [[LINKED-DATA]][[sparql11-query]]</p>
+      <p>Linked Data Templates is a uniform protocol for read-write Linked Data. This document defines an abstract syntax (a data model) of Linked Data applications with SPARQL backends, and semantics of CRUD interactions against their resources. [[LINKED-DATA]][[sparql11-overview]]</p>
     </section>
     <section id="sotd">
     </section>
@@ -224,6 +224,7 @@
           <dd><a>Operation</a>↓3 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
           <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
+		  <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation)</a> [[!JAX-RS]]</dd>
           <dt><dfn>matchrel</dfn></dt>
           <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
