@@ -247,7 +247,7 @@
     		  <dd>type(term) = class ∈ Class</dd>
     		  <dt><dfn>skolemizeTerm</dfn></dt>
     		  <dd><a>RDFTerm</a> → <a>IRI</a></dd>
-    		  <dd>skolemizeTerm(term) = build(pathTemplate(<a>type</a>(term)), propertyNames(term))</dd>
+    		  <dd>skolemizeTerm(term) = build(pathTemplate(<a>type</a>(term)), propertyMap(term))</dd>
     		  <dt><dfn>skolemize</dfn></dt>
     		  <dd><a>Dataset</a> → <a>Dataset</a></dd>
     		  <dd>skolemize(dataset) = <a>skolemizeTerm</a>(bNode), bNode ∈ dataset : <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank(term)</a> = <code>true</code> [[!sparql11-query]]</dd>
