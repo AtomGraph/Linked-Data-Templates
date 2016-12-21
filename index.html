@@ -22,12 +22,12 @@
       };
     </script>
     <style type="text/css">
-      #abstract-syntax dt , #semantics dt { float: left; }
-      #abstract-syntax .internalDFN, #semantics .internalDFN { font-style: italic; }
-      #abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
-      #domains dt::after, #valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
-      #functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
-      #functions dd { font-style: italic; }
+      .abstract-syntax dt , .semantics dt { float: left; }
+      .abstract-syntax .internalDFN, .semantics .internalDFN { font-style: italic; }
+      .abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
+      .domains dt::after, .valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
+      .functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
+      .functions dd { font-style: italic; }
 	  var { font-weight: bold; }
 	  var:before { content: "?"; }
     </style>
@@ -39,7 +39,7 @@
     </section>
     <section id="sotd">
     </section>
-    <section id="introduction" class="informative">
+    <section id="introduction" class="introductory">
       <h2>Introduction</h2>
       <p>This document defines a precise semantics for Linked Data applications, providing a specification of how Create, Read, Update, Delete (CRUD) interactions change the state of their resources.</p>
       <figure id="architecture">
@@ -59,10 +59,10 @@
     </section>
     <section id="conformance">
     </section>
-    <section id="abstract-syntax">
+    <section id="ldt-syntax" class="abstract-syntax">
       <h2>Abstract syntax</h2>
       <p>This section defines the data model of LDT applications.</p>
-      <section id="rest">
+      <section id="rest-syntax">
         <h3>REST</h3>
         <p>In this section we define the abstract syntax REpresentational State Transfer. It sufficient to model a RESTful read-write API independently of the transport protocol.</p>
         <dl>
@@ -84,53 +84,54 @@
         <pre class="grammar"><a>Request</a>  := <a>Method</a> <a>IRI</a> | <a>Method</a> <a>IRI</a> <a>Body</a>
 <a>Response</a> := <a>Status</a> <a>Body</a> | <a>Status</a> <a>IRI</a></pre>
       </section>
-      <section id="linked-data">
+      <section id="linked-data-syntax">
         <h3>Linked Data</h3>
         <p>In this section, we specialize the REST abstract syntax by constraining the request/response representations to syntaxes of the RDF data model.</p>
         <dl>
           <dt><dfn>RDFRequest</dfn></dt>
-          <dd>RDF-Request ⊂ <a>Request</a></dd>
+          <dd>RDF-request ⊂ <a>Request</a></dd>
           <dt><dfn>RDFResponse</dfn></dt>
-          <dd>RDF-Response ⊂ <a>Response</a></dd>
+          <dd>RDF-response ⊂ <a>Response</a></dd>
           <dt><dfn>RDFBody</dfn></dt>
           <dd>RDF-body ⊂ <a>Body</a></dd>
           <dt><dfn>RDFMediaType</dfn></dt>
           <dd>RDF-media-type ⊂ <a>MediaType</a></dd>
-		  <dt><dfn>Dataset</dfn></dt>
+		      <dt><dfn>Dataset</dfn></dt>
           <dd>RDF-dataset</dd>
-        </dl><pre><a>RDFBody</a>     := <a>Dataset</a> <a>RDFMediaType</a>
+        </dl>
+        <pre><a>RDFBody</a>     := <a>Dataset</a> <a>RDFMediaType</a>
 <a>RDFRequest</a>  := <a>Method</a> <a>IRI</a> | <a>Method</a> <a>IRI</a> <a>RDFBody</a>
 <a>RDFResponse</a> := <a>Status</a> <a>RDFBody</a> | <a>Status</a> <a>IRI</a></pre>
       </section>
     </section>
-    <section id="semantics">
+    <section id="ldt-semantics" class="semantics">
       <h2>Semantics</h2>
-	  <p>We use denotational semantics as the formalism.</p>
-      <section id="domains">
+      <p>We use denotational semantics as the formalism.</p>
+      <section id="ldt-domains" class="domains">
         <h3>Domains</h3>
         <dl>
           <dt><a>IRI</a>Abs</dt>
           <dd>non-relative <a href="https://www.w3.org/TR/rdf11-concepts/#section-IRIs">IRI identifier</a> [[!rdf11-concepts]]</dd>
           <dt><a>Method</a></dt>
           <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
-		  <dt><a>Dataset</a></dt>
+	        <dt><a>Dataset</a></dt>
           <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
           <dt><a>RDFRequest</a></dt>
           <dd><a>Method</a> × <a>IRI</a>Abs × <a>Dataset</a></dd>
-		  <dt><a>Status</a></dt>
+	        <dt><a>Status</a></dt>
           <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
-		  <dt><dfn>Ontology</dfn></dt>
+	        <dt><dfn>Ontology</dfn></dt>
           <dd>{ <a>Operation</a>1, …, <a>Operation</a>N }</dd>
-		  <!--
-		  <dt><dfn>Service</a></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
-		  -->
+    		  <!--
+    		  <dt><dfn>Service</a></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
+    		  -->
           <dt><dfn>App</dfn></dt>
-          <dd><a>IRI</a>Abs × <a>Ontology</a> × <a>Dataset</a></dd>
-		  <dt><dfn>QueryVariable</dfn></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
-		  <dt><dfn>RDFTerm</dfn></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
+          <dd><a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
+    		  <dt><dfn>QueryVariable</dfn></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
+    		  <dt><dfn>RDFTerm</dfn></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn>QueryBinding</dfn></dt>
           <dd><a>QueryVariable</a> × <a>RDFTerm</a></dd>
           <dt><dfn>Query</dfn></dt>
@@ -153,7 +154,7 @@
 		  <dd></dd>
       </dl>
       </section>
-      <section id="functions">
+      <section id="ldt-functions" class="functions">
         <h3>Functions</h3>
         <dl>
           <dt><dfn>absolutePath</dfn></dt>
@@ -174,7 +175,7 @@
           <dt><dfn>relativize</dfn></dt>
           <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRIrel</dfn> ⊂ <a>IRI</a></dd>
           <dd>relativize(absoluteIri1, absoluteIri2) = relativeIri</dd>
-		  <dd>The processor MUST implement <a>relativize</a> as defined in <a href="https://tools.ietf.org/html/rfc3986#section-5.2">Relative Resolution</a> [[!rfc3986]].</dd>
+	        <dd>The processor MUST implement <a>relativize</a> as defined in <a href="https://tools.ietf.org/html/rfc3986#section-5.2">Relative Resolution</a> [[!rfc3986]].</dd>
           <dt><dfn>app</dfn></dt>
           <dd><a>IRI</a> → <a>App</a></dd>
           <dd>app(iri) = appminPath ∈ App such that<br/>
@@ -182,30 +183,30 @@
           for all app ∈ <a>App</a> : app ≠ appminPath [[xpath-functions-31]]</dd>
           <dt><dfn>context</dfn></dt>
           <dd><a>Request</a> → <a>QueryBinding</a></dd>
-		  <dd>context(request) =
-		    <table>
-			  <thead>
-			    <tr>
-				  <th><a>QueryVariable</a></th>
-				  <th><a>RDFTerm</a></th>
-				</tr>
-			  </thead>
-			  <tbody>
-			    <tr>
-				  <td><var>this</var></td>
-				  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
-				</tr>
-			    <tr>
-				  <td><var>absolutePath</var></td>
-				  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
-				</tr>
-			    <tr>
-				  <td><var>requestUri</var></td>
-				  <td><a>iri</a>(request)</td>
-				</tr>
-			  </tbody>
-			</table>
-		  </dd>
+    		  <dd>context(request) =
+    		    <table>
+    			  <thead>
+    			    <tr>
+    				  <th><a>QueryVariable</a></th>
+    				  <th><a>RDFTerm</a></th>
+    				</tr>
+    			  </thead>
+    			  <tbody>
+    			    <tr>
+    				  <td><var>this</var></td>
+    				  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
+    				</tr>
+    			    <tr>
+    				  <td><var>absolutePath</var></td>
+    				  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
+    				</tr>
+    			    <tr>
+    				  <td><var>requestUri</var></td>
+    				  <td><a>iri</a>(request)</td>
+    				</tr>
+    			  </tbody>
+    			</table>
+    		  </dd>
           <dt><dfn>apply</dfn></dt>
           <dd><a>Command</a> × <a>QueryBinding</a> → <a>Command</a></dd>
           <dt><dfn>insertData</dfn></dt>
@@ -230,7 +231,7 @@
           <dd><a>Operation</a>↓3 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
           <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
-		  <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
+	        <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
           <dt><dfn>matchrel</dfn></dt>
           <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
@@ -238,27 +239,27 @@
           <dt><dfn>match</dfn></dt>
           <dd><a>IRI</a> × <a>IRI</a>base × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>match(iri, iribase, ontology) = <a>matchrel</a>(<a>relativize</a>(iribase, <a>absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
-		  <dt><dfn>appMatch</dfn></dt>
-		  <dd><a>IRI</a> × <a>App</a> → <a>Operation</a></dd>
-		  <dd>appMatch(iri, app) = <a>match</a>(iri, <a>base</a>(app), <a>ontology</a>(app))</dd>
-		  <dt><dfn>type</dfn></dt>
-		  <dd><a>RDFTerm</a> → <a>Class</a></dd>
-		  <dd>type(term) = class ∈ Class</dd>
-		  <dt><dfn>skolemizeTerm</dfn></dt>
-		  <dd><a>RDFTerm</a> → <a>IRI</a></dd>
-		  <dd>skolemizeTerm(term) = build(pathTemplate(<a>type</a>(term)), propertyMap(term))</dd>
-		  <dt><dfn>skolemize</dfn></dt>
-		  <dd><a>Dataset</a> → <a>Dataset</a></dd>
-		  <dd>skolemize(dataset) = <a>skolemizeTerm</a>(bNode), bNode ∈ dataset : <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank(term)</a> = <code>true</code> [[!sparql11-query]]</dd>
-		  <dt><dfn>conneg</dfn></dt>
-		  <dd><a>RDFRequest</a> → <a>RDFMediaType</a></dd>
-		  <dd>The processor MUST implement <a>conneg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
-		  <dt><dfn>created</dfn></dt>
-		  <dd><a>RDFRequest</a> → <a>IRI</a></dd>
-		  <dd>The processor MUST provide an implementation of <a>created</a></dd>
+    		  <dt><dfn>appMatch</dfn></dt>
+    		  <dd><a>IRI</a> × <a>App</a> → <a>Operation</a></dd>
+    		  <dd>appMatch(iri, app) = <a>match</a>(iri, <a>base</a>(app), <a>ontology</a>(app))</dd>
+    		  <dt><dfn>type</dfn></dt>
+    		  <dd><a>RDFTerm</a> → <a>Class</a></dd>
+    		  <dd>type(term) = class ∈ Class</dd>
+    		  <dt><dfn>skolemizeTerm</dfn></dt>
+    		  <dd><a>RDFTerm</a> → <a>IRI</a></dd>
+    		  <dd>skolemizeTerm(term) = build(pathTemplate(<a>type</a>(term)), propertyNames(term))</dd>
+    		  <dt><dfn>skolemize</dfn></dt>
+    		  <dd><a>Dataset</a> → <a>Dataset</a></dd>
+    		  <dd>skolemize(dataset) = <a>skolemizeTerm</a>(bNode), bNode ∈ dataset : <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank(term)</a> = <code>true</code> [[!sparql11-query]]</dd>
+    		  <dt><dfn>conNeg</dfn></dt>
+    		  <dd><a>RDFRequest</a> → <a>RDFMediaType</a></dd>
+    		  <dd>The processor MUST implement <a>conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
+    		  <dt><dfn>created</dfn></dt>
+    		  <dd><a>RDFRequest</a> → <a>IRI</a></dd>
+    		  <dd>The processor MUST provide an implementation of <a>created</a></dd>
         </dl>
       </section>
-      <section id="valuation-functions">
+      <section id="ldt-valuation" class="valuation-functions">
         <h3>Valuation functions</h3>
         <p>Evaluation of response to request ∈ <a>RDFRequest</a>:</p>
         <p>
@@ -270,47 +271,130 @@
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>IRI</a>]] (request)</dt>
           <dd><a>RDFResponse</a> [[<a>Status</a> <a>IRI</a>]] (<a>app</a>(<a>iri</a>(request))) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>RDFBody</a>]] (app) (request)</dt>
-		  <dd><a>RDFResponse</a> [[<a>Status</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)
+	        <dd><a>RDFResponse</a> [[<a>Status</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>IRI</a>]] (app) (request)</dt>
-		  <dd><a>RDFResponse</a> [[<a>Status</a>]] (app) (request) <a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)
-		  <dt><a>RDFResponse</a> [[<a>Status</a>]] (app) (request)</dt>
+    		  <dd><a>RDFResponse</a> [[<a>Status</a>]] (app) (request) <a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)
+    		  <dt><a>RDFResponse</a> [[<a>Status</a>]] (app) (request)</dt>
           <dd><a>appMatch</a>(<a>iri</a>(request), app) = {} → <code>NotFound</code> []<br/>
-        	 <a>method</a>(request) = <code>Create</code> → <code>Created</code> []<br/>
-             <a>method</a>(request) = <code>Delete</code> → <code>NoContent</code> [] <code>OK</code></dd>
+        	   <a>method</a>(request) = <code>Create</code> → <code>Created</code> []<br/>
+             <a>method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
+             <code>OK</code>
+         </dd>
           <dt><a>RDFResponse</a> [[<a>RDFBody</a>]] (app) (request)</dt>
-		  <dd><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dd>
+	        <dd><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request) <a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
           <dd><a>method</a>(request) = <code>Read</code>  → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) []<br/>
-			<a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
-		    <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
-			<a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) [] {}</dd>
-		  <dd class="ednote">Does this address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
+            <a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
+	          <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
+		        <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>invocation</a>(<a>appMatch</a>(<a>iri</a>(request), app))), <a>context</a>(<a>iri</a>(request)))) []<br/>
+            {}</dd>
+    		  <dd class="ednote">Does this address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
-		  <dd><a>conneg</a>(request)</dd>
-		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
-		  <dd><a>method</a>(request) = <code>Create</code> → <a>created</a>(request) [] {}</dd>
+    		  <dd><a>conNeg</a>(request)</dd>
+    		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
+    		  <dd><a>method</a>(request) = <code>Create</code> → <a>created</a>(request) []<br/>
+            {}</dd>
         </dl>
       </section>
     </section>
     <section id="ldt-http">
       <h2>LDT over HTTP</h2>
+      <section id="http-syntax" class="abstract-syntax">
+        <h3>Abstract syntax</h3>
+        <dl>
+          <dt><dfn>HTTPRequest</dfn></dt>
+          <dd>HTTP-request</dd>
+          <dt><dfn>HTTPResponse</dfn></dt>
+          <dd>HTTP-response</dd>
+          <dt><dfn>HTTPStatus</dfn></dt>
+          <dd>HTTP-status</dd>
+          <dt><dfn>HTTPMethod</dfn></dt>
+          <dd>HTTP-method</dd>
+        </dl>
+        <pre><a>HTTPRequest</a>  := <a>HTTPMethod</a> <a>IRI</a> | <a>HTTPMethod</a> <a>IRI</a> <a>Body</a>
+<a>HTTPResponse</a> := <a>HTTPStatus</a> <a>Body</a> | <a>HTTPStatus</a> <a>IRI</a></pre>
+      </section>
+      <section id="http-semantics" class="semantics">
+        <h3>Semantics</h3>
+        <section id="http-domains" class="domains">
+          <h4>Domains</h4>
+          <dl>
+            <dt><dfn>HTTPRequest</dfn></dt>
+            <dd><a>HTTPMethod</a> × <a>IRI</a>Abs × <a>Body</a></dd>
+            <dt><dfn>HTTPResponse</dfn></dt>
+            <dd><a>HTTPMethod</a> × <a>IRI</a>Abs × <a>Body</a></dd>
+            <dt><dfn>HTTPStatus</dfn></dt>
+            <dd>{ <code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> }</dd>
+            <dt><dfn>HTTPMethod</dfn></dt>
+            <dd>{ <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code> }</dd>
+          </dl>
+        </section>
+        <section id="http-functions" class="functions">
+          <h4>Functions</h4>
+          <dl>
+            <dt><dfn>httpMethod</dfn></dt>
+            <dd><a>HTTPRequest</a>↓1 → <a>HTTPMethod</a></dd>
+            <dt><dfn>httpIri</dfn></dt>
+            <dd><a>HTTPRequest</a>↓2 → <a>IRI</a></dd>
+            <dt><dfn>httpBody</dfn></dt>
+            <dd><a>HTTPRequest</a>↓3 → <a>Body</a></dd>
+            <dt><dfn>httpMethodToMethod</dfn></dt>
+            <dd><a>HTTPMethod</a> → <a>Method</a></dd>
+            <dd>httpMethodToMethod(httpMethod) = httpMethod = <code>POST</code> → <code>Create</code> []<br/>
+              httpMethod = <code>GET</code> → <code>Read</code> []
+              httpMethod = <code>PUT</code> → <code>Update</code> []
+              httpMethod = <code>DELETE</code> → <code>Delete</code> []<br/>
+              {}</dd>
+            <dt><dfn>statusToHttpStatus</dfn></dt>
+            <dd><a>Status</a> → <a>HTTPStatus</a></dd>
+            <dd>statusToHttpStatus(status) = status = <code>NotFound</code> → <code>404 Not Found</code> []<br/>
+              status = <code>Created</code> → <code>201 Created</code> []<br/>
+              status = <code>NoContent</code> → <code>204 No Content</code> []<br/>
+              status = <code>OK</code> → <code>200 OK</code> []<br/>
+              {}</dd>
+          </dl>
+        </section>
+        <section id="http-valuation" class="valuation-functions">
+          <h3>Valuation functions</h3>
+          <p>Evaluation of response to request ∈ <a>HTTPRequest</a>:</p>
+          <p>
+            <dfn>HTTPResponse</dfn> : <a>HTTPRequest</a> → <a>HTTPResponse</a>
+          </p>
+          <dl>
+            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a> <a>Body</a>]] (request)</dt>
+            <dd><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (request) <a>HTTPResponse</a> [[<a>Body</a>]] (request)</dd>
+            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (request)</dt>
+            <dd><a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)) = {} → <code>405 Method Not Allowed</code> []<br/>
+              <a>httpBody</a>(httpRequest) ∉ <a>RDFBody</a> → <code>406 Not Acceptable</code> []<br/>
+              <a>statusToHttpStatus</a>(<a>RDFResponse</a> [[<a>Status</a>]] ((<a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)), <a>httpIri</a>(httpRequest), <a>httpBody</a>(httpRequest))))
+            </dd>
+            <dt><a>HTTPResponse</a> [[<a>Body</a>]] (request)</dt>
+            <dd><a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)) = {} → {} []<br/>
+              <a>httpBody</a>(httpRequest) ∉ <a>RDFBody</a> → {} []<br/>
+              <a>RDFResponse</a> [[<a>RDFBody</a>]] (<a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)), <a>httpIri</a>(httpRequest), <a>httpBody</a>(httpRequest))</dd>
+            <!-- <dd><a>httpBody</a>(request) ∈ <a>RDFBody</a> → </dd> -->
+          </dl>
+        </section>
+      </section>
+      <!--
       <section>
         <h3>Concrete syntax</h3>
         <p class="ednote">Link abstract syntax to HTTP ABNF?</p>
       </section>
-      <section id="valuation-examples">
-        <h3>Valuation examples</h3>
-		<p></p>
-        <section id="get-request">
+    -->
+      <section id="http-examples">
+        <h3>Examples</h3>
+		    <p></p>
+        <section id="get-example">
           <h4>GET request</h4>
         </section>
-        <section id="post-request">
+        <section id="post-example">
           <h4>POST request</h4>
         </section>
-        <section id="put-request">
+        <section id="put-example">
           <h4>PUT request</h4>
         </section>
-        <section id="delete-request">
+        <section id="delete-example">
           <h4>DELETE request</h4>
         </section>
       </section>
