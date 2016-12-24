@@ -30,7 +30,6 @@
       .functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
       .functions dd { font-style: italic; }
       var { font-weight: bold; }
-      var:before { content: "?"; }
     </style>
   </head>
   <body>
@@ -178,30 +177,7 @@
           for all app ∈ <a>App</a> : app ≠ appminPath [[xpath-functions-31]]</dd>
           <dt><dfn>context</dfn></dt>
           <dd><a>Request</a> → <a>QueryBinding</a></dd>
-          <dd>context(request) =
-            <table>
-              <thead>
-                <tr>
-                  <th><a>QueryVariable</a></th>
-                  <th><a>RDFTerm</a></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><var>this</var></td>
-                  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
-                </tr>
-                <tr>
-                  <td><var>absolutePath</var></td>
-                  <td><a>absolutePath</a>(<a>iri</a>(request))</td>
-                </tr>
-                <tr>
-                  <td><var>requestUri</var></td>
-                  <td><a>iri</a>(request)</td>
-                </tr>
-              </tbody>
-            </table>
-          </dd>
+          <dd>context(request) = (<var>?this</var>, <a>absolutePath</a>(<a>iri</a>(request)))</dd>
           <dt><dfn>apply</dfn></dt>
           <dd><a>Command</a> × <a>QueryBinding</a> → <a>Command</a></dd>
           <dt><dfn>insertData</dfn></dt>
