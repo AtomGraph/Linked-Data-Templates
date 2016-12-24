@@ -134,12 +134,20 @@
 		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn>QueryBinding</dfn></dt>
           <dd><a>QueryVariable</a> × <a>RDFTerm</a></dd>
-          <dt><dfn>Query</dfn></dt>
-          <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> + <a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
-          <dt><dfn>Update</dfn></dt>
-          <dd><a href="https://www.w3.org/TR/sparql11-update/#delete">DELETE</a> + <a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
-          <dt><dfn>Command</dfn></dt>
-          <dd><a>Query</a> + <a>Update</a></dd>
+          <dt><dfn>DESCRIBE</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> [[!sparql11-query]]</dd>
+		  <dt><dfn>CONSTRUCT</dfn></dt>
+		  <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
+		  <dt><dfn>Query</dfn></dt>
+          <dd><a>DESCRIBE</a> + <a>CONSTRUCT</a></dd>
+          <dt><dfn>DELETE</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/sparql11-update/#delete">DELETE</a> [[!sparql11-update]]</dd>
+		  <dt><dfn>INSERT DATA</dfn></dt>
+		  <dd><a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
+		  <dt><dfn>Update</dfn></dt>
+          <dd><a>DELETE</a> + <a>INSERT DATA</a></dd>
+		  <dt><dfn>Command</dfn></dt>
+          <dd><a>Query</a> + <a>DELETE</a></dd>
           <dt><dfn>IRIPattern</dfn></dt>
           <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
           <dt><dfn>Operation</dfn></dt>
@@ -181,7 +189,7 @@
           <dt><dfn>apply</dfn></dt>
           <dd><a>Command</a> × <a>QueryBinding</a> → <a>Command</a></dd>
           <dt><dfn>insertData</dfn></dt>
-          <dd><a>Dataset</a>Request → <a>InsertData</a></dd>
+          <dd><a>Dataset</a>Request → <a>INSERT DATA</a></dd>
           <dt><dfn>exec</dfn></dt>
           <dd><a>Command</a> × <a>Dataset</a>Before → <a>Dataset</a>Result × <a>Dataset</a>After
           <dt><dfn>execQuery</dfn></dt>
@@ -259,8 +267,8 @@
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
           <dd><a>method</a>(request) = <code>Read</code>  → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : isQuery(command), <a>context</a>(<a>iri</a>(request)))) []<br/>
             <a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
-              <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : isUpdate(command), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
-                <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : isUpdate(command), <a>context</a>(<a>iri</a>(request)))) []<br/>
+              <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : isDELETE(command), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
+                <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : isDELETE(command), <a>context</a>(<a>iri</a>(request)))) []<br/>
             {}</dd>
           <dd class="ednote">Does this address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
