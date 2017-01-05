@@ -225,7 +225,7 @@
           <dd><a>RDFTerm</a> → <a>IRI</a></dd>
           <dd>skolemizeTerm(term) = <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank</a>(term) = <code>true</code> : build(pathTemplate(<a>type</a>(term)), propertyMap(term)) []<br/>
             term [[!sparql11-query]]</dd>
-          <dd class="ednote">Skolemization definition not complete</dd>
+          <dd class="ednote">Skolemization definition not complete. See also <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Replacing Blank Nodes with IRIs</a> [[rdf11-concepts]]</dd>
           <dt><dfn>skolemize</dfn></dt>
           <dd><a>Dataset</a> → <a>Dataset</a></dd>
           <dd>skolemize(dataset) = <a>skolemizeTerm</a>(term), term ∈ dataset</dd>
