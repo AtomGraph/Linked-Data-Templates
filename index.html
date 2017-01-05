@@ -214,8 +214,8 @@
           <dt><dfn>match</dfn></dt>
           <dd><a>IRI</a> × <a>IRI</a>base × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>match(iri, iribase, ontology) = <a>matchrel</a>(<a>relativize</a>(iribase, <a>absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
-		  <dd class="ednote">Priority and conflict resolution have not been addressed yet</dd>
-		  <dt><dfn>reqMatch</dfn></dt>
+          <dd class="ednote">Priority and conflict resolution have not been addressed yet</dd>
+          <dt><dfn>reqMatch</dfn></dt>
           <dd><a>Request</a> × <a>App</a> → <a>Operation</a></dd>
           <dd>reqMatch(request, app) = <a>match</a>(<a>iri</a>(request), <a>base</a>(app), <a>ontology</a>(app))</dd>
           <dt><dfn>type</dfn></dt>
@@ -223,16 +223,19 @@
           <dd>type(term) = class ∈ Class</dd>
           <dt><dfn>skolemizeTerm</dfn></dt>
           <dd><a>RDFTerm</a> → <a>IRI</a></dd>
-          <dd>skolemizeTerm(term) = build(pathTemplate(<a>type</a>(term)), propertyMap(term))</dd>
+          <dd>skolemizeTerm(term) = <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank</a>(term) = <code>true</code> : build(pathTemplate(<a>type</a>(term)), propertyMap(term)) []<br/>
+            term [[!sparql11-query]]</dd>
+          <dd class="ednote">Skolemization definition not complete</dd>
           <dt><dfn>skolemize</dfn></dt>
           <dd><a>Dataset</a> → <a>Dataset</a></dd>
-          <dd>skolemize(dataset) = <a>skolemizeTerm</a>(bNode), bNode ∈ dataset : <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank(term)</a> = <code>true</code> [[!sparql11-query]]</dd>
+          <dd>skolemize(dataset) = <a>skolemizeTerm</a>(term), term ∈ dataset</dd>
           <dt><dfn>conNeg</dfn></dt>
           <dd><a>RDFRequest</a> → <a>RDFMediaType</a></dd>
           <dd>The processor MUST implement <a>conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
           <dt><dfn>created</dfn></dt>
           <dd><a>RDFRequest</a> → <a>IRI</a></dd>
-          <dd>The processor MUST provide an implementation of <a>created</a></dd>
+          <dd>created(rdfRequest) = iri ∈ <a>skolemize</a>(<a>data</a>(rdfRequest))</dd>
+          <dd>The processor MUST provide an implementation of <a>created</a> that satisfies the above definition</dd>
         </dl>
       </section>
       <section id="ldt-valuation" class="valuation-functions">
@@ -343,56 +346,81 @@
             <dfn>HTTPResponse</dfn> : <a>HTTPRequest</a> → <a>HTTPResponse</a>
           </p>
           <dl>
-            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a> <a>Body</a>]] (request)</dt>
-            <dd><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (request) <a>HTTPResponse</a> [[<a>Body</a>]] (request)</dd>
-            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a> <a>IRI</a>]] (request)</dt>
-            <dd><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (request) <a>HTTPResponse</a> [[<a>IRI</a>]] (request)</dd>
-            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (request)</dt>
+            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a> <a>Body</a>]] (httpRequest)</dt>
+            <dd><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (httpRequest) <a>HTTPResponse</a> [[<a>Body</a>]] (httpRequest)</dd>
+            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a> <a>IRI</a>]] (httpRequest)</dt>
+            <dd><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (httpRequest) <a>HTTPResponse</a> [[<a>IRI</a>]] (httpRequest)</dd>
+            <dt><a>HTTPResponse</a> [[<a>HTTPStatus</a>]] (httpRequest)</dt>
             <dd><a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)) = {} → <code>405 Method Not Allowed</code> []<br/>
               <a>httpBody</a>(httpRequest) ∉ <a>RDFBody</a> → <code>406 Not Acceptable</code> []<br/>
               <a>statusToHttpStatus</a>(<a>RDFResponse</a> [[<a>Status</a>]] ((<a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)), <a>httpIri</a>(httpRequest), <a>httpBody</a>(httpRequest))))
             </dd>
-            <dt><a>HTTPResponse</a> [[<a>Body</a>]] (request)</dt>
+            <dt><a>HTTPResponse</a> [[<a>Body</a>]] (httpRequest)</dt>
             <dd><a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)) = {} → {} []<br/>
               <a>httpBody</a>(httpRequest) ∉ <a>RDFBody</a> → {} []<br/>
               <a>RDFResponse</a> [[<a>RDFBody</a>]] (<a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)), <a>httpIri</a>(httpRequest), <a>httpBody</a>(httpRequest))
             </dd>
-            <dt><a>HTTPResponse</a> [[<a>IRI</a>]] (request)</dt>
+            <dt><a>HTTPResponse</a> [[<a>IRI</a>]] (httpRequest)</dt>
             <dd><a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)) = {} → {} []<br/>
               <a>RDFResponse</a> [[<a>IRI</a>]] (<a>httpMethodToMethod</a>(<a>httpMethod</a>(httpRequest)), <a>httpIri</a>(httpRequest), <a>httpBody</a>(httpRequest))
             </dd>
           </dl>
         </section>
       </section>
-      <!--
-      <section>
-        <h3>Concrete syntax</h3>
-        <p class="ednote">Link abstract syntax to HTTP ABNF?</p>
-      </section>
-    -->
-      <section id="http-examples">
-        <h3>Examples</h3>
-        <p>
-            We will use the following set members for all the subsequent response valuation examples:
-        </p>
-        <dl class="domains">
-          <dt><code>app</code> ∈ <a>App</a></dt>
-          <dd><a>app</a>(<a>iri</a>(request)) = (<code>&lt;http://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
-          <dt><code>ontology</code> ∈ <a>Ontology</a></dt>
-          <dd><a>reqMatch</a>(request, app) = { (<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>) }</dd>
-        </dl>
-        <section id="get-example">
-          <h4>GET request</h4>
-        </section>
-        <section id="post-example">
-          <h4>POST request</h4>
-        </section>
-        <section id="put-example">
-          <h4>PUT request</h4>
-        </section>
-        <section id="delete-example">
-          <h4>DELETE request</h4>
-        </section>
+    </section>
+    <section id="examples">
+      <h3>Examples</h3>
+      <p>
+          We will use the following set members for all the subsequent response valuation examples:
+      </p>
+      <dl class="domains">
+        <dt><code>app</code> ∈ <a>App</a></dt>
+        <dd><a>app</a>(<a>iri</a>(request)) = (<code>&lt;http://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
+        <dt><code>ontology</code> ∈ <a>Ontology</a></dt>
+        <dd><a>reqMatch</a>(request, app) = { (<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>) }</dd>
+      </dl>
+      <section id="put-example">
+        <h4>Create over HTTP</h4>
+        <div class="example">
+          <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
+          <pre>PUT /people/Berners-Lee HTTP/1.1
+Host: linkeddatahub.com
+Accept: text/turtle
+Content-Type: text/turtle
+
+@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
+@prefix ldt:  &lt;http://www.w3.org/ns/ldt#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+&lt;&gt; a ldt:Document ;
+  foaf:primaryTopic &lt;#this&gt; .
+
+&lt;#this&gt; a foaf:Person ;
+  foaf:isPrimaryTopicOf &lt;&gt; ;
+  owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .</pre>
+        </div>
+        <div class="example">
+          <p>Valuation of <code>putRequest</code></p>
+          <pre>HTTPResponse [[HTTPStatus Body]] (<code>putRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>putRequest</code>) HTTPResponse [[Body]] (<code>putRequest</code>) =
+statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>))))
+  RDFResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>)) =
+statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))) =
+  RDFResponse [[RDFBody]] (httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+statusToHttpStatus(RDFResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))) =
+  RDFResponse [[RDFBody]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
+  RDFResponse [[RDFBody]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
+  RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
+  RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+<code>OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+<code>OK</code> execUpdate(join(apply(command(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)) : isDelete(command), context(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+
+
+HTTPResponse [[HTTPStatus IRI]] (<code>putRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>putRequest</code>) HTTPResponse [[IRI]] (<code>putRequest</code>) =</pre>
+        </div>
       </section>
     </section>
     <section id="vocabulary">
@@ -407,7 +435,8 @@
   <strong>ldt:path = xsd:string</strong>
   <strong>ldt:query = ldt:Query</strong>
   ldt:update? = ldt:Update
-  ldt:lang? = rdf:langString
+  ldt:lang? = rdf:List(rdf:langString)
+  ldt:param* = ldt:Argument
   ldt:cacheControl? = xsd:string
   spin:constructor? = spin:Rule
   rdfs:isDefinedBy = ldt:Ontology</pre>
