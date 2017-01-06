@@ -110,18 +110,18 @@
       <section id="ldt-domains" class="domains">
         <h3>Domains</h3>
         <dl>
-          <dt><a>IRI</a>Abs</dt>
+          <dt><a>IRI</a><sub>abs</sub></dt>
           <dd>non-relative <a href="https://www.w3.org/TR/rdf11-concepts/#section-IRIs">IRI identifier</a> [[!rdf11-concepts]]</dd>
           <dt><a>Method</a></dt>
           <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
           <dt><a>Dataset</a></dt>
           <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
           <dt><a>RDFRequest</a></dt>
-          <dd><a>Method</a> × <a>IRI</a>Abs × <a>Dataset</a></dd>
+          <dd><a>Method</a> × <a>IRI</a><sub>abs</sub> × <a>Dataset</a></dd>
           <dt><a>Status</a></dt>
           <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
           <dt><dfn>Ontology</dfn></dt>
-          <dd>{ <a>Operation</a>1, …, <a>Operation</a>N }</dd>
+          <dd>{ <a>Operation</a><sub>1</sub>, …, <a>Operation</a><sub>N</sub> }  × Precedence × { <a>Ontology</a><sub>1</sub>, …, <a>Ontology</a><sub>M</sub> }</dd>
               <!--
               <dt><dfn>Service</a></dt>
               <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
@@ -160,8 +160,8 @@
         <h3>Functions</h3>
         <dl>
           <dt><dfn>absolutePath</dfn></dt>
-          <dd><a>IRI</a> → <a>IRI</a>Abs</dd>
-          <dd>absolutePath(iri) = <a href="https://www.w3.org/TR/xpath-functions-3/#func-substring-before">fn:substring-before</a>(absoluteIri, "<code>?</code>") = absolutePath ∈ <a>IRI</a>Abs [[!xpath-functions-31]]</dd>
+          <dd><a>IRI</a> → <a>IRI</a><sub>abs</sub></dd>
+          <dd>absolutePath(iri) = <a href="https://www.w3.org/TR/xpath-functions-3/#func-substring-before">fn:substring-before</a>(absoluteIri, "<code>?</code>") = absolutePath ∈ <a>IRI</a><sub>abs</sub> [[!xpath-functions-31]]</dd>
           <dt><dfn>method</dfn></dt>
           <dd><a>Request</a>↓1 → <a>Method</a>
           <dt><dfn>iri</dfn></dt>
@@ -175,7 +175,7 @@
           <dt><dfn>dataset</dfn></dt>
           <dd><a>App</a>↓3 → <a>Dataset</a></dd>
           <dt><dfn>relativize</dfn></dt>
-          <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRIrel</dfn> ⊂ <a>IRI</a></dd>
+          <dd><a>IRI</a> × <a>IRI</a> → <dfn>IRI<sub>rel</sub></dfn> ⊂ <a>IRI</a></dd>
           <dd>relativize(absoluteIri1, absoluteIri2) = relativeIri</dd>
           <dd>The processor MUST implement <a>relativize</a> as defined in <a href="https://tools.ietf.org/html/rfc3986#section-5.2">Relative Resolution</a> [[!rfc3986]].</dd>
           <dt><dfn>app</dfn></dt>
@@ -190,12 +190,14 @@
           <dd><a>Command</a> × <a>QueryBinding</a> → <a>Command</a></dd>
           <dt><dfn>insertData</dfn></dt>
           <dd><a>Dataset</a>Request → <a>InsertData</a></dd>
+          <!--
           <dt><dfn>exec</dfn></dt>
-          <dd><a>Command</a> × <a>Dataset</a>Before → <a>Dataset</a>Result × <a>Dataset</a>After
+          <dd><a>Command</a> × <a>Dataset</a><sub>before</sub> → <a>Dataset</a><sub>result</sub> × <a>Dataset</a><sub>after</sub>
+          -->
           <dt><dfn>execQuery</dfn></dt>
-          <dd><a>Query</a> × <a>Dataset</a>Before → <a>Dataset</a></dd>
+          <dd><a>Query</a> × <a>Dataset</a><sub>before</sub> → <a>Dataset</a></dd>
           <dt><dfn>execUpdate</dfn></dt>
-          <dd><a>Update</a> × <a>Dataset</a>Before → <a>Dataset</a>After
+          <dd><a>Update</a> × <a>Dataset</a><sub>before</sub> → <a>Dataset</a><sub>after</sub>
           <dt><dfn>join</dfn></dt>
           <dd><a>Update</a> × <a>Update</a> → <a>Update</a>
           <dt><dfn>method</dfn></dt>
@@ -208,7 +210,7 @@
           <dd><a>Operation</a>↓4 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
           <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
-          <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
+          <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-2_0-fr-eval-spec/jsr339-jaxrs-2.0-final-spec.pdf#page=32">Request Matching</a>, using C = <a>Ontology</a>, T<sub>Z</sub> = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
           <dt><dfn>matchrel</dfn></dt>
           <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
@@ -244,7 +246,7 @@
         <h3>Valuation functions</h3>
         <p>Evaluation of response to request ∈ <a>RDFRequest</a>:</p>
         <p>
-          <dfn>RDFResponse</dfn> : <a>RDFRequest</a> × <a>Dataset</a>Before → <a>RDFResponse</a> × <a>Dataset</a>After
+          <dfn>RDFResponse</dfn> : <a>RDFRequest</a> × <a>Dataset</a><sub>before</sub> → <a>RDFResponse</a> × <a>Dataset</a><sub>after</sub>
         </p>
         <dl>
           <dt><a>RDFResponse</a> [[<a>Status</a> <a>RDFBody</a>]] (request)</dt>
@@ -275,7 +277,7 @@
               <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>delete</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
                 <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>delete</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request)))) []<br/>
             {}</dd>
-          <dd class="ednote">Does this address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
+          <dd class="ednote">Does this address <a>Dataset</a><sub>after</sub> (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
 		  <dd><a>conNeg</a>(request)</dd>
 		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
@@ -307,9 +309,9 @@
           <h4>Domains</h4>
           <dl>
             <dt><dfn>HTTPRequest</dfn></dt>
-            <dd><a>HTTPMethod</a> × <a>IRI</a>Abs × <a>Body</a></dd>
+            <dd><a>HTTPMethod</a> × <a>IRI</a><sub>abs</sub> × <a>Body</a></dd>
             <dt><dfn>HTTPResponse</dfn></dt>
-            <dd><a>HTTPMethod</a> × <a>IRI</a>Abs × <a>Body</a></dd>
+            <dd><a>HTTPMethod</a> × <a>IRI</a><sub>abs</sub> × <a>Body</a></dd>
             <dt><dfn>HTTPStatus</dfn></dt>
             <dd>{ <code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
             <dt><dfn>HTTPMethod</dfn></dt>
@@ -438,13 +440,13 @@ RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-L
 statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
 RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+<code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), context(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+<code>200 OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), context(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>OK</code> execUpdate(join(apply(delete(<code>match</code>), (<code>?this</code>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
+<code>200 OK</code> execUpdate(join(apply(delete(<code>match</code>), (<code>?this</code>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
 
-<code>OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>)), (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+<code>200 OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>)), (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -457,7 +459,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 }</code>) <code>text/turtle</code> =
 
-<code>OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -470,7 +472,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 }</code>) <code>text/turtle</code> =
 
-<code>OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -483,7 +485,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 }</code>) <code>text/turtle</code> =
 
-<code>OK</code> execUpdate(join(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+<code>200 OK</code> execUpdate(join(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   ?this ?p ?o .
@@ -508,7 +510,7 @@ WHERE
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
   }</code>) <code>text/turtle</code> =
 
-<code>OK</code> execUpdate(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+<code>200 OK</code> execUpdate(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   ?this ?p ?o .
@@ -534,6 +536,10 @@ WHERE
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
   }</code>) <code>text/turtle</code></pre>
+        </div>
+        <div class="example">
+          <p>HTTP response</p>
+          <pre>200 OK</pre>
         </div>
       </section>
     </section>
