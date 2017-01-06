@@ -456,6 +456,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 }</code>) <code>text/turtle</code> =
+
 <code>OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
@@ -519,6 +520,7 @@ WHERE
         ?primaryTopic ?primaryTopicP ?primaryTopicO
       }
   } ;
+
   BASE    &lt;http://linkeddatahub.com/&gt;
   PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
   PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
