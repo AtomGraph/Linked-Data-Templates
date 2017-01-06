@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset='utf-8'>
@@ -128,30 +128,30 @@
               -->
           <dt><dfn>App</dfn></dt>
           <dd><a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
-		  <dt><dfn>QueryVariable</dfn></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
-		  <dt><dfn>RDFTerm</dfn></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
+    		  <dt><dfn>QueryVariable</dfn></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
+    		  <dt><dfn>RDFTerm</dfn></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn>QueryBinding</dfn></dt>
           <dd><a>QueryVariable</a> × <a>RDFTerm</a></dd>
           <dt><dfn>Describe</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> [[!sparql11-query]]</dd>
-		  <dt><dfn>Construct</dfn></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
-		  <dt><dfn>Query</dfn></dt>
+    		  <dt><dfn>Construct</dfn></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
+    		  <dt><dfn>Query</dfn></dt>
           <dd><a>Describe</a> + <a>Construct</a></dd>
           <dt><dfn>Delete</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-update/#delete">DELETE</a> [[!sparql11-update]]</dd>
-		  <dt><dfn>InsertData</dfn></dt>
-		  <dd><a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
-		  <dt><dfn>Update</dfn></dt>
+    		  <dt><dfn>InsertData</dfn></dt>
+    		  <dd><a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
+    		  <dt><dfn>Update</dfn></dt>
           <dd><a>Delete</a> + <a>InsertData</a></dd>
-		  <dt><dfn>Command</dfn></dt>
+    		  <dt><dfn>Command</dfn></dt>
           <dd><a>Query</a> + <a>Delete</a></dd>
           <dt><dfn>IRIPattern</dfn></dt>
           <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
           <dt><dfn>Operation</dfn></dt>
-          <dd><a>IRIPattern</a> × <a>Command</a> × Priority<br/>
+          <dd><a>IRIPattern</a> × <a>Query</a> × <a>Delete</a> × Priority<br/>
           <dt><dfn>Class</dfn></dt>
           <dd></dd>
       </dl>
@@ -200,10 +200,12 @@
           <dd><a>Update</a> × <a>Update</a> → <a>Update</a>
           <dt><dfn>method</dfn></dt>
           <dd><a>Operation</a>↓1 → <a>IRIPattern</a></dd>
-          <dt><dfn>command</dfn></dt>
-          <dd><a>Operation</a>↓2 → <a>Command</a></dd>
+          <dt><dfn>query</dfn></dt>
+          <dd><a>Operation</a>↓2 → <a>Query</a></dd>
+          <dt><dfn>delete</dfn></dt>
+          <dd><a>Operation</a>↓3 → <a>Delete</a></dd>
           <dt><dfn>priority</dfn></dt>
-          <dd><a>Operation</a>↓3 → <a>Priority</a></dd>
+          <dd><a>Operation</a>↓4 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
           <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
           <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=25">Request Matching</a>, using C = <a>Ontology</a>, TClass = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
@@ -230,7 +232,7 @@
           <dd><a>Dataset</a> → <a>Dataset</a></dd>
           <dd>skolemize(dataset) = <a>skolemizeTerm</a>(term), term ∈ dataset</dd>
           <dt><dfn>conNeg</dfn></dt>
-          <dd><a>RDFRequest</a> → <a>RDFMediaType</a></dd>
+          <dd><a>Request</a> → <a>MediaType</a></dd>
           <dd>The processor MUST implement <a>conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
           <dt><dfn>created</dfn></dt>
           <dd><a>RDFRequest</a> → <a>IRI</a></dd>
@@ -268,10 +270,10 @@
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (request)</dt>
           <dd><a>RDFResponse</a> [[<a>Dataset</a>]] (<a>app</a>(<a>iri</a>(request))) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
-          <dd><a>method</a>(request) = <code>Read</code>  → <a>execQuery</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : is<a>Query</a>(command), <a>context</a>(<a>iri</a>(request)))) []<br/>
+          <dd><a>method</a>(request) = <code>Read</code>  → <a>execQuery</a>(<a>apply</a>(<a>query</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request)))) []<br/>
             <a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
-              <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : is<a>Delete</a>(command), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
-                <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>command</a>(<a>reqMatch</a>(request, app)) : is<a>Delete</a>(command), <a>context</a>(<a>iri</a>(request)))) []<br/>
+              <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>delete</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
+                <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>delete</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request)))) []<br/>
             {}</dd>
           <dd class="ednote">Does this address <a>Dataset</a>After (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
@@ -376,8 +378,22 @@
       <dl class="domains">
         <dt><code>app</code> ∈ <a>App</a></dt>
         <dd><a>app</a>(<a>iri</a>(request)) = (<code>&lt;http://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
-        <dt><code>ontology</code> ∈ <a>Ontology</a></dt>
-        <dd><a>reqMatch</a>(request, app) = { (<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>) }</dd>
+        <dt><code>match</code> ∈ <a>Operation</a></dt>
+        <dd><a>reqMatch</a>(request, app) = (<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>0</code>)</dd>
+        <dt><code>deleteWithTopic</code> ∈ <a>Delete</a></dt>
+        <dd><pre><code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE {
+  ?this ?p ?o .
+  ?primaryTopic ?primaryTopicP ?primaryTopicO .
+}
+WHERE
+  { ?this ?p ?o
+    OPTIONAL
+      { ?this foaf:primaryTopic ?primaryTopic .
+        ?primaryTopic ?primaryTopicP ?primaryTopicO
+      }
+  }</code></pre></dd>
       </dl>
       <section id="put-example">
         <h4>Update over HTTP</h4>
@@ -403,23 +419,118 @@ Content-Type: text/turtle
         <div class="example">
           <p>Valuation of <code>putRequest</code></p>
           <pre>HTTPResponse [[HTTPStatus Body]] (<code>putRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>putRequest</code>) HTTPResponse [[Body]] (<code>putRequest</code>) =
+
 statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>))))
-  RDFResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>)) =
-statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))) =
-  RDFResponse [[RDFBody]] (httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
-statusToHttpStatus(RDFResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))) =
-  RDFResponse [[RDFBody]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+RDFResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>)) =
+
+statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+RDFResponse [[RDFBody]] (httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+
+statusToHttpStatus(RDFResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+RDFResponse [[RDFBody]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+
 statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-  RDFResponse [[RDFBody]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+RDFResponse [[RDFBody]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+
 statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-  RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+
 statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-  RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+
 <code>OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
-<code>OK</code> execUpdate(join(apply(command(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)) : isDelete(command), context(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
+<code>OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), context(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-HTTPResponse [[HTTPStatus IRI]] (<code>putRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>putRequest</code>) HTTPResponse [[IRI]] (<code>putRequest</code>) =</pre>
+<code>OK</code> execUpdate(join(apply(delete(<code>match</code>), (<code>?this</code>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
+
+<code>OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>)), (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+INSERT DATA {
+  &lt;people/Berners-Lee&gt; a ldtc:Document .
+  &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
+  &lt;people/Berners-Lee#this&gt; a foaf:Person .
+  &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
+  &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+}</code>) <code>text/turtle</code> =
+<code>OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+INSERT DATA {
+  &lt;people/Berners-Lee&gt; a ldtc:Document .
+  &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
+  &lt;people/Berners-Lee#this&gt; a foaf:Person .
+  &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
+  &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+}</code>) <code>text/turtle</code> =
+
+<code>OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+INSERT DATA {
+  &lt;people/Berners-Lee&gt; a ldtc:Document .
+  &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
+  &lt;people/Berners-Lee#this&gt; a foaf:Person .
+  &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
+  &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+}</code>) <code>text/turtle</code> =
+<code>OK</code> execUpdate(join(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE {
+  ?this ?p ?o .
+  ?primaryTopic ?primaryTopicP ?primaryTopicO .
+}
+WHERE
+  { ?this ?p ?o
+    OPTIONAL
+      { ?this foaf:primaryTopic ?primaryTopic .
+        ?primaryTopic ?primaryTopicP ?primaryTopicO
+      }
+  }</code>), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+  PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+  PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+  PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+  INSERT DATA {
+    &lt;people/Berners-Lee&gt; a ldtc:Document .
+    &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
+    &lt;people/Berners-Lee#this&gt; a foaf:Person .
+    &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
+    &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+  }</code>) <code>text/turtle</code> =
+
+<code>OK</code> execUpdate(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE {
+  ?this ?p ?o .
+  ?primaryTopic ?primaryTopicP ?primaryTopicO .
+}
+WHERE
+  { ?this ?p ?o
+    OPTIONAL
+      { ?this foaf:primaryTopic ?primaryTopic .
+        ?primaryTopic ?primaryTopicP ?primaryTopicO
+      }
+  } ;
+  BASE    &lt;http://linkeddatahub.com/&gt;
+  PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+  PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+  PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+  INSERT DATA {
+    &lt;people/Berners-Lee&gt; a ldtc:Document .
+    &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
+    &lt;people/Berners-Lee#this&gt; a foaf:Person .
+    &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
+    &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+  }</code>) <code>text/turtle</code></pre>
         </div>
       </section>
     </section>
