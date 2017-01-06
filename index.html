@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset='utf-8'>
@@ -431,13 +431,13 @@ RDFResponse [[RDFBody]] (httpMethodToMethod(<code>PUT</code>), <code>&lt;http://
 statusToHttpStatus(RDFResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
 RDFResponse [[RDFBody]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
+statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
 RDFResponse [[RDFBody]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
+statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
 RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
+statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
 RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
 <code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
@@ -457,7 +457,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; a foaf:Person .
   &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-}</code>) <code>text/turtle</code> =
+}</code>)) <code>text/turtle</code> =
 
 <code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
@@ -470,7 +470,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; a foaf:Person .
   &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-}</code>) <code>text/turtle</code> =
+}</code>)) <code>text/turtle</code> =
 
 <code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
@@ -483,7 +483,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; a foaf:Person .
   &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-}</code>) <code>text/turtle</code> =
+}</code>)) <code>text/turtle</code> =
 
 <code>200 OK</code> execUpdate(join(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -497,7 +497,7 @@ WHERE
       { ?this foaf:primaryTopic ?primaryTopic .
         ?primaryTopic ?primaryTopicP ?primaryTopicO
       }
-  }</code>), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+  }</code>, <code>BASE    &lt;http://linkeddatahub.com/&gt;
   PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
   PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
   PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -508,7 +508,7 @@ WHERE
     &lt;people/Berners-Lee#this&gt; a foaf:Person .
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-  }</code>) <code>text/turtle</code> =
+  }</code>)) <code>text/turtle</code> =
 
 <code>200 OK</code> execUpdate(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
