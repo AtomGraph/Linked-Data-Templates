@@ -48,13 +48,23 @@
       </figure>
       <section>
         <h3>Applications</h3>
-        <p>An LDT application represents a data space identified by its base URI, in which application resource URIs are relative to the base URI. The only external interface an application provides is RESTful Linked Data: application produces RDF representations when resource URIs are dereferenced, and consumes RDF representations when requested to change resource state.</p>
+        <p>An LDT application represents a data space identified by its base URI, in which application resource URIs are relative to the base URI. The only interface an application provides is RESTful Linked Data: application produces RDF representations when resource URIs are dereferenced,
+          and consumes RDF representations when requested to change resource state.</p>
       </section>
       <section>
         <h3>Services</h3>
+        <p>A service is a datasource from which an LDT application retrieves, and in which it stores RDF data with resource representations. The only interface a service MUST provide is SPARQL 1.1 Protocol [[[!sparql11-protocol]]]. That way an application is agnostic to the service implementation
+          details: it can be a native RDF triplestore, an RDBMS or XML database with an RDF wrapper, or any other compliant datasource.</p>
       </section>
       <section>
         <h3>Ontologies</h3>
+        <p>An ontology is an efficient way to define application structure declaratively as a set of instructions for resource representation processing. LDT application uses a single RDF ontology to define operations specific to that application. Ontologies can be exposed and dereferenced,
+          as well as imported and reused by other LDT applications or third-party software.</p>
+      </section>
+      <section>
+        <h3>Operations</h3>
+        <p>An operation maps a certain part of the application URI space to a certain SPARQL command. During request processing, an LDT processor selects a single best-matching operation (if such exists) that drives the RDF CRUD processing. Operations defined using the
+          <a href="#vocabulary">LDT vocabulary</a>, while the SPARQL commands are defined using SPIN RDF syntax.</p>
       </section>
     </section>
     <section id="conformance">
@@ -128,6 +138,7 @@
               -->
           <dt><dfn>App</dfn></dt>
           <dd><a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
+          <dd class="ednote">Here we define an ontology with a <a>Dataset</a>, yet the implementation/vocabulary uses a Service which is an interface for the Dataset.</dd>
     		  <dt><dfn>QueryVariable</dfn></dt>
     		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
     		  <dt><dfn>RDFTerm</dfn></dt>
@@ -168,6 +179,12 @@
           <dd><a>Request</a>↓2 → <a>IRI</a></dd>
           <dt><dfn>data</dfn></dt>
           <dd><a>RDFRequest</a>↓3 → <a>Dataset</a></dd>
+          <dt><dfn>operations</dfn></dt>
+          <dd><a>Ontology</a>↓1 → { <a>Operation</a><sub>1</sub>, …, <a>Operation</a><sub>N</sub> }</dd>
+          <dt><dfn>precedence</dfn></dt>
+          <dd><a>Ontology</a>↓2 → Precedence</dd>
+          <dt><dfn>imports</dfn></dt>
+          <dd><a>Ontology</a>↓3 → { <a>Ontology</a><sub>1</sub>, …, <a>Ontology</a><sub>M</sub> }</dd>
           <dt><dfn>base</dfn></dt>
           <dd><a>App</a>↓1 → <a>IRI</a>
           <dt><dfn>ontology</dfn></dt>
@@ -209,10 +226,10 @@
           <dt><dfn>priority</dfn></dt>
           <dd><a>Operation</a>↓4 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
-          <dd><a>IRIrel</a> × <a>IRIPattern</a> → Boolean</dd>
+          <dd><a>IRI</a><sub>rel</sub> × <a>IRIPattern</a> → Boolean</dd>
           <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-2_0-fr-eval-spec/jsr339-jaxrs-2.0-final-spec.pdf#page=32">Request Matching</a>, using C = <a>Ontology</a>, T<sub>Z</sub> = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
           <dt><dfn>matchrel</dfn></dt>
-          <dd><a>IRIrel</a> × <a>Ontology</a> → <a>Operation</a></dd>
+          <dd><a>IRI</a><sub>rel</sub> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
             <a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operationmatch)) = <code>true</code></dd>
           <dt><dfn>match</dfn></dt>
