@@ -29,6 +29,9 @@
       .domains dt::after, .valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
       .functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
       .functions dd { font-style: italic; }
+      table { width: 100%; border: 1px solid black; border-collapse: collapse; }
+      table th, table td { border: 1px solid black; padding: 3px; }
+      table#template-core-vocab td:nth-child(2), table#template-core-vocab td:nth-child(3), table#template-core-vocab td:nth-child(4), table#template-core-vocab td:nth-child(5) { font-family: monospace; }
       var { font-weight: bold; }
     </style>
   </head>
@@ -217,7 +220,7 @@
           <dd><a>Update</a> × <a>Dataset</a><sub>before</sub> → <a>Dataset</a><sub>after</sub>
           <dt><dfn>join</dfn></dt>
           <dd><a>Update</a> × <a>Update</a> → <a>Update</a>
-          <dt><dfn>method</dfn></dt>
+          <dt><dfn>iriPattern</dfn></dt>
           <dd><a>Operation</a>↓1 → <a>IRIPattern</a></dd>
           <dt><dfn>query</dfn></dt>
           <dd><a>Operation</a>↓2 → <a>Query</a></dd>
@@ -562,11 +565,80 @@ WHERE
     </section>
     <section id="vocabulary">
       <h3>Vocabulary</h3>
-      <section id="application">
+      <section>
         <h4>Application</h4>
       </section>
-      <section id="template">
+      <section>
         <h4>Template</h4>
+        <table id="template-core-vocab">
+          <caption>Core</caption>
+          <thead>
+            <tr>
+              <th colspan="2">Domain</th>
+              <th>Property</th>
+              <th>Cardinality</th>
+              <th colspan="2">Range</th>
+              <th>Required</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td><strong>ldt:path</strong></td>
+              <td>1</td>
+              <td>xsd:string</td>
+              <td><a>IRIPattern</a></td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td><strong>ldt:query</strong></td>
+              <td>1</td>
+              <td>ldt:Query</td>
+              <td><a>Query</a></td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td><strong>rdfs:isDefinedBy</strong></td>
+              <td>1</td>
+              <td>ldt:Ontology</td>
+              <td><a>Ontology</a></td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td>ldt:update</td>
+              <td>?</td>
+              <td>ldt:Update</td>
+              <td><a>Update</a></td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td>ldt:param</td>
+              <td>*</td>
+              <td>ldt:Argument</td>
+              <td><a>Argument</a></td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td>rdfs:subClassOf</td>
+              <td>*</td>
+              <td>rdfs:Class</td>
+              <td><a>Operation</a></td>
+              <td>No</td>
+            </tr>
+          </tbody>
+        </table>
+
         <pre><strong>ldt:Template</strong>
   rdfs:subClassOf* = rdfs:Class
   <strong>ldt:path = xsd:string</strong>
