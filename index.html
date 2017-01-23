@@ -31,7 +31,8 @@
       .functions dd { font-style: italic; }
       table { width: 100%; border: 1px solid black; border-collapse: collapse; }
       table th, table td { border: 1px solid black; padding: 3px; }
-      table#template-core-vocab td:nth-child(2), table#template-core-vocab td:nth-child(3), table#template-core-vocab td:nth-child(4), table#template-core-vocab td:nth-child(5) { font-family: monospace; }
+      table.core-vocab td:nth-child(2), table.core-vocab td:nth-child(3), table.core-vocab td:nth-child(4), table.core-vocab td:nth-child(6) { font-family: monospace; }
+      table.http-vocab td:nth-child(2), table.http-vocab td:nth-child(3), table.http-vocab td:nth-child(4), table.http-vocab td:nth-child(5) { font-family: monospace; }
       var { font-weight: bold; }
     </style>
   </head>
@@ -565,20 +566,21 @@ WHERE
     </section>
     <section id="vocabulary">
       <h3>Vocabulary</h3>
+	  <p>The namespace URI of the LDT vocabulary is <code>http://www.w3.org/ns/ldt#</code>.</p>	
       <section>
         <h4>Application</h4>
+		<p class="ednote">Applications are orthogonal to templates. Does it make sense to put them under the same namespace?</p>	
       </section>
       <section>
         <h4>Template</h4>
-        <table id="template-core-vocab">
+        <table class="core-vocab">
           <caption>Core</caption>
           <thead>
             <tr>
               <th colspan="2">Domain</th>
               <th>Property</th>
-              <th>Cardinality</th>
               <th colspan="2">Range</th>
-              <th>Required</th>
+			  <th>Cardinality</th>
             </tr>
           </thead>
           <tbody>
@@ -586,69 +588,84 @@ WHERE
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td><strong>ldt:path</strong></td>
-              <td>1</td>
               <td>xsd:string</td>
               <td><a>IRIPattern</a></td>
-              <td>Yes</td>
+              <td>1</td>
             </tr>
             <tr>
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td><strong>ldt:query</strong></td>
-              <td>1</td>
               <td>ldt:Query</td>
               <td><a>Query</a></td>
-              <td>Yes</td>
+              <td>1</td>
             </tr>
             <tr>
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td><strong>rdfs:isDefinedBy</strong></td>
-              <td>1</td>
               <td>ldt:Ontology</td>
               <td><a>Ontology</a></td>
-              <td>Yes</td>
+              <td>1</td>
             </tr>
             <tr>
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td>ldt:update</td>
-              <td>?</td>
               <td>ldt:Update</td>
               <td><a>Update</a></td>
-              <td>No</td>
+              <td>?</td>
             </tr>
             <tr>
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td>ldt:param</td>
-              <td>*</td>
               <td>ldt:Argument</td>
               <td><a>Argument</a></td>
-              <td>No</td>
+              <td>*</td>
             </tr>
             <tr>
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td>rdfs:subClassOf</td>
-              <td>*</td>
               <td>rdfs:Class</td>
               <td><a>Operation</a></td>
-              <td>No</td>
+              <td>*</td>
             </tr>
           </tbody>
         </table>
+		<p class="ednote">Should we align set names with RDF terms? I.e. <code>ldt:Operation</code> instead of <code>ldt:Template</code>?<br/>
+			The range of the <code>rdfs:</code> properties is not accurate here in terms of RDFS.</p>
 
-        <pre><strong>ldt:Template</strong>
-  rdfs:subClassOf* = rdfs:Class
-  <strong>ldt:path = xsd:string</strong>
-  <strong>ldt:query = ldt:Query</strong>
-  ldt:update? = ldt:Update
-  ldt:lang? = rdf:List(rdf:langString)
-  ldt:param* = ldt:Argument
-  ldt:cacheControl? = xsd:string
-  spin:constructor? = spin:Rule
-  rdfs:isDefinedBy = ldt:Ontology</pre>
+        <table class="http-vocab">
+          <caption>HTTP</caption>
+          <thead>
+            <tr>
+              <th colspan="2">Domain</th>
+              <th>Property</th>
+              <th>Range</th>
+			  <th>Cardinality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td>ldt:lang</td>
+              <td>rdf:List(xsd:string)</td>
+              <td>?</td>
+            </tr>
+            <tr>
+              <td><a>Operation</a></td>
+              <td>ldt:Template</td>
+              <td>ldt:cacheControl</td>
+              <td>xsd:string</td>
+              <td>?</td>
+            </tr>
+          </tbody>
+        </table>
+		<p class="ednote">The HTTP properties are not part of <a href="#ldt-http">LDT over HTTP</a> yet. We need to introduce HTTP headers.<br/>
+			Also core and HTTP probably should not be under the same namespace.</p>
       </section>
     </section>
   </body>
