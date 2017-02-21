@@ -165,8 +165,12 @@
           <dd><a>Query</a> + <a>Delete</a></dd>
           <dt><dfn>IRIPattern</dfn></dt>
           <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
+          <dt><dfn>Parameter</dfn></dt>
+          <dd><a>String</a> × <a>IRI</a> × <a>IRI</a> × Boolean</dd>
           <dt><dfn>Operation</dfn></dt>
-          <dd><a>IRIPattern</a> × <a>Query</a> × <a>Delete</a> × Priority<br/>
+          <dd><a>IRIPattern</a> × <a>Query</a> × <a>Delete</a> × { <a>Parameter</a><sub>1</sub>, …, <a>Parameter</a><sub>N</sub> } × Priority<br/>
+          <dt><dfn>Argument</dfn></dt>
+          <dd><a>Parameter</a> × <a>RDFTerm</a></dd>
           <dt><dfn>Class</dfn></dt>
           <dd></dd>
       </dl>
@@ -177,6 +181,9 @@
           <dt><dfn>absolutePath</dfn></dt>
           <dd><a>IRI</a> → <a>IRI</a><sub>abs</sub></dd>
           <dd>absolutePath(iri) = <a href="https://www.w3.org/TR/xpath-functions-3/#func-substring-before">fn:substring-before</a>(absoluteIri, "<code>?</code>") = absolutePath ∈ <a>IRI</a><sub>abs</sub> [[!xpath-functions-31]]</dd>
+          <dt><dfn>queryString</dfn></dt>
+          <dd><a>IRI</a> → String</dd>
+          <dd>queryString(iri) = <a href="https://www.w3.org/TR/xpath-functions-3/#func-substring-after">fn:substring-after</a>(absoluteIri, "<code>?</code>") = queryString ∈ String [[!xpath-functions-31]]</dd>
           <dt><dfn>method</dfn></dt>
           <dd><a>Request</a>↓1 → <a>Method</a>
           <dt><dfn>iri</dfn></dt>
@@ -221,14 +228,24 @@
           <dd><a>Update</a> × <a>Dataset</a><sub>before</sub> → <a>Dataset</a><sub>after</sub>
           <dt><dfn>join</dfn></dt>
           <dd><a>Update</a> × <a>Update</a> → <a>Update</a>
+          <dt><dfn>name</dfn></dt>
+          <dd><a>Parameter</a>↓1 → <a>String</a></dd>
+          <dt><dfn>predicate</dfn></dt>
+          <dd><a>Parameter</a>↓2 → <a>IRI</a></dd>
+          <dt><dfn>valueType</dfn></dt>
+          <dd><a>Parameter</a>↓3 → <a>IRI</a></dd>
+          <dt><dfn>optional</dfn></dt>
+          <dd><a>Parameter</a>↓4 → Boolean</dd>
           <dt><dfn>iriPattern</dfn></dt>
           <dd><a>Operation</a>↓1 → <a>IRIPattern</a></dd>
           <dt><dfn>query</dfn></dt>
           <dd><a>Operation</a>↓2 → <a>Query</a></dd>
           <dt><dfn>delete</dfn></dt>
           <dd><a>Operation</a>↓3 → <a>Delete</a></dd>
+          <dt><dfn>parameters</dfn></dt>
+          <dd><a>Operation</a>↓4 → { <a>Parameter</a><sub>1</sub>, …, <a>Parameter</a><sub>N</sub> }</dd>
           <dt><dfn>priority</dfn></dt>
-          <dd><a>Operation</a>↓4 → <a>Priority</a></dd>
+          <dd><a>Operation</a>↓5 → <a>Priority</a></dd>
           <dt><dfn>matchIRIPattern</dfn></dt>
           <dd><a>IRI</a><sub>rel</sub> × <a>IRIPattern</a> → Boolean</dd>
           <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-2_0-fr-eval-spec/jsr339-jaxrs-2.0-final-spec.pdf#page=32">Request Matching</a>, using C = <a>Ontology</a>, T<sub>Z</sub> = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
@@ -243,6 +260,11 @@
           <dt><dfn>reqMatch</dfn></dt>
           <dd><a>Request</a> × <a>App</a> → <a>Operation</a></dd>
           <dd>reqMatch(request, app) = <a>match</a>(<a>iri</a>(request), <a>base</a>(app), <a>ontology</a>(app))</dd>
+
+          <dt><dfn>arguments</dfn></dt>
+          <dd><a>String</a> × <a>Operation</a> → { <a>Argument</a><sub>1</sub>, …, <a>Argument</a><sub>N</sub> }</dd>
+          <dd>arguments(queryString, operation) = { <a>cast</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓2, <a>valueType</a>(param)) } such that <a>name</a>(param) = <a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓1 : argString ∈ fn:tokenize(queryString, '&amp;'), param ∈ <a>parameters</a>(operation) [[xpath-functions-31]]</dd>
+
           <dt><dfn>type</dfn></dt>
           <dd><a>RDFTerm</a> → <a>Class</a></dd>
           <dd>type(term) = class ∈ Class</dd>
@@ -566,10 +588,10 @@ WHERE
     </section>
     <section id="vocabulary">
       <h3>Vocabulary</h3>
-	  <p>The namespace URI of the LDT vocabulary is <code>http://www.w3.org/ns/ldt#</code>.</p>	
+	  <p>The namespace URI of the LDT vocabulary is <code>http://www.w3.org/ns/ldt#</code>.</p>
       <section>
         <h4>Application</h4>
-		<p class="ednote">Applications are orthogonal to operations. Does it make sense to put them under the same namespace?</p>	
+		<p class="ednote">Applications are orthogonal to operations. Does it make sense to put them under the same namespace?</p>
       </section>
       <section>
         <h4>Operation</h4>
@@ -620,8 +642,8 @@ WHERE
               <td><a>Operation</a></td>
               <td>ldt:Template</td>
               <td>ldt:param</td>
-              <td>ldt:Argument</td>
-              <td><a>Argument</a></td>
+              <td>ldt:Parameter</td>
+              <td><a>Parameter</a></td>
               <td>*</td>
             </tr>
             <tr>
