@@ -269,7 +269,7 @@
           <dd>The processor MUST implement <a>cast</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#FunctionMapping">XPath Constructor Functions</a> [[!sparql11-query]]</dd>
           <dt><dfn>arguments</dfn></dt>
           <dd><a>String</a> × <a>Operation</a> → { <a>Argument</a><sub>1</sub>, …, <a>Argument</a><sub>N</sub> }</dd>
-          <dd>arguments(queryString, operation) = { <a>cast</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓2), <a>valueType</a>(param)) } such that <a>name</a>(param) = <a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓1) : argString ∈ fn:tokenize(queryString, '&amp;'), param ∈ <a>parameters</a>(operation) [[xpath-functions-31]]</dd>
+          <dd>arguments(queryString, operation) = { <a>cast</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓2), <a>valueType</a>(param)) } such that <a>name</a>(param) = <a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1) : argString ∈ fn:tokenize(queryString, "<code>&amp;</code>"), param ∈ <a>parameters</a>(operation) [[xpath-functions-31]]</dd>
           <dt><dfn>type</dfn></dt>
           <dd><a>RDFTerm</a> → <a>Class</a></dd>
           <dd>type(term) = class ∈ Class</dd>
