@@ -260,13 +260,16 @@
           <dt><dfn>reqMatch</dfn></dt>
           <dd><a>Request</a> × <a>App</a> → <a>Operation</a></dd>
           <dd>reqMatch(request, app) = <a>match</a>(<a>iri</a>(request), <a>base</a>(app), <a>ontology</a>(app))</dd>
+          <dt><dfn>decodeUri</dfn></dt>
+          <dd>String → String</dd>
+          <dd>decodeUri(encoded) = decoded such that <a href="https://www.w3.org/TR/xpath-functions-31/#func-encode-for-uri">fn:encode-for-uri(decoded)</a> = encoded [[xpath-functions-31]]</dd>
           <dt><dfn>cast</dfn></dt>
           <dd><a>RDFTerm</a> × <a>IRI</a> → <a>RDFTerm</a></dd>
           <dd>cast(inputValue, targetType) = targetValue ∈ RDFTerm</dd>
           <dd>The processor MUST implement <a>cast</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#FunctionMapping">XPath Constructor Functions</a> [[!sparql11-query]]</dd>
           <dt><dfn>arguments</dfn></dt>
           <dd><a>String</a> × <a>Operation</a> → { <a>Argument</a><sub>1</sub>, …, <a>Argument</a><sub>N</sub> }</dd>
-          <dd>arguments(queryString, operation) = { <a>cast</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓2, <a>valueType</a>(param)) } such that <a>name</a>(param) = <a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓1 : argString ∈ fn:tokenize(queryString, '&amp;'), param ∈ <a>parameters</a>(operation) [[xpath-functions-31]]</dd>
+          <dd>arguments(queryString, operation) = { <a>cast</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓2), <a>valueType</a>(param)) } such that <a>name</a>(param) = <a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, '=')↓1) : argString ∈ fn:tokenize(queryString, '&amp;'), param ∈ <a>parameters</a>(operation) [[xpath-functions-31]]</dd>
           <dt><dfn>type</dfn></dt>
           <dd><a>RDFTerm</a> → <a>Class</a></dd>
           <dd>type(term) = class ∈ Class</dd>
@@ -285,6 +288,10 @@
           <dd><a>RDFRequest</a> → <a>IRI</a></dd>
           <dd>created(rdfRequest) = iri ∈ <a>skolemize</a>(<a>data</a>(rdfRequest))</dd>
           <dd>The processor MUST provide an implementation of <a>created</a> that satisfies the above definition</dd>
+          <dt><dfn>merge</dfn></dt>
+          <dd><a>Dataset</a> × <a>Dataset</a> → <a>Dataset</a></dd>
+          <dd>merge(dataset<sub>1</sub>, dataset<sub>2</sub>) = dataset<sub>merged</sub> ∈ Dataset</dd>
+          <dd>The processor MUST implement <a>merge</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#sparqlDataset">RDF Dataset</a> [[!sparql11-query]]</dd>
         </dl>
       </section>
       <section id="ldt-valuation" class="valuation-functions">
