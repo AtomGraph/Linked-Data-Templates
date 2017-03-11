@@ -254,8 +254,8 @@
           <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
             <a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operationmatch)) = <code>true</code></dd>
           <dt><dfn>match</dfn></dt>
-          <dd><a>IRI</a> × <a>IRI</a>base × <a>Ontology</a> → <a>Operation</a></dd>
-          <dd>match(iri, iribase, ontology) = <a>matchrel</a>(<a>relativize</a>(iribase, <a>absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
+          <dd><a>IRI</a> × <a>IRI</a> × <a>Ontology</a> → <a>Operation</a></dd>
+          <dd>match(iri, base, ontology) = <a>matchrel</a>(<a>relativize</a>(base, <a>absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
           <dd class="ednote">Priority and conflict resolution have not been addressed yet</dd>
           <dt><dfn>reqMatch</dfn></dt>
           <dd><a>Request</a> × <a>App</a> → <a>Operation</a></dd>
