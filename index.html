@@ -70,6 +70,11 @@
         <p>An operation maps a certain part of the application URI space to a certain SPARQL command. During request processing, an LDT processor selects a single best-matching operation (if such exists) that drives the RDF CRUD processing. Operations are defined using the
           <a href="#vocabulary">LDT vocabulary</a>, while the SPARQL commands are defined using SPIN RDF syntax.</p>
       </section>
+      <section>
+        <h3>Hypermedia</h3>
+        <p>Hypermedia, used here in terms of Hypermedia As The Engine Of Application State (HATEOAS), is the final constraint of REST. It enables loose server/client coupling by requiring the client to navigate by transitioning between server-provided application states. It implies that those
+          states need to be URI-identified and provided in response body. LDT addresses this by providing operation parameters that are used to validate and describe requested application states.</p>
+      </section>
     </section>
     <section id="conformance">
     </section>
@@ -251,8 +256,8 @@
           <dd>The processor MUST implement <a>matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-2_0-fr-eval-spec/jsr339-jaxrs-2.0-final-spec.pdf#page=32">Request Matching</a>, using C = <a>Ontology</a>, T<sub>Z</sub> = <a>iriPattern</a>(operation) [[!JAX-RS]]</dd>
           <dt><dfn>matchrel</dfn></dt>
           <dd><a>IRI</a><sub>rel</sub> × <a>Ontology</a> → <a>Operation</a></dd>
-          <dd>matchrel(irirel, ontology) = operationmatch ∈ Ontology :<br/>
-            <a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operationmatch)) = <code>true</code></dd>
+          <dd>matchrel(irirel, ontology) = operation<sub>match</sub> ∈ Ontology :<br/>
+            <a>matchIRIPattern</a>(irirel, <a>iriPattern</a>(operation<sub>match</sub>)) = <code>true</code></dd>
           <dt><dfn>match</dfn></dt>
           <dd><a>IRI</a> × <a>IRI</a> × <a>Ontology</a> → <a>Operation</a></dd>
           <dd>match(iri, base, ontology) = <a>matchrel</a>(<a>relativize</a>(base, <a>absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
@@ -270,6 +275,10 @@
           <dt><dfn>arguments</dfn></dt>
           <dd><a>String</a> × <a>Operation</a> → { <a>Argument</a><sub>1</sub>, …, <a>Argument</a><sub>N</sub> }</dd>
           <dd>arguments(queryString, operation) = { <a>cast</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓2), <a>valueType</a>(param)) } such that <a>name</a>(param) = <a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1) : argString ∈ fn:tokenize(queryString, "<code>&amp;</code>"), param ∈ <a>parameters</a>(operation) [[xpath-functions-31]]</dd>
+          <dt><dfn>parameter</dfn></dt>
+          <dd><a>Argument</a>↓1 → <a>Parameter</a></dd>
+          <dt><dfn>value</dfn></dt>
+          <dd><a>Argument</a>↓2 → <a>RDFTerm</a></dd>
           <dt><dfn>type</dfn></dt>
           <dd><a>RDFTerm</a> → <a>Class</a></dd>
           <dd>type(term) = class ∈ Class</dd>
@@ -292,6 +301,9 @@
           <dd><a>Dataset</a> × <a>Dataset</a> → <a>Dataset</a></dd>
           <dd>merge(dataset<sub>1</sub>, dataset<sub>2</sub>) = dataset<sub>merged</sub> ∈ Dataset</dd>
           <dd>The processor MUST implement <a>merge</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#sparqlDataset">RDF Dataset</a> [[!sparql11-query]]</dd>
+          <dt><dfn>state</dfn></dt>
+          <dd><a>IRI</a> × { <a>Argument</a><sub>1</sub>, …, <a>Argument</a><sub>N</sub> } → <a>Dataset</a></dd>
+          <dd class="ednote">This is the function that should describe the current application state. How do we convert from sets to triples? Parameters need to have IRIs.</dd>
         </dl>
       </section>
       <section id="ldt-valuation" class="valuation-functions">
@@ -324,7 +336,7 @@
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (request)</dt>
           <dd><a>RDFResponse</a> [[<a>Dataset</a>]] (<a>app</a>(<a>iri</a>(request))) (request)</dd>
           <dt><a>RDFResponse</a> [[<a>Dataset</a>]] (app) (request)</dt>
-          <dd><a>method</a>(request) = <code>Read</code>  → <a>execQuery</a>(<a>apply</a>(<a>query</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request)))) []<br/>
+          <dd><a>method</a>(request) = <code>Read</code>  → <a>merge</a>(<a>execQuery</a>(<a>apply</a>(<a>query</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request)))), <a>state</a>(<a>iri</a>(request), <a>arguments</a>(<a>queryString</a>(<a>iri</a>(request)), <a>reqMatch</a>(request, app)))) []<br/>
             <a>method</a>(request) = <code>Create</code> → <a>execUpdate</a>(<a>insertData</a>(<a>skolemize</a>(<a>data</a>(request)))) []<br/>
               <a>method</a>(request) = <code>Update</code> → <a>execUpdate</a>(<a>join</a>(<a>apply</a>(<a>delete</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request))), <a>insertData</a>(<a>data</a>(request)))) []<br/>
                 <a>method</a>(request) = <code>Delete</code> → <a>execUpdate</a>(<a>apply</a>(<a>delete</a>(<a>reqMatch</a>(request, app)), <a>context</a>(<a>iri</a>(request)))) []<br/>
