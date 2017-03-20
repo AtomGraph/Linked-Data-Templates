@@ -466,10 +466,9 @@ WHERE
       </dl>
       <section id="get-example">
         <h3>Read over HTTP</h3>
-        <p>With parameters.</p>
         <div class="example">
-          <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
-          <pre>GET /people/Berners-Lee HTTP/1.1
+          <p>HTTP GET request <code>getRequest</code> with query string arguments:</p>
+          <pre>GET /people/Berners-Lee?source=https%3A%2F%2Fwww.w3.org%2FPeople%2FBerners-Lee%2Fcard.rdf HTTP/1.1
 Host: linkeddatahub.com
 Accept: text/turtle</pre>
         </div>
