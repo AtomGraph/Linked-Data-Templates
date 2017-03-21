@@ -441,60 +441,71 @@
     </section>
     <section id="examples">
       <h3>Examples</h3>
-      <p>
-          We will use the following set members for all the subsequent response valuation examples:
-      </p>
+      <p>We will use the following set members for all the subsequent response valuation examples:</p>
       <dl class="domains">
         <dt><code>app</code> ∈ <a>App</a></dt>
         <dd><a>app</a>(<a>iri</a>(request)) = (<code>&lt;http://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
         <dt><code>match</code> ∈ <a>Operation</a></dt>
         <dd><a>reqMatch</a>(request, app) = (<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>0</code>)</dd>
+        <dt><code>describeWithTopic</code> ∈ <a>Describe</a></dt>
+        <dd><pre><code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DESCRIBE ?this ?primaryTopic
+WHERE
+  { GRAPH ?g
+      { ?this  ?p  ?o
+        OPTIONAL
+          { ?this     foaf:primaryTopic  ?primaryTopic .
+            ?primaryTopic
+                      ?primaryTopicP     ?primaryTopicO
+          }
+      }
+  }</code></pre></dd>
         <dt><code>deleteWithTopic</code> ∈ <a>Delete</a></dt>
         <dd><pre><code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
-  ?this ?p ?o .
-  ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  GRAPH ?g {
+    ?this ?p ?o .
+    ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  }
 }
 WHERE
-  { ?this ?p ?o
-    OPTIONAL
-      { ?this foaf:primaryTopic ?primaryTopic .
-        ?primaryTopic ?primaryTopicP ?primaryTopicO
+  { GRAPH ?g
+      { ?this  ?p  ?o
+        OPTIONAL
+          { ?this     foaf:primaryTopic  ?primaryTopic .
+            ?primaryTopic
+                      ?primaryTopicP     ?primaryTopicO
+          }
       }
   }</code></pre></dd>
       </dl>
-      <section id="get-example">
-        <h3>Read over HTTP</h3>
-        <div class="example">
-          <p>HTTP GET request <code>getRequest</code> with query string arguments:</p>
-          <pre>GET /people/Berners-Lee?source=https%3A%2F%2Fwww.w3.org%2FPeople%2FBerners-Lee%2Fcard.rdf HTTP/1.1
-Host: linkeddatahub.com
-Accept: text/turtle</pre>
-        </div>
-
-
-      </section>
       <section id="put-example">
         <h4>Update over HTTP</h4>
         <div class="example">
           <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
           <pre>PUT /people/Berners-Lee HTTP/1.1
 Host: linkeddatahub.com
-Accept: text/turtle
-Content-Type: text/turtle
+Accept: text/turtle, text/trig
+Content-Type: text/trig
 
 @base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
 @prefix ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 
-&lt;&gt; a ldtc:Document ;
-  foaf:primaryTopic &lt;#this&gt; .
+&lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
+{
 
-&lt;#this&gt; a foaf:Person ;
-  foaf:isPrimaryTopicOf &lt;&gt; ;
-  owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .</pre>
+  &lt;&gt; a ldtc:Document ;
+    foaf:primaryTopic &lt;#this&gt; .
+
+  &lt;#this&gt; a foaf:Person ;
+    foaf:isPrimaryTopicOf &lt;&gt; ;
+    owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+
+}</pre>
         </div>
         <div class="example">
           <p>Valuation of <code>putRequest</code></p>
@@ -618,6 +629,42 @@ WHERE
         <div class="example">
           <p>HTTP response</p>
           <pre>200 OK</pre>
+        </div>
+      </section>
+      <section id="get-example">
+        <h3>Read over HTTP</h3>
+        <div class="example">
+          <p>HTTP GET request <code>getRequest</code> with query string arguments</p>
+          <pre>GET /people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762 HTTP/1.1
+Host: linkeddatahub.com
+Accept: text/turtle, text/trig</pre>
+        </div>
+        <div class="example">
+          <p>Valuation of <code>getRequest</code></p>
+          <pre>HTTPResponse [[HTTPStatus Body]] (<code>getRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>getRequest</code>) HTTPResponse [[Body]] (<code>putRequest</code>) =
+
+statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>getRequest</code>)), httpIri(<code>getRequest</code>), httpBody(<code>getRequest</code>))))
+RDFResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>getRequest</code>)), httpIri(<code>getRequest</code>), httpBody(<code>getRequest</code>)) =
+
+statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+RDFResponse [[RDFBody]] (httpMethodToMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
+
+statusToHttpStatus(RDFResponse [[Status]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+RDFResponse [[RDFBody]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
+
+statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+RDFResponse [[RDFBody]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+
+statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+
+statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+
+<code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+
+<code>200 OK</code> ...
+</pre>
         </div>
       </section>
     </section>
