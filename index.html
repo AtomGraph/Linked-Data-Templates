@@ -23,6 +23,7 @@
       };
     </script>
     <style type="text/css">
+       figure img { width: 100%; }
       .abstract-syntax dt , .semantics dt { float: left; }
       .abstract-syntax .internalDFN, .semantics .internalDFN { font-style: italic; }
       .abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
@@ -148,30 +149,30 @@
           <dt><dfn>App</dfn></dt>
           <dd><a>IRI</a> × <a>Ontology</a> × <a>Dataset</a></dd>
           <dd class="ednote">Here we define an ontology with a <a>Dataset</a>, yet the implementation/vocabulary uses a Service which is an interface for the Dataset.</dd>
-    		  <dt><dfn>QueryVariable</dfn></dt>
-    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
-    		  <dt><dfn>RDFTerm</dfn></dt>
-    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
+              <dt><dfn>QueryVariable</dfn></dt>
+              <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
+              <dt><dfn>RDFTerm</dfn></dt>
+              <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn>QueryBinding</dfn></dt>
           <dd><a>QueryVariable</a> × <a>RDFTerm</a></dd>
           <dt><dfn>Describe</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> [[!sparql11-query]]</dd>
-    		  <dt><dfn>Construct</dfn></dt>
-    		  <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
-    		  <dt><dfn>Query</dfn></dt>
+              <dt><dfn>Construct</dfn></dt>
+              <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
+              <dt><dfn>Query</dfn></dt>
           <dd><a>Describe</a> + <a>Construct</a></dd>
           <dt><dfn>Delete</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-update/#delete">DELETE</a> [[!sparql11-update]]</dd>
-    		  <dt><dfn>InsertData</dfn></dt>
-    		  <dd><a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
-    		  <dt><dfn>Update</dfn></dt>
+              <dt><dfn>InsertData</dfn></dt>
+              <dd><a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
+              <dt><dfn>Update</dfn></dt>
           <dd><a>Delete</a> + <a>InsertData</a></dd>
-    		  <dt><dfn>Command</dfn></dt>
+              <dt><dfn>Command</dfn></dt>
           <dd><a>Query</a> + <a>Delete</a></dd>
           <dt><dfn>IRIPattern</dfn></dt>
           <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
           <dt><dfn>Parameter</dfn></dt>
-          <dd><a>QueryVariable</a> × <a>IRI</a> × <a>IRI</a> × Boolean</dd>
+          <dd><a>QueryVariable</a> × <a>IRI</a> × Boolean</dd>
           <dt><dfn>Operation</dfn></dt>
           <dd><a>IRIPattern</a> × <a>Query</a> × <a>Delete</a> × { <a>Parameter</a><sub>1</sub>, …, <a>Parameter</a><sub>N</sub> } × Priority<br/>
           <dt><dfn>Argument</dfn></dt>
@@ -232,12 +233,10 @@
           <dd><a>Update</a> × <a>Update</a> → <a>Update</a>
           <dt><dfn>name</dfn></dt>
           <dd><a>Parameter</a>↓1 → <a>QueryVariable</a></dd>
-          <dt><dfn>predicate</dfn></dt>
-          <dd><a>Parameter</a>↓2 → <a>IRI</a></dd>
           <dt><dfn>valueType</dfn></dt>
-          <dd><a>Parameter</a>↓3 → <a>IRI</a></dd>
+          <dd><a>Parameter</a>↓2 → <a>IRI</a></dd>
           <dt><dfn>optional</dfn></dt>
-          <dd><a>Parameter</a>↓4 → Boolean</dd>
+          <dd><a>Parameter</a>↓3 → Boolean</dd>
           <dt><dfn>iriPattern</dfn></dt>
           <dd><a>Operation</a>↓1 → <a>IRIPattern</a></dd>
           <dt><dfn>query</dfn></dt>
@@ -269,9 +268,12 @@
           <dd><a>RDFTerm</a> × <a>IRI</a> → <a>RDFTerm</a></dd>
           <dd>cast(inputValue, targetType) = targetValue ∈ RDFTerm</dd>
           <dd>The processor MUST implement <a>cast</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#FunctionMapping">XPath Constructor Functions</a> [[!sparql11-query]]</dd>
+          <dt><dfn>paramByName</dfn></dt>
+          <dd><a>String</a> × <a>Operation</a> → <a>Parameter</a></dd>
+          <dd>paramByName(name, operation) = param ∈ <a>parameters</a>(operation) : <a>name</a>(param) = name</dd>
           <dt><dfn>arguments</dfn></dt>
           <dd><a>String</a> × <a>Operation</a> → { <a>Argument</a><sub>1</sub>, …, <a>Argument</a><sub>N</sub> }</dd>
-          <dd>arguments(queryString, operation) = { <a>cast</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓2), <a>valueType</a>(param)) : <a>name</a>(param) = <a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1) : argString ∈ <a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(queryString, "<code>&amp;</code>"), param ∈ <a>parameters</a>(operation) } [[xpath-functions-31]]</dd>
+          <dd>arguments(queryString, operation) = { (<a>paramByName</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1)), <a>cast</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓2), <a>valueType</a>(<a>paramByName</a>(<a>decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1))))) } : argString ∈ <a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(queryString, "<code>&amp;</code>") [[xpath-functions-31]]</dd>
           <dt><dfn>parameter</dfn></dt>
           <dd><a>Argument</a>↓1 → <a>Parameter</a></dd>
           <dt><dfn>value</dfn></dt>
@@ -346,10 +348,10 @@
             {}</dd>
           <dd class="ednote">Does this address <a>Dataset</a><sub>after</sub> (<a>update</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
           <dt><a>RDFResponse</a> [[<a>RDFMediaType</a>]] (app) (request)</dt>
-		  <dd><a>conNeg</a>(request)</dd>
-		  <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
-		  <dd><a>method</a>(request) = <code>Create</code> → <a>created</a>(request) []<br/>
-			{}</dd>
+          <dd><a>conNeg</a>(request)</dd>
+          <dt><a>RDFResponse</a> [[<a>IRI</a>]] (app) (request)</dt>
+          <dd><a>method</a>(request) = <code>Create</code> → <a>created</a>(request) []<br/>
+            {}</dd>
         </dl>
       </section>
     </section>
@@ -446,7 +448,7 @@
         <dt><code>app</code> ∈ <a>App</a></dt>
         <dd><a>app</a>(<a>iri</a>(request)) = (<code>&lt;http://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
         <dt><code>match</code> ∈ <a>Operation</a></dt>
-        <dd><a>reqMatch</a>(request, app) = (<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>0</code>)</dd>
+        <dd><a>reqMatch</a>(request, app) = (<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>{ <code>graphParam</code> = (<var>?g</var>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>) }</code>, <code>0</code>)</dd>
         <dt><code>describeWithTopic</code> ∈ <a>Describe</a></dt>
         <dd><pre><code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -533,9 +535,9 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http
 
 <code>200 OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), binding(<var>?this</var>, iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>200 OK</code> execUpdate(join(apply(delete(<code>match</code>), (<code>?this</code>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
+<code>200 OK</code> execUpdate(join(apply(delete(<code>match</code>), (<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
 
-<code>200 OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>)), (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+<code>200 OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>)), (<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -548,7 +550,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 }</code>)) <code>text/turtle</code> =
 
-<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -561,7 +563,7 @@ INSERT DATA {
   &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 }</code>)) <code>text/turtle</code> =
 
-<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<code>?this</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -663,24 +665,55 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http:/
 
 <code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
-<code>200 OK</code> merge(execQuery(apply(query(reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))), argBindings(arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))))), state(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)), arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))) =
+<code>200 OK</code> merge(execQuery(apply(query(reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))), argBindings(arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))))), state(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)), arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))) conNeg((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))  =
 
-<code>200 OK</code> merge(execQuery(apply(query(match), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), match))))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), match))) =
+<code>200 OK</code> merge(execQuery(apply(query(match), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), <code>match</code>))))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), <code>match</code>))) <code>text/trig</code> =
 
-<code>200 OK</code> merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762</code>, match))))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(<code>g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762</code>, match))) =
+<code>200 OK</code> merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>match</code>))))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>match</code>))) <code>text/trig</code> =
 
-<code>200 OK</code> merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ cast(decodeUri(fn:tokenize("g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762", "=")↓2), valueType(param)) : name(param) = decodeUri(fn:tokenize("g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762", "=")↓1) : param ∈ parameters(match) })))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { cast(decodeUri(fn:tokenize("g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762", "=")↓2), valueType(param)) : name(param) = decodeUri(fn:tokenize("g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762", "=")↓1) : param ∈ parameters(match) })) =
+<code>200 OK</code> merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ (paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1)), cast(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓2), valueType(paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1))))) })))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1)), cast(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓2), valueType(paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1))))) })) <code>text/trig</code> =
 
-</pre>
+<code>200 OK</code> merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ (paramByName(<code>"g"</code>), cast(<code>"http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762"</code>, valueType(paramByName(<code>"g"</code>)))) })))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (paramByName(<code>"g"</code>), cast(<code>"http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762"</code>, valueType(paramByName(<code>"g"</code>)))) })) <code>text/trig</code> =
+
+<code>200 OK</code> merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), (<var>?g</var>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) <code>text/trig</code> =
+
+<code>200 OK</code> merge(execQuery(apply(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DESCRIBE ?this ?primaryTopic
+WHERE
+  { GRAPH ?g
+      { ?this  ?p  ?o
+        OPTIONAL
+          { ?this     foaf:primaryTopic  ?primaryTopic .
+            ?primaryTopic
+                      ?primaryTopicP     ?primaryTopicO
+          }
+      }
+  }</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), (<var>?g</var>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) <code>text/trig</code> =
+
+  <code>200 OK</code> merge(execQuery(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DESCRIBE &lt;people/Berners-Lee&gt; ?primaryTopic
+WHERE
+  { GRAPH &lt;graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
+      { &lt;people/Berners-Lee&gt;  ?p  ?o
+        OPTIONAL
+          { &lt;people/Berners-Lee&gt;     foaf:primaryTopic  ?primaryTopic .
+            ?primaryTopic
+                      ?primaryTopicP     ?primaryTopicO
+          }
+      }
+  }</code>), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) <code>text/trig</code></pre>
         </div>
       </section>
     </section>
     <section id="vocabulary">
       <h3>Vocabulary</h3>
-	  <p>The namespace URI of the LDT vocabulary is <code>http://www.w3.org/ns/ldt#</code>.</p>
+      <p>The namespace URI of the LDT vocabulary is <code>http://www.w3.org/ns/ldt#</code>.</p>
       <section>
         <h4>Application</h4>
-		<p class="ednote">Applications are orthogonal to operations. Does it make sense to put them under the same namespace?</p>
+        <p class="ednote">Applications are orthogonal to operations. Does it make sense to put them under the same namespace?</p>
       </section>
       <section>
         <h4>Operation</h4>
@@ -691,7 +724,7 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http:/
               <th colspan="2">Domain</th>
               <th>Property</th>
               <th colspan="2">Range</th>
-			  <th>Cardinality</th>
+              <th>Cardinality</th>
             </tr>
           </thead>
           <tbody>
@@ -745,8 +778,8 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http:/
             </tr>
           </tbody>
         </table>
-		<p class="ednote">Should we align set names with RDF terms? I.e. <code>ldt:Operation</code> instead of <code>ldt:Template</code>?<br/>
-			The range of the <code>rdfs:</code> properties is not accurate here in terms of RDFS.</p>
+        <p class="ednote">Should we align set names with RDF terms? I.e. <code>ldt:Operation</code> instead of <code>ldt:Template</code>?<br/>
+            The range of the <code>rdfs:</code> properties is not accurate here in terms of RDFS.</p>
 
         <table class="http-vocab">
           <caption>HTTP</caption>
@@ -755,7 +788,7 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http:/
               <th colspan="2">Domain</th>
               <th>Property</th>
               <th>Range</th>
-			  <th>Cardinality</th>
+              <th>Cardinality</th>
             </tr>
           </thead>
           <tbody>
@@ -775,8 +808,8 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http:/
             </tr>
           </tbody>
         </table>
-		<p class="ednote">The HTTP properties are not part of <a href="#ldt-http">LDT over HTTP</a> yet. We need to introduce HTTP headers.<br/>
-			Also core and HTTP probably should not be under the same namespace.</p>
+        <p class="ednote">The HTTP properties are not part of <a href="#ldt-http">LDT over HTTP</a> yet. We need to introduce HTTP headers.<br/>
+            Also core and HTTP probably should not be under the same namespace.</p>
       </section>
     </section>
   </body>
