@@ -474,11 +474,10 @@ DELETE {
 }
 WHERE
   { GRAPH ?g
-      { ?this  ?p  ?o
+      { ?this ?p ?o
         OPTIONAL
-          { ?this     foaf:primaryTopic  ?primaryTopic .
-            ?primaryTopic
-                      ?primaryTopicP     ?primaryTopicO
+          { ?this foaf:primaryTopic ?primaryTopic .
+            ?primaryTopic ?primaryTopicP ?primaryTopicO
           }
       }
   }</code></pre></dd>
@@ -533,100 +532,125 @@ RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http
 
 <code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>200 OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), binding(<var>?this</var>, iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+<code>200 OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), argBindings(arguments(queryString(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))), reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)))))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>200 OK</code> execUpdate(join(apply(delete(<code>match</code>), (<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
+<code>200 OK</code> execUpdate(join(apply(delete(<code>match</code>), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>match</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
 
-<code>200 OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, (<code>describeWithTopic</code>, <code>deleteWithTopic</code>), <code>0</code>)), (<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
-PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+<code>200 OK</code> execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>{ <code>graphParam</code> = (<var>?g</var>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>) }</code>, <code>0</code>)), append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>""</code>, <code>match</code>))))), insertData(<code>putBody</code>))) <code>text/turtle</code> =
 
-INSERT DATA {
-  &lt;people/Berners-Lee&gt; a ldtc:Document .
-  &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
-  &lt;people/Berners-Lee#this&gt; a foaf:Person .
-  &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
-  &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-}</code>)) <code>text/turtle</code> =
+<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>{ }</code>))), insertData(<code>@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
+@prefix ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 
-<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>))), <code>BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
-PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+&lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
+{
 
-INSERT DATA {
-  &lt;people/Berners-Lee&gt; a ldtc:Document .
-  &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
-  &lt;people/Berners-Lee#this&gt; a foaf:Person .
-  &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
-  &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-}</code>)) <code>text/turtle</code> =
+  &lt;&gt; a ldtc:Document ;
+    foaf:primaryTopic &lt;#this&gt; .
 
-<code>200 OK</code> execUpdate(join(apply(<code>deleteWithTopic</code>, (<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
-PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+  &lt;#this&gt; a foaf:Person ;
+    foaf:isPrimaryTopicOf &lt;&gt; ;
+    owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 
-INSERT DATA {
-  &lt;people/Berners-Lee&gt; a ldtc:Document .
-  &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
-  &lt;people/Berners-Lee#this&gt; a foaf:Person .
-  &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
-  &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-}</code>)) <code>text/turtle</code> =
+}</code>))) <code>text/turtle</code> =
 
-<code>200 OK</code> execUpdate(join(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+<code>200 OK</code> execUpdate(join(apply(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
-  ?this ?p ?o .
-  ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  GRAPH ?g {
+    ?this ?p ?o .
+    ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  }
 }
 WHERE
-  { ?this ?p ?o
-    OPTIONAL
-      { ?this foaf:primaryTopic ?primaryTopic .
-        ?primaryTopic ?primaryTopicP ?primaryTopicO
+  { GRAPH ?g
+      { ?this ?p ?o
+        OPTIONAL
+          { ?this foaf:primaryTopic ?primaryTopic .
+            ?primaryTopic ?primaryTopicP ?primaryTopicO
+          }
       }
-  }</code>, <code>BASE    &lt;http://linkeddatahub.com/&gt;
-  PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
-  PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-  PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+  }</code>, (<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
-  INSERT DATA {
+INSERT DATA {
+  GRAPH &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt; {
     &lt;people/Berners-Lee&gt; a ldtc:Document .
     &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
     &lt;people/Berners-Lee#this&gt; a foaf:Person .
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-  }</code>)) <code>text/turtle</code> =
+  }
+}</code>)) <code>text/turtle</code> =
 
-<code>200 OK</code> execUpdate(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+<code>200 OK</code> execUpdate(join(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
-  ?this ?p ?o .
-  ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  GRAPH ?g {
+    &lt;people/Berners-Lee&gt; ?p ?o .
+    ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  }
 }
 WHERE
-  { ?this ?p ?o
-    OPTIONAL
-      { ?this foaf:primaryTopic ?primaryTopic .
-        ?primaryTopic ?primaryTopicP ?primaryTopicO
+  { GRAPH ?g
+      { &lt;people/Berners-Lee&gt; ?p ?o
+        OPTIONAL
+          { &lt;people/Berners-Lee&gt; foaf:primaryTopic ?primaryTopic .
+            ?primaryTopic ?primaryTopicP ?primaryTopicO
+          }
+      }
+  }</code>, <code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+INSERT DATA {
+  GRAPH &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt; {
+    &lt;people/Berners-Lee&gt; a ldtc:Document .
+    &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
+    &lt;people/Berners-Lee#this&gt; a foaf:Person .
+    &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
+    &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+  }
+}</code>)) <code>text/turtle</code> =
+
+<code>200 OK</code> execUpdate(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE {
+  GRAPH ?g {
+    &lt;people/Berners-Lee&gt; ?p ?o .
+    ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  }
+}
+WHERE
+  { GRAPH ?g
+      { &lt;people/Berners-Lee&gt; ?p ?o
+        OPTIONAL
+          { &lt;people/Berners-Lee&gt; foaf:primaryTopic ?primaryTopic .
+            ?primaryTopic ?primaryTopicP ?primaryTopicO
+          }
       }
   } ;
 
-  BASE    &lt;http://linkeddatahub.com/&gt;
-  PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
-  PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-  PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+BASE    &lt;http://linkeddatahub.com/&gt;
+PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
+PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
-  INSERT DATA {
+INSERT DATA {
+  GRAPH &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt; {
     &lt;people/Berners-Lee&gt; a ldtc:Document .
     &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
     &lt;people/Berners-Lee#this&gt; a foaf:Person .
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-  }</code>) <code>text/turtle</code></pre>
+  }
+}</code>) <code>text/turtle</code></pre>
         </div>
         <div class="example">
           <p>HTTP response</p>
