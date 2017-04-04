@@ -86,19 +86,19 @@
         <h3>REST</h3>
         <p>In this section we define the abstract syntax REpresentational State Transfer. It sufficient to model a RESTful read-write API independently of the transport protocol.</p>
         <dl>
-          <dt><dfn>Request</dfn></dt>
+          <dt>Request</dt>
           <dd>Request</dd>
-          <dt><dfn>Response</dfn></dt>
+          <dt>Response</dt>
           <dd>Response</dd>
-          <dt><dfn>Body</dfn></dt>
+          <dt>Body</dt>
           <dd>Message-body</dd>
-          <dt><dfn>MediaType</dfn></dt>
+          <dt>MediaType</dt>
           <dd>Media-type</dd>
-          <dt><dfn>Status</dfn></dt>
+          <dt>Status</dt>
           <dd>Status</dd>
-          <dt><dfn>IRI</dfn></dt>
-          <dd>Absolute-IRI</dd>
-          <dt><dfn>Method</dfn></dt>
+          <dt>IRI</dt>
+          <dd><a>IRI</a></dd>
+          <dt>Method</dt>
           <dd>Interaction-method</dd>
         </dl>
         <pre class="grammar"><a>Request</a>  := <a>Method</a> <a>IRI</a> | <a>Method</a> <a>IRI</a> <a>Body</a>
@@ -108,15 +108,15 @@
         <h3>Linked Data</h3>
         <p>In this section, we specialize the REST abstract syntax by constraining the request/response representations to syntaxes of the RDF data model.</p>
         <dl>
-          <dt><dfn>RDFRequest</dfn></dt>
+          <dt><a>RDFRequest</a></dt>
           <dd>RDF-request ⊂ <a>Request</a></dd>
-          <dt><dfn>RDFResponse</dfn></dt>
+          <dt><a>RDFResponse</a></dt>
           <dd>RDF-response ⊂ <a>Response</a></dd>
-          <dt><dfn>RDFBody</dfn></dt>
+          <dt><a>RDFBody</a></dt>
           <dd>RDF-body ⊂ <a>Body</a></dd>
-          <dt><dfn>RDFMediaType</dfn></dt>
+          <dt><a>RDFMediaType</a></dt>
           <dd>RDF-media-type ⊂ <a>MediaType</a></dd>
-          <dt><dfn>Dataset</dfn></dt>
+          <dt><a>Dataset</a></dt>
           <dd>RDF-dataset</dd>
         </dl>
         <pre><a>RDFBody</a>     := <a>Dataset</a> <a>RDFMediaType</a>
@@ -130,15 +130,15 @@
       <section id="ldt-domains" class="domains">
         <h3>Domains</h3>
         <dl>
-          <dt><a>IRI</a><sub>abs</sub></dt>
+          <dt><dfn>IRI</dfn><sub>abs</sub></dt>
           <dd>non-relative <a href="https://www.w3.org/TR/rdf11-concepts/#section-IRIs">IRI identifier</a> [[!rdf11-concepts]]</dd>
-          <dt><a>Method</a></dt>
+          <dt><dfn>Method</dfn></dt>
           <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
-          <dt><a>Dataset</a></dt>
+          <dt><dfn>Dataset</dfn></dt>
           <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
-          <dt><a>RDFRequest</a></dt>
+          <dt><dfn>RDFRequest</dfn></dt>
           <dd><a>Method</a> × <a>IRI</a><sub>abs</sub> × <a>Dataset</a></dd>
-          <dt><a>Status</a></dt>
+          <dt><dfn>Status</dfn></dt>
           <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
           <dt><dfn>Ontology</dfn></dt>
           <dd>{ <a>Operation</a><sub>1</sub>, …, <a>Operation</a><sub>N</sub> }  × Precedence × { <a>Ontology</a><sub>1</sub>, …, <a>Ontology</a><sub>M</sub> }</dd>
@@ -738,11 +738,48 @@ WHERE
       <section>
         <h4>Application</h4>
         <p class="ednote">Applications are orthogonal to operations. Does it make sense to put them under the same namespace?</p>
+        <table class="core-vocab">
+          <caption>Application</caption>
+          <thead>
+            <tr>
+              <th colspan="2">Domain</th>
+              <th>Property</th>
+              <th colspan="2">Range</th>
+              <th>Cardinality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a>App</a></td>
+              <td>ldt:Application</td>
+              <td><strong>ldt:baseUri</strong></td>
+              <td>rdfs:Resource</td>
+              <td><a>IRI</a></td>
+              <td>+</td>
+            </tr>
+            <tr>
+              <td><a>App</a></td>
+              <td>ldt:Application</td>
+              <td><strong>ldt:ontology</strong></td>
+              <td>ldt:Ontology</td>
+              <td><a>Ontology</a></td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td><a>App</a></td>
+              <td>ldt:Application</td>
+              <td><strong>ldt:service</strong></td>
+              <td>sd:Service</td>
+              <td>????</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
       <section>
         <h4>Operation</h4>
         <table class="core-vocab">
-          <caption>Core</caption>
+          <caption>Operation</caption>
           <thead>
             <tr>
               <th colspan="2">Domain</th>
@@ -806,7 +843,7 @@ WHERE
             The range of the <code>rdfs:</code> properties is not accurate here in terms of RDFS.</p>
 
         <table class="http-vocab">
-          <caption>HTTP</caption>
+          <caption>Operation (HTTP)</caption>
           <thead>
             <tr>
               <th colspan="2">Domain</th>
@@ -834,6 +871,30 @@ WHERE
         </table>
         <p class="ednote">The HTTP properties are not part of <a href="#ldt-http">LDT over HTTP</a> yet. We need to introduce HTTP headers.<br/>
             Also core and HTTP probably should not be under the same namespace.</p>
+      </section>
+      <section>
+        <h4>Hypermedia</h4>
+        <table class="core-vocab">
+          <caption>Argument</caption>
+          <thead>
+            <tr>
+              <th colspan="2">Domain</th>
+              <th>Property</th>
+              <th colspan="2">Range</th>
+              <th>Cardinality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a>View</a></td>
+              <td>ldt:View</td>
+              <td>ldt:arg</td>
+              <td>ldt:Parameter</td>
+              <td><a>Parameter</a></td>
+              <td>*</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     </section>
   </body>
