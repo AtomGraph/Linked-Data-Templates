@@ -101,7 +101,7 @@
           <dt>M</dt>
           <dd><a data-lt="domain-Method">Method</a></dd>
         </dl>
-        <pre class="grammar">Q := M I | M I B
+        <pre class="grammar">Q := M I | M I T B
 P := S T B | S I</pre>
       </section>
       <section id="linked-data-syntax">
@@ -109,23 +109,20 @@ P := S T B | S I</pre>
         <p>In this section, we specialize the REST abstract syntax by constraining the request/response representations to syntaxes of the RDF data model.</p>
         <dl>
           <dt>Q<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFRequest">RDFRequest</a></dd>
+          <dd><a data-lt="domain-RDFRequest">RDFRequest</a> ⊂ <a data-lt="domain-Request">Request</a></dd>
           <dt>P<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a></dd>
+          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> ⊂ <a data-lt="domain-Response">Response</a></dd>
           <dt>B<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFBody">RDFBody</a></dd>
-          <dt>M<sub>CRUD</sub></dt>
-          <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a></dd>
+          <dd><a data-lt="domain-Dataset">Dataset</a> ⊂ <a data-lt="domain-Body">Body</a></dd>
           <dt>T<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFMediaType">RDFMediaType</a></dd>
-          <dt>D</dt>
-          <dd><a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd><a data-lt="domain-RDFMediaType">RDFMediaType</a> ⊂ <a data-lt="domain-MediaType">MediaType</a></dd>
           <dt>S<sub>CRUD</sub></dt>
-          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a></dd>
+          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> ⊂ <a data-lt="domain-Status">Status</a></dd>
+          <dt>M<sub>CRUD</sub></dt>
+          <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a> ⊂ <a data-lt="domain-Method">Method</a></dd>
         </dl>
-        <pre class="grammar">Q<sub>RDF</sub> := M<sub>CRUD</sub> I | M<sub>CRUD</sub> I B<sub>RDF</sub>
-P<sub>RDF</sub> := S<sub>CRUD</sub> B<sub>RDF</sub> | S<sub>CRUD</sub> I
-B<sub>RDF</sub> := D T<sub>RDF</sub></pre>
+        <pre class="grammar">Q<sub>RDF</sub> := M<sub>CRUD</sub> I | M<sub>CRUD</sub> I T<sub>RDF</sub> B<sub>RDF</sub>
+P<sub>RDF</sub> := S<sub>CRUD</sub> T<sub>RDF</sub> B<sub>RDF</sub> | S<sub>CRUD</sub> I
       </section>
     </section>
     <section id="ldt-semantics" class="semantics">
