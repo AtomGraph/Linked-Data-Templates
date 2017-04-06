@@ -47,12 +47,12 @@
     <section id="introduction" class="introductory">
       <h2>Introduction</h2>
       <p>This document defines a precise semantics for Linked Data applications, providing a specification of how Create, Read, Update, Delete (CRUD) interactions change the state of their resources.</p>
-      <figure id="architecture">
-        <img src="images/components.svg" alt="LDT architecture">
-        <figcaption>Main components of LDT architecture</figcaption>
-      </figure>
       <section>
         <h3>Applications</h3>
+        <figure id="architecture">
+          <img src="images/components.svg" alt="LDT architecture">
+          <figcaption>Main components of LDT architecture</figcaption>
+        </figure>
         <p>An LDT application represents a data space identified by its base URI, in which application resource URIs are relative to the base URI. The only interface an application provides is RESTful Linked Data: application produces RDF representations when resource URIs are dereferenced,
           and consumes RDF representations when requested to change resource state.</p>
       </section>
