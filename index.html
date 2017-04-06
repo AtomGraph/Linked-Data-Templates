@@ -95,7 +95,7 @@
           <dt>T</dt>
           <dd><a data-lt="domain-MediaType">MediaType</a></dd>
           <dt>S</dt>
-          <dd><a data-lt="domain-CRUDStatus">Status</a></dd>
+          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a></dd>
           <dt>I</dt>
           <dd><a data-lt="domain-IRI">IRI</a></dd>
           <dt>M</dt>
@@ -137,7 +137,7 @@ B<sub>RDF</sub> := D T<sub>RDF</sub></pre>
           <dt><dfn data-lt="domain-Request" data-lt-noDefault>Request</dfn></dt>
           <dd><a data-lt="domain-Method">Method</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Body">Body</a></dd>
           <dt><dfn data-lt="domain-Response" data-lt-noDefault>Response</dfn></dt>
-          <dd><a data-lt="domain-CRUDStatus">Status</a> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-Body">Body</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub></dd>
+          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-Body">Body</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub></dd>
           <dt><dfn data-lt="domain-Body" data-lt-noDefault>Body</dfn></dt>
           <dd><a href="https://tools.ietf.org/html/rfc7230#section-3.3">Message Body</a> [[!HTTP11]]
           <dt><dfn data-lt="domain-MediaType" data-lt-noDefault>MediaType</dfn></dt>
@@ -331,17 +331,17 @@ B<sub>RDF</sub> := D T<sub>RDF</sub></pre>
           <dfn>RDFResponse</dfn> : <a data-lt="domain-RDFRequest">RDFRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-RDFResponse">RDFResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
         </p>
         <dl>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a> <a data-lt="domain-IRI">IRI</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a> <a data-lt="domain-IRI">IRI</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a> <a data-lt="domain-IRI">IRI</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (app) (request)
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a>]] (app) (request)</dt>
+          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (request)</dt>
+          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)</dt>
+          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)
+          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-IRI">IRI</a>]] (request)</dt>
+          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-IRI">IRI</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-IRI">IRI</a>]] (app) (request)</dt>
+          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (app) (request)
+          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (request)</dt>
+          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (app) (request)</dt>
           <dd><a data-lt="func-reqMatch">reqMatch</a>(request, app) = {} → <code>NotFound</code> []<br/>
              <a data-lt="func-method">method</a>(request) = <code>Create</code> → <code>Created</code> []<br/>
              <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
@@ -417,7 +417,7 @@ P<sub>HTTP</sub> := S<sub>HTTP</sub> T B | S<sub>HTTP</sub> I</pre>
               httpMethod = <code>DELETE</code> → <code>Delete</code> []<br/>
               {}</dd>
             <dt><dfn>statusToHttpStatus</dfn></dt>
-            <dd><a data-lt="domain-CRUDStatus">Status</a> → <a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
+            <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> → <a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
             <dd>statusToHttpStatus(status) = status = <code>NotFound</code> → <code>404 Not Found</code> []<br/>
               status = <code>Created</code> → <code>201 Created</code> []<br/>
               status = <code>NoContent</code> → <code>204 No Content</code> []<br/>
@@ -439,7 +439,7 @@ P<sub>HTTP</sub> := S<sub>HTTP</sub> T B | S<sub>HTTP</sub> I</pre>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-HTTPStatus">HTTPStatus</a>]] (httpRequest)</dt>
             <dd><a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)) = {} → <code>405 Method Not Allowed</code> []<br/>
               <a data-lt="func-httpBody">httpBody</a>(httpRequest) ∉ <a data-lt="domain-RDFBody">RDFBody</a> → <code>406 Not Acceptable</code> []<br/>
-              <a data-lt="func-statusToHttpStatus">statusToHttpStatus</a>(<a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">Status</a>]] ((<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))))
+              <a data-lt="func-statusToHttpStatus">statusToHttpStatus</a>(<a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] ((<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))))
             </dd>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
             <dd><a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)) = {} → {} []<br/>
