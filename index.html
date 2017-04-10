@@ -27,6 +27,7 @@
       .abstract-syntax dt , .semantics dt { float: left; }
       .abstract-syntax .internalDFN, .semantics .internalDFN { font-style: italic; }
       .abstract-syntax dt::after { content: "\00a0∈\00a0"; font-weight: normal; }
+      .grammar { font-family: monospace; font-size: larger; }
       .domains dt::after, .valuation-functions dt::after { content: "\00a0=\00a0"; font-weight: normal; }
       .functions dt::after { content: "\00a0:\00a0"; font-weight: normal; }
       .functions dd { font-style: italic; }
@@ -84,70 +85,73 @@
       <p>This section defines the data model of LDT applications.</p>
       <section id="rest-syntax">
         <h3>REST</h3>
-        <p>In this section we define the abstract syntax REpresentational State Transfer. It sufficient to model a RESTful read-write API independently of the transport protocol.</p>
+        <p>In this section we define the abstract syntax REpresentational State Transfer. It sufficient to model a RESTful API independently of the transport protocol.</p>
         <dl>
-          <dt>Q</dt>
-          <dd><a data-lt="domain-Request">Request</a></dd>
-          <dt>P</dt>
-          <dd><a data-lt="domain-Response">Response</a></dd>
-          <dt>B</dt>
-          <dd><a data-lt="domain-Body">Body</a></dd>
-          <dt>T</dt>
-          <dd><a data-lt="domain-MediaType">MediaType</a></dd>
-          <dt>S</dt>
-          <dd><a data-lt="domain-Status">Status</a></dd>
-          <dt>I</dt>
-          <dd><a data-lt="domain-IRI">IRI</a></dd>
-          <dt>M</dt>
-          <dd><a data-lt="domain-Method">Method</a></dd>
+          <dt><dfn data-lt="token-Request" data-lt-noDefault>Request</dfn></dt>
+          <dd>Request</dd>
+          <dt><dfn data-lt="token-Response" data-lt-noDefault>Response</dfn></dt>
+          <dd>Response</dd>
+          <dt><dfn data-lt="token-Body" data-lt-noDefault>Body</dfn></dt>
+          <dd>Message-body</dd>
+          <dt><dfn data-lt="token-MediaType" data-lt-noDefault>MediaType</dfn></dt>
+          <dd>Media-type</dd>
+          <dt><dfn data-lt="token-Status" data-lt-noDefault>Status</dfn></dt>
+          <dd>Status</dd>
+          <dt><dfn data-lt="token-IRI" data-lt-noDefault>IRI</dfn></dt>
+          <dd>IRI</dd>
+          <dt><dfn data-lt="token-Method" data-lt-noDefault>Method</dfn></dt>
+          <dd>Interaction-method</dd>
         </dl>
-        <pre class="grammar">Q := M I | M I T B
-P := S T B | S I</pre>
+        <p class="grammar">Request  := Method IRI | Method IRI MediaType Body<br/>
+Response := Status MediaType Body | Status IRI</p>
       </section>
       <section id="linked-data-syntax">
         <h3>Linked Data</h3>
-        <p>In this section, we specialize the REST abstract syntax by constraining the request/response representations to syntaxes of the RDF data model.</p>
+        <p>In this section, we specialize the REST abstract syntax by constraining the message body to RDF serializations and read-write interactions to CRUD.</p>
         <dl>
-          <dt>Q<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFRequest">RDFRequest</a> ⊂ <a data-lt="domain-Request">Request</a></dd>
-          <dt>P<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> ⊂ <a data-lt="domain-Response">Response</a></dd>
-          <dt>B<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-Dataset">Dataset</a> ⊂ <a data-lt="domain-Body">Body</a></dd>
-          <dt>T<sub>RDF</sub></dt>
-          <dd><a data-lt="domain-RDFMediaType">RDFMediaType</a> ⊂ <a data-lt="domain-MediaType">MediaType</a></dd>
-          <dt>S<sub>CRUD</sub></dt>
-          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> ⊂ <a data-lt="domain-Status">Status</a></dd>
-          <dt>M<sub>CRUD</sub></dt>
-          <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a> ⊂ <a data-lt="domain-Method">Method</a></dd>
+          <dt><dfn data-lt="token-LDRequest" data-lt-noDefault>LDRequest</dfn></dt>
+          <dd>RDF-request ⊂ Request</dd>
+          <dt><dfn data-lt="token-LDResponse" data-lt-noDefault>LDResponse</dfn></dt>
+          <dd>RDF-response ⊂ Response</dd>
+          <dt><dfn data-lt="token-RDFMediaType" data-lt-noDefault>RDFMediaType</dfn></dt>
+          <dd>RDF-media-type ⊂ Media-type</dd>
+          <dt><dfn data-lt="token-Dataset" data-lt-noDefault>Dataset</dfn></dt>
+          <dd>Dataset ⊂ Body</dd>
+          <dt><dfn data-lt="token-CRUDMethod" data-lt-noDefault>CRUDMethod</dfn></dt>
+          <dd>CRUD-method ⊂ Method</dd>
+          <dt><dfn data-lt="token-CRUDStatus" data-lt-noDefault>CRUDStatus</dfn></dt>
+          <dd>CRUD-status ⊂ Status</dd>
         </dl>
-        <pre class="grammar">Q<sub>RDF</sub> := M<sub>CRUD</sub> I | M<sub>CRUD</sub> I T<sub>RDF</sub> B<sub>RDF</sub>
-P<sub>RDF</sub> := S<sub>CRUD</sub> T<sub>RDF</sub> B<sub>RDF</sub> | S<sub>CRUD</sub> I
+        <p class="grammar">LDRequest  := CRUDMethod IRI | CRUDMethod IRI RDFMediaType Dataset<br/>
+LDResponse := CRUDStatus RDFMediaType Dataset | CRUDStatus IRI<br/>
+CRUDMethod  := <code>Create</code> | <code>Read</code> | <code>Delete</code> | <code>Update</code><br/>
+CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</code> | <code>OK</code></p>
       </section>
     </section>
     <section id="ldt-semantics" class="semantics">
       <h2>Semantics</h2>
-      <p>We use denotational semantics as the formalism.</p>
+      <p>We use denotational semantics as the formalism for Linked Data semantics.</p>
       <section id="ldt-domains" class="domains">
         <h3>Domains</h3>
         <dl>
-          <dt><dfn data-lt="domain-Request" data-lt-noDefault>Request</dfn></dt>
-          <dd><a data-lt="domain-Method">Method</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Body">Body</a></dd>
-          <dt><dfn data-lt="domain-Response" data-lt-noDefault>Response</dfn></dt>
-          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-Body">Body</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub></dd>
-          <dt><dfn data-lt="domain-Body" data-lt-noDefault>Body</dfn></dt>
-          <dd><a href="https://tools.ietf.org/html/rfc7230#section-3.3">Message Body</a> [[!HTTP11]]
-          <dt><dfn data-lt="domain-MediaType" data-lt-noDefault>MediaType</dfn></dt>
-          <dd><a href="https://tools.ietf.org/html/rfc7231#section-3.1.1.1">Media Type</a> [[!HTTP11]]
-
+          <dt><dfn data-lt="domain-Method" data-lt-noDefault>Method</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/webarch/#interaction">Interaction method</a> [[webarch]]</dd>
           <dt><dfn data-lt="domain-IRI" data-lt-noDefault>IRI</dfn><sub>abs</sub></dt>
           <dd>non-relative <a href="https://www.w3.org/TR/rdf11-concepts/#section-IRIs">IRI identifier</a> [[!rdf11-concepts]]</dd>
-          <dt><dfn data-lt="domain-Method" data-lt-noDefault>Method</dfn></dt>
+          <dt><dfn data-lt="domain-MediaType" data-lt-noDefault>MediaType</dfn></dt>
+          <dd>[[!rfc2046]]</dd>
+          <dt><dfn data-lt="domain-Body" data-lt-noDefault>Body</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/webarch/#internet-media-type">Representation</a> [[!webarch]]</dd>
+          <dt><dfn data-lt="domain-Request" data-lt-noDefault>Request</dfn></dt>
+          <dd><a data-lt="domain-Method">Method</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-Body">Body</a></dd>
+          <dt><dfn data-lt="domain-RDFMediaType" data-lt-noDefault>RDFMediaType</dfn></dt>
+          <dd>{ <code>text/turtle</code>, <code>text/trig</code>, <code>application/n-triples</code>, <code>application/n-quads</code>, <code>application/ld+json</code>, <code>application/rdf+xml</code>, … } <a href="https://www.w3.org/TR/rdf11-primer/#section-graph-syntax">Writing RDF graphs</a> [[rdf11-primer]]</dd>
+          <dt><dfn data-lt="domain-CRUDMethod" data-lt-noDefault>CRUDMethod</dfn></dt>
           <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
           <dt><dfn data-lt="domain-Dataset" data-lt-noDefault>Dataset</dfn></dt>
           <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
-          <dt><dfn data-lt="domain-RDFRequest" data-lt-noDefault>RDFRequest</dfn></dt>
-          <dd><a data-lt="domain-Method">Method</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dt><dfn data-lt="domain-LDRequest" data-lt-noDefault>LDRequest</dfn></dt>
+          <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="domain-CRUDStatus" data-lt-noDefault>CRUDStatus</dfn></dt>
           <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
           <dt><dfn data-lt="domain-Ontology" data-lt-noDefault>Ontology</dfn></dt>
@@ -205,7 +209,7 @@ P<sub>RDF</sub> := S<sub>CRUD</sub> T<sub>RDF</sub> B<sub>RDF</sub> | S<sub>CRUD
           <dt><dfn data-lt="func-iri" data-lt-noDefault>iri</dfn></dt>
           <dd><a data-lt="domain-Request">Request</a>↓2 → <a data-lt="domain-IRI">IRI</a></dd>
           <dt><dfn data-lt="func-data" data-lt-noDefault>data</dfn></dt>
-          <dd><a data-lt="domain-RDFRequest">RDFRequest</a>↓3 → <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd><a data-lt="domain-LDRequest">LDRequest</a>↓3 → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="func-operations" data-lt-noDefault>operations</dfn></dt>
           <dd><a data-lt="domain-Ontology">Ontology</a>↓1 → { <a data-lt="domain-Operation">Operation</a><sub>1</sub>, …, <a data-lt="domain-Operation">Operation</a><sub>N</sub> }</dd>
           <dt><dfn data-lt="func-precedence" data-lt-noDefault>precedence</dfn></dt>
@@ -303,7 +307,7 @@ P<sub>RDF</sub> := S<sub>CRUD</sub> T<sub>RDF</sub> B<sub>RDF</sub> | S<sub>CRUD
           <dd><a data-lt="domain-Request">Request</a> → <a data-lt="domain-MediaType">MediaType</a></dd>
           <dd>The processor MUST implement <a data-lt="func-conNeg">conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
           <dt><dfn data-lt="func-created" data-lt-noDefault>created</dfn></dt>
-          <dd><a data-lt="domain-RDFRequest">RDFRequest</a> → <a data-lt="domain-IRI">IRI</a></dd>
+          <dd><a data-lt="domain-LDRequest">LDRequest</a> → <a data-lt="domain-IRI">IRI</a></dd>
           <dd>created(rdfRequest) = iri ∈ <a data-lt="func-skolemize">skolemize</a>(<a data-lt="func-data">data</a>(rdfRequest))</dd>
           <dd>The processor MUST provide an implementation of <a data-lt="func-created">created</a> that satisfies the above definition</dd>
           <dt><dfn data-lt="func-append" data-lt-noDefault>append</dfn></dt>
@@ -323,43 +327,43 @@ P<sub>RDF</sub> := S<sub>CRUD</sub> T<sub>RDF</sub> B<sub>RDF</sub> | S<sub>CRUD
       </section>
       <section id="ldt-valuation" class="valuation-functions">
         <h3>Valuation functions</h3>
-        <p>Evaluation of response to request ∈ <a data-lt="domain-RDFRequest">RDFRequest</a>:</p>
+        <p>Evaluation of response to request ∈ <a data-lt="domain-LDRequest">LDRequest</a>:</p>
         <p>
-          <dfn>RDFResponse</dfn> : <a data-lt="domain-RDFRequest">RDFRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-RDFResponse">RDFResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
+          <dfn>LDResponse</dfn> : <a data-lt="domain-LDRequest">LDRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-LDResponse">LDResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
         </p>
         <dl>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-IRI">IRI</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-IRI">IRI</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a> <a data-lt="domain-IRI">IRI</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (app) (request)
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] (app) (request)</dt>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFBody">RDFBody</a>]] (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFBody">RDFBody</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFBody">RDFBody</a>]] (app) (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFBody">RDFBody</a>]] (app) (request)
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-IRI">IRI</a>]] (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-IRI">IRI</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-IRI">IRI</a>]] (app) (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (app) (request)
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (app) (request)</dt>
           <dd><a data-lt="func-reqMatch">reqMatch</a>(request, app) = {} → <code>NotFound</code> []<br/>
              <a data-lt="func-method">method</a>(request) = <code>Create</code> → <code>Created</code> []<br/>
              <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
              <code>OK</code>
           </dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-Dataset">Dataset</a>]] (app) (request) <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFMediaType">RDFMediaType</a>]] (app) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-Dataset">Dataset</a>]] (request)</dt>
-          <dd><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-Dataset">Dataset</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-Dataset">Dataset</a>]] (app) (request)</dt>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFBody">RDFBody</a>]] (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFBody">RDFBody</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFBody">RDFBody</a>]] (app) (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (app) (request) <a data-lt="token-LDResponse">LDResponse</a> [[<a data-lt="token-RDFMediaType">RDFMediaType</a>]] (app) (request)</dd>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (request)</dt>
+          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (app) (request)</dt>
           <dd><a data-lt="func-method">method</a>(request) = <code>Read</code>  → <a data-lt="func-merge">merge</a>(<a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))))), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Create</code> → <a data-lt="func-execUpdate">execUpdate</a>(<a data-lt="func-insertData">insertData</a>(<a data-lt="func-skolemize">skolemize</a>(<a data-lt="func-data">data</a>(request)))) []<br/>
               <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-execUpdate">execUpdate</a>(<a data-lt="func-join">join</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-insertData">insertData</a>(<a data-lt="func-data">data</a>(request)))) []<br/>
                 <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-execUpdate">execUpdate</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))))) []<br/>
             {}</dd>
           <dd class="ednote">Does this address <a data-lt="domain-Dataset">Dataset</a><sub>after</sub> (<a data-lt="func-execUpdate">execUpdate</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFMediaType">RDFMediaType</a>]] (app) (request)</dt>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFMediaType">RDFMediaType</a>]] (app) (request)</dt>
           <dd><a data-lt="func-conNeg">conNeg</a>(request)</dd>
-          <dt><a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (app) (request)</dt>
+          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (app) (request)</dt>
           <dd><a data-lt="func-method">method</a>(request) = <code>Create</code> → <a data-lt="func-created">created</a>(request) []<br/>
             {}</dd>
         </dl>
@@ -370,17 +374,17 @@ P<sub>RDF</sub> := S<sub>CRUD</sub> T<sub>RDF</sub> B<sub>RDF</sub> | S<sub>CRUD
       <section id="http-syntax" class="abstract-syntax">
         <h3>Abstract syntax</h3>
         <dl>
-          <dt>Q<sub>HTTP</sub></dt>
-          <dd><a data-lt="domain-HTTPRequest">HTTPRequest</a></dd>
-          <dt>P<sub>HTTP</sub></dt>
-          <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a></dd>
-          <dt>S<sub>HTTP</sub></dt>
-          <dd><a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
-          <dt>M<sub>HTTP</sub></dt>
-          <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a></dd>
+          <dt><dfn data-lt="token-HTTPRequest" data-lt-noDefault>HTTPRequest</dfn></dt>
+          <dd>HTTP-request</dd>
+          <dt><dfn data-lt="token-HTTPResponse" data-lt-noDefault>HTTPResponse</dfn></dt>
+          <dd>HTTP-response</dd>
+          <dt><dfn data-lt="token-HTTPStatus" data-lt-noDefault>HTTPStatus</dfn></dt>
+          <dd>HTTP-status</dd>
+          <dt><dfn data-lt="token-HTTPMethod" data-lt-noDefault>HTTPMethod</dfn></dt>
+          <dd>HTTP-method</dd>
         </dl>
-        <pre class="grammar">Q<sub>HTTP</sub> := M<sub>HTTP</sub> I | M<sub>HTTP</sub> I B
-P<sub>HTTP</sub> := S<sub>HTTP</sub> T B | S<sub>HTTP</sub> I</pre>
+        <p class="grammar">HTTPRequest  := HTTPMethod IRI | HTTPMethod IRI MediaType Body<br/>
+HTTPResponse := HTTPStatus MediaType Body | HTTPStatus IRI</p>
       </section>
       <section id="http-semantics" class="semantics">
         <h3>Semantics</h3>
@@ -407,7 +411,7 @@ P<sub>HTTP</sub> := S<sub>HTTP</sub> T B | S<sub>HTTP</sub> I</pre>
             <dt><dfn>httpBody</dfn></dt>
             <dd><a data-lt="domain-HTTPRequest">HTTPRequest</a>↓3 → <a data-lt="domain-Body">Body</a></dd>
             <dt><dfn>httpMethodToMethod</dfn></dt>
-            <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> → <a data-lt="domain-Method">Method</a></dd>
+            <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> → <a data-lt="domain-CRUDMethod">CRUDMethod</a></dd>
             <dd>httpMethodToMethod(httpMethod) = httpMethod = <code>POST</code> → <code>Create</code> []<br/>
               httpMethod = <code>GET</code> → <code>Read</code> []<br/>
               httpMethod = <code>PUT</code> → <code>Update</code> []<br/>
@@ -429,23 +433,23 @@ P<sub>HTTP</sub> := S<sub>HTTP</sub> T B | S<sub>HTTP</sub> I</pre>
             <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> → <a data-lt="domain-HTTPResponse">HTTPResponse</a>
           </p>
           <dl>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-HTTPStatus">HTTPStatus</a> <a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
-            <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-Body">Body</a>]] (httpRequest)</dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-HTTPStatus">HTTPStatus</a> <a data-lt="domain-IRI">IRI</a>]] (httpRequest)</dt>
-            <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (httpRequest)</dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-HTTPStatus">HTTPStatus</a>]] (httpRequest)</dt>
+            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
+            <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-Body">Body</a>]] (httpRequest)</dd>
+            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-IRI">IRI</a>]] (httpRequest)</dt>
+            <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (httpRequest)</dd>
+            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest)</dt>
             <dd><a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)) = {} → <code>405 Method Not Allowed</code> []<br/>
               <a data-lt="func-httpBody">httpBody</a>(httpRequest) ∉ <a data-lt="domain-RDFBody">RDFBody</a> → <code>406 Not Acceptable</code> []<br/>
-              <a data-lt="func-statusToHttpStatus">statusToHttpStatus</a>(<a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-CRUDStatus">CRUDStatus</a>]] ((<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))))
+              <a data-lt="func-statusToHttpStatus">statusToHttpStatus</a>(<a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] ((<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))))
             </dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
+            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-Body">Body</a>]] (httpRequest)</dt>
             <dd><a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)) = {} → {} []<br/>
               <a data-lt="func-httpBody">httpBody</a>(httpRequest) ∉ <a data-lt="domain-RDFBody">RDFBody</a> → {} []<br/>
-              <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-RDFBody">RDFBody</a>]] (<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))
+              <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFBody">RDFBody</a>]] (<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))
             </dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (httpRequest)</dt>
+            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (httpRequest)</dt>
             <dd><a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)) = {} → {} []<br/>
-              <a data-lt="domain-RDFResponse">RDFResponse</a> [[<a data-lt="domain-IRI">IRI</a>]] (<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))
+              <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (<a data-lt="func-httpMethodToMethod">httpMethodToMethod</a>(<a data-lt="func-httpMethod">httpMethod</a>(httpRequest)), <a data-lt="func-httpIri">httpIri</a>(httpRequest), <a data-lt="func-httpBody">httpBody</a>(httpRequest))
             </dd>
           </dl>
         </section>
@@ -522,25 +526,25 @@ Content-Type: text/trig
           <p>Valuation of <code>putRequest</code></p>
           <pre>HTTPResponse [[HTTPStatus Body]] (<code>putRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>putRequest</code>) HTTPResponse [[Body]] (<code>putRequest</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>))))
-RDFResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>)) =
+statusToHttpStatus(LDResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>))))
+LDResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>putRequest</code>)), httpIri(<code>putRequest</code>), httpBody(<code>putRequest</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-RDFResponse [[RDFBody]] (httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+statusToHttpStatus(LDResponse [[Status]] ((httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+LDResponse [[RDFBody]] (httpMethodToMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-RDFResponse [[RDFBody]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+statusToHttpStatus(LDResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+LDResponse [[RDFBody]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-RDFResponse [[RDFBody]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+statusToHttpStatus(LDResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+LDResponse [[RDFBody]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+statusToHttpStatus(LDResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+LDResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+statusToHttpStatus(LDResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
+LDResponse [[RDFBody]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
-<code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+<code>200 OK</code> LDResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
 <code>200 OK</code> execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), argBindings(arguments(queryString(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))), reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)))))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
 
@@ -679,25 +683,25 @@ Accept: text/turtle, text/trig</pre>
           <p>Valuation of <code>getRequest</code></p>
           <pre>HTTPResponse [[HTTPStatus Body]] (<code>getRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>getRequest</code>) HTTPResponse [[Body]] (<code>putRequest</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>getRequest</code>)), httpIri(<code>getRequest</code>), httpBody(<code>getRequest</code>))))
-RDFResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>getRequest</code>)), httpIri(<code>getRequest</code>), httpBody(<code>getRequest</code>)) =
+statusToHttpStatus(LDResponse [[Status]] ((httpMethodToMethod(httpMethod(<code>getRequest</code>)), httpIri(<code>getRequest</code>), httpBody(<code>getRequest</code>))))
+LDResponse [[RDFBody]] (httpMethodToMethod(httpMethod(<code>getRequest</code>)), httpIri(<code>getRequest</code>), httpBody(<code>getRequest</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] ((httpMethodToMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-RDFResponse [[RDFBody]] (httpMethodToMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
+statusToHttpStatus(LDResponse [[Status]] ((httpMethodToMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFBody]] (httpMethodToMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-RDFResponse [[RDFBody]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
+statusToHttpStatus(LDResponse [[Status]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFBody]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
 
-statusToHttpStatus(RDFResponse [[Status]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-RDFResponse [[RDFBody]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+statusToHttpStatus(LDResponse [[Status]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFBody]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-RDFResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+statusToHttpStatus(LDResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFBody]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
-statusToHttpStatus(RDFResponse [[Status]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-RDFResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+statusToHttpStatus(LDResponse [[Status]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFBody]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
-<code>200 OK</code> RDFResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) RDFResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+<code>200 OK</code> LDResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
 <code>200 OK</code> merge(execQuery(apply(query(reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))), argBindings(arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))))), state(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)), arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))) conNeg((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))  =
 
