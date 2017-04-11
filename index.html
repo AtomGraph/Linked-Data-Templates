@@ -139,7 +139,7 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dt><dfn data-lt="domain-IRI" data-lt-noDefault>IRI</dfn><sub>abs</sub></dt>
           <dd>non-relative <a href="https://www.w3.org/TR/rdf11-concepts/#section-IRIs">IRI identifier</a> [[!rdf11-concepts]]</dd>
           <dt><dfn data-lt="domain-MediaType" data-lt-noDefault>MediaType</dfn></dt>
-          <dd>[[!rfc2046]]</dd>
+          <dd>Media Type [[!rfc2046]]</dd>
           <dt><dfn data-lt="domain-Body" data-lt-noDefault>Body</dfn></dt>
           <dd><a href="https://www.w3.org/TR/webarch/#internet-media-type">Representation</a> [[!webarch]]</dd>
           <dt><dfn data-lt="domain-Request" data-lt-noDefault>Request</dfn></dt>
@@ -151,7 +151,7 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dt><dfn data-lt="domain-Dataset" data-lt-noDefault>Dataset</dfn></dt>
           <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
           <dt><dfn data-lt="domain-LDRequest" data-lt-noDefault>LDRequest</dfn></dt>
-          <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-RDFMediaType">RDFMediaType</a> × <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="domain-CRUDStatus" data-lt-noDefault>CRUDStatus</dfn></dt>
           <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
           <dt><dfn data-lt="domain-Ontology" data-lt-noDefault>Ontology</dfn></dt>
@@ -382,7 +382,10 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dd>HTTP-method ⊂ Method</dd>
         </dl>
         <p class="grammar">HTTPRequest  := HTTPMethod IRI | HTTPMethod IRI MediaType Body<br/>
-HTTPResponse := HTTPStatus MediaType Body | HTTPStatus IRI</p>
+HTTPResponse := HTTPStatus MediaType Body | HTTPStatus IRI<br/>
+HTTPMethod := <code>GET</code> | <code>POST</code> | <code>PUT</code> | <code>DELETE</code><br/>
+HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Content</code> | <code>404 Not Found</code> | <code>405 Method Not Allowed</code> | <code>406 Not Acceptable</code><br/>
+</p>
       </section>
       <section id="http-semantics" class="semantics">
         <h3>Semantics</h3>
@@ -393,10 +396,10 @@ HTTPResponse := HTTPStatus MediaType Body | HTTPStatus IRI</p>
             <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Body">Body</a></dd>
             <dt><dfn data-lt="domain-HTTPResponse" data-lt-noDefault>HTTPResponse</dfn></dt>
             <dd><a data-lt="domain-HTTPStatus">HTTPStatus</a> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Body">Body</a></dd>
-            <dt><dfn data-lt="domain-HTTPStatus" data-lt-noDefault>HTTPStatus</dfn></dt>
-            <dd>{ <code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
             <dt><dfn data-lt="domain-HTTPMethod" data-lt-noDefault>HTTPMethod</dfn></dt>
             <dd>{ <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-4">Request Methods</a> [[!HTTP11]]</dd>
+            <dt><dfn data-lt="domain-HTTPStatus" data-lt-noDefault>HTTPStatus</dfn></dt>
+            <dd>{ <code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
           </dl>
         </section>
         <section id="http-functions" class="functions">
@@ -493,6 +496,8 @@ WHERE
       </dl>
       <section id="put-example">
         <h4>Update over HTTP</h4>
+		<p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request. The evaluation result is a successful HTTP response and a SPARQL update execution.<br/>
+        SPARQL update execution replaces the existing description of the requested resource in the application dataset with the one from the request body. The updated application dataset is a side-effect of the <code>Update</code> operation.</p>
         <div class="example">
           <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
           <pre>PUT /people/Berners-Lee HTTP/1.1
@@ -690,6 +695,8 @@ INSERT DATA {
       </section>
       <section id="get-example">
         <h3>Read over HTTP</h3>
+		<p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.</br>
+		The request dereferences the IRI and retrieves the same representation that was stored by the previous example.</p>
         <div class="example">
           <p>HTTP GET request <code>getRequest</code> with query string arguments</p>
           <pre>GET /people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762 HTTP/1.1
