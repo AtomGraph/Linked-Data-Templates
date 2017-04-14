@@ -523,7 +523,7 @@ WHERE
   spl:optional true ;
   rdfs:isDefinedBy : .
 
-:DescribeWithTopic a sp:Describe ;
+:DescribeWithTopic a ldt:Query, sp:Describe ;
   rdfs:label "Describe with topic" ;
   sp:text """PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -540,7 +540,7 @@ WHERE
   }""" ;
   rdfs:isDefinedBy : .
 
-:DeleteWithTopic a sp:Modify ;
+:DeleteWithTopic a ldt:Update, sp:Modify ;
   rdfs:label "Delete with topic" ;
   sp:text """PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -764,7 +764,7 @@ INSERT DATA {
       </section>
       <section id="get-example">
         <h3>Read over HTTP</h3>
-        <p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.</br>
+        <p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.<br/>
         The request dereferences the IRI and retrieves the same representation that was stored by the previous example.</p>
         <div class="example">
           <p>HTTP GET request <code>getRequest</code> with query string arguments</p>
@@ -866,7 +866,57 @@ WHERE
     </section>
     <section id="vocabulary">
       <h3>Vocabulary</h3>
-      <p>The namespace URI of the LDT vocabulary is <code>http://www.w3.org/ns/ldt#</code>.</p>
+      <table>
+        <caption>Namespaces used in this section</caption>
+        <thead>
+          <tr>
+            <th>Prefix</th>
+            <th>Namespace URI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>ldt:</code>
+            </td>
+            <td>
+              <code>http://www.w3.org/ns/ldt#</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>rdf:</code>
+            </td>
+            <td>
+              <code>http://www.w3.org/1999/02/22-rdf-syntax-ns#</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>rdfs:</code>
+            </td>
+            <td>
+              <code>http://www.w3.org/2000/01/rdf-schema#</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>xsd:</code>
+            </td>
+            <td>
+              <code>http://www.w3.org/2001/XMLSchema#</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>sd:</code>
+            </td>
+            <td>
+              <code>http://www.w3.org/ns/sparql-service-description#</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <section>
         <h4>Application</h4>
         <p class="ednote">Applications are orthogonal to operations. Does it make sense to put them under the same namespace?</p>
