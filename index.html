@@ -494,9 +494,78 @@ WHERE
       }
   }</code></pre></dd>
       </dl>
+      <section id="ontology-example">
+        <h4>Ontology</h4>
+        <p>The following example shows the ontology of our example application. Operations used in response valuation are encoded as RDF terms using LDT <a href="#vocabulary">vocabulary</a> and SPIN vocabulary:</p>
+        <div class="example">
+          <pre>@prefix :     &lt;http://linkeddatahub.com/ns#&gt; .
+@prefix ldt:  &lt;http://www.w3.org/ns/ldt#&gt; .
+@prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix sp:   &lt;http://spinrdf.org/sp#&gt; .
+@prefix spl:  &lt;http://spinrdf.org/spl#&gt; .
+
+: a ldt:Ontology ;
+  owl:imports ldt:, sp: ;
+  rdfs:label "Example ontology" .
+
+:PersonItemTemplate a ldt:Template ;
+  rdfs:label "Person item" ;
+  ldt:path "/people/{familyName}" ;
+  ldt:query :DescribeWithTopic ;
+  ldt:update :DeleteWithTopic ;
+  rdfs:isDefinedBy : .
+
+:GraphParam a ldt:Parameter ;
+  rdfs:label "Graph parameter" ;
+  spl:predicate :g ;
+  spl:valueType rdfs:Resource ;
+  spl:optional true ;
+  rdfs:isDefinedBy : .
+
+:DescribeWithTopic a sp:Describe ;
+  rdfs:label "Describe with topic" ;
+  sp:text """PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DESCRIBE ?this ?primaryTopic
+WHERE
+  { GRAPH ?g
+      { ?this  ?p  ?o
+        OPTIONAL
+          { ?this     foaf:primaryTopic  ?primaryTopic .
+            ?primaryTopic
+                      ?primaryTopicP     ?primaryTopicO
+          }
+      }
+  }""" ;
+  rdfs:isDefinedBy : .
+
+:DeleteWithTopic a sp:Modify ;
+  rdfs:label "Delete with topic" ;
+  sp:text """PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+DELETE {
+  GRAPH ?g {
+    ?this ?p ?o .
+    ?primaryTopic ?primaryTopicP ?primaryTopicO .
+  }
+}
+WHERE
+  { GRAPH ?g
+      { ?this ?p ?o
+        OPTIONAL
+          { ?this foaf:primaryTopic ?primaryTopic .
+            ?primaryTopic ?primaryTopicP ?primaryTopicO
+          }
+      }
+  }""" ;
+  rdfs:isDefinedBy : .
+          </pre>
+        </div>
+      </section>
       <section id="put-example">
         <h4>Update over HTTP</h4>
-		<p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request on an LDT application. The evaluation result is a successful HTTP response and a SPARQL update execution.<br/>
+        <p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request on an LDT application. The evaluation result is a successful HTTP response and a SPARQL update execution.<br/>
         SPARQL update execution replaces the existing description of the requested resource in the application dataset with the one from the request body. The updated application dataset is a side-effect of the <code>Update</code> operation.</p>
         <div class="example">
           <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
@@ -695,8 +764,8 @@ INSERT DATA {
       </section>
       <section id="get-example">
         <h3>Read over HTTP</h3>
-		<p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.</br>
-		The request dereferences the IRI and retrieves the same representation that was stored by the previous example.</p>
+        <p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.</br>
+        The request dereferences the IRI and retrieves the same representation that was stored by the previous example.</p>
         <div class="example">
           <p>HTTP GET request <code>getRequest</code> with query string arguments</p>
           <pre>GET /people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762 HTTP/1.1
