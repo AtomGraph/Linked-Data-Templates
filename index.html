@@ -41,21 +41,35 @@
   <body>
     <!-- https://www.w3.org/TR/qaframe-spec/ -->
     <section id="abstract">
-      <p>Linked Data Templates is a uniform protocol for read-write Linked Data. This document defines an abstract syntax (a data model) of Linked Data applications with SPARQL backends, and semantics of CRUD interactions against their resources. [[LINKED-DATA]][[sparql11-overview]]</p>
+      <p>Linked Data Templates (LDT) is a uniform protocol for read-write Linked Data. This document defines an abstract syntax (a data model) of Linked Data applications with SPARQL backends, and semantics of CRUD interactions against their resources. [[LINKED-DATA]][[sparql11-overview]]</p>
+      <p>LDT can be used to design ontology-driven Web application programming interfaces (APIs). It provides facilities to define interactions with application resources declaratively using SPARQL commands. It also provides a standard method to evaluate requests into responses over application
+        ontology and dataset.</p>
     </section>
     <section id="sotd">
     </section>
-    <section id="introduction" class="introductory">
+    <section id="introduction" class="introductory informative">
       <h2>Introduction</h2>
       <p>This document defines a precise semantics for Linked Data applications, providing a specification of how Create, Read, Update, Delete (CRUD) interactions change the state of their resources.</p>
+      <p>The purpose of Linked Data Templates is to provide a uniform read-write Linked Data protocol. The specification formalizes Linked Data access to SPARQL-backed applications by establishing the following:</p>
+      <ul>
+        <li>an <a href="#ldt-syntax">abstract syntax</a> of REST and Linked Data</li>
+        <li>a <a href="#ldt-domains">formal model</a> of Linked Data applications as well as operations that map interactions to SPARQL commands</li>
+        <li>a generic <a href="#ldt-valuation">formal method</a> that evaluates CRUD interactions against application's resources using the operation descriptions</li>
+        <li>a <a href="#ldt-http">mapping of LDT to HTTP</a> that translates HTTP interactions into LDT interactions</li>
+        <li>an <a href="#vocabulary">RDF vocabulary</a> for encoding operations as RDF ontology terms</li>
+      </ul>
+      <p>LDT reconciles ontology-driven Semantic Web, read-write Linked Data and the SPARQL query language. LDT architecture decouples software from domain- or application-specific operations, enabling reuse of the machine-processable operation descriptions (for composition, reasoning etc.) as well as
+        generic implementations of both server and client software.</p>
+      <p>Ontology as a declarative representation of the application's operations, as well as the formal valuation of interactions, are the main features that distinguish LDT from other Linked Data specifications such as Linked Data Platform [[LDP]].</p>
+      <p>The main LDT concepts are explained below.</p>
       <section>
         <h3>Applications</h3>
         <figure id="architecture">
           <img src="images/components.svg" alt="LDT architecture">
           <figcaption>Main components of LDT architecture</figcaption>
         </figure>
-        <p>An LDT application represents a data space identified by its base URI, in which application resource URIs are relative to the base URI. The only interface an application provides is RESTful Linked Data: application produces RDF representations when resource URIs are dereferenced,
-          and consumes RDF representations when requested to change resource state.</p>
+        <p>An LDT application represents a data space identified by its base URI, in which application resource URIs are usually (but not necessarily) relative to the base URI. The only interface an application provides is RESTful Linked Data: application produces RDF representations when resource URIs are
+          dereferenced, and consumes RDF representations when requested to change resource state.</p>
       </section>
       <section>
         <h3>Services</h3>
@@ -69,7 +83,7 @@
       </section>
       <section>
         <h3>Operations</h3>
-        <p>An operation maps a certain part of the application URI space to a certain SPARQL command. During request processing, an LDT processor selects a single best-matching operation (if such exists) that drives the RDF CRUD processing. Operations are defined using the
+        <p>An operation maps a certain URI pattern to a certain SPARQL command. During request processing, an LDT processor matches request URI against operations and selects the best match (if such exists) that will drive the RDF CRUD processing. Operations are defined using the
           <a href="#vocabulary">LDT vocabulary</a>, while the SPARQL commands are defined using SPIN RDF syntax.</p>
       </section>
       <section>
@@ -860,7 +874,36 @@ WHERE
                       ?primaryTopicP     ?primaryTopicO
           }
       }
-  }</code>), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) </pre>
+  }</code>), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) }))</pre>
+        </div>
+        <div class="example">
+          <p>HTTP response</p>
+          <pre>200 OK
+Content-Type: text/trig
+
+@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
+@prefix ldt:  &lt;http://www.w3.org/ns/ldt#&gt; .
+@prefix ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt; .
+@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+&lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
+{
+
+  &lt;&gt; a ldtc:Document ;
+    foaf:primaryTopic &lt;#this&gt; .
+
+  &lt;#this&gt; a foaf:Person ;
+    foaf:isPrimaryTopicOf &lt;&gt; ;
+    owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+
+}
+
+&lt;?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt; ldt:arg [ a &lt;http://linkeddatahub.com/ns#GraphParam&gt; ;
+  ldt:paramName "g" ;
+  rdf:value &lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
+] .</pre>
         </div>
       </section>
     </section>
@@ -1068,11 +1111,11 @@ WHERE
           </thead>
           <tbody>
             <tr>
-              <td><a>View</a></td>
-              <td>ldt:View</td>
+              <td><a data-lt="domain-IRI">IRI</a></td>
+              <td>rdfs:Resource</td>
               <td>ldt:arg</td>
-              <td>ldt:Parameter</td>
-              <td><a data-lt="domain-Parameter">Parameter</a></td>
+              <td></td>
+              <td><a data-lt="domain-Argument">Argument</a></td>
               <td>*</td>
             </tr>
           </tbody>
