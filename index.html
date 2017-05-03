@@ -328,10 +328,10 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dd>The processor MUST provide an implementation of <a data-lt="func-created">created</a> that satisfies the above definition</dd>
           <dt><dfn data-lt="func-append" data-lt-noDefault>append</dfn></dt>
           <dd><a data-lt="domain-QueryBinding">QueryBinding</a> × <a data-lt="domain-QueryBinding">QueryBinding</a> → <a data-lt="domain-QueryBinding">QueryBinding</a></dd>
-          <dd>append(binding<sub>1</sub>, binding<sub>2</sub>) = binding<sub>1</sub> ∪ binding<sub>2</sub></dd>
+          <dd>append(binding<sub>1</sub>, binding<sub>2</sub>) = binding<sub>1</sub> + binding<sub>2</sub></dd>
           <dt><dfn data-lt="func-argBindings" data-lt-noDefault>argBindings</dfn></dt>
           <dd> { <a data-lt="domain-Argument">Argument</a><sub>1</sub>, …, <a data-lt="domain-Argument">Argument</a><sub>N</sub> } → <a data-lt="domain-QueryBinding">QueryBinding</a></dd>
-          <dd>argBindings(arguments) = (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>1</sub>)), <a data-lt="func-value">value</a>(arg<sub>1</sub>)) ∪ … ∪ (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>N</sub>)), <a data-lt="func-value">value</a>(arg<sub>N</sub>)) : arg<sub>i</sub> ∈ arguments</dd>
+          <dd>argBindings(arguments) = (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>1</sub>)), <a data-lt="func-value">value</a>(arg<sub>1</sub>)) + … + (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>N</sub>)), <a data-lt="func-value">value</a>(arg<sub>N</sub>)) : arg<sub>i</sub> ∈ arguments</dd>
           <dt><dfn data-lt="func-merge" data-lt-noDefault>merge</dfn></dt>
           <dd><a data-lt="domain-Dataset">Dataset</a> × <a data-lt="domain-Dataset">Dataset</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dd>merge(dataset<sub>1</sub>, dataset<sub>2</sub>) = dataset<sub>merged</sub> ∈ Dataset</dd>
