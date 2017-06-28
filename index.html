@@ -88,7 +88,7 @@
       <section>
         <h3>Operations</h3>
         <p>An operation maps a certain URI pattern to a certain SPARQL command. During request processing, an LDT processor matches request URI against operations and selects the best match (if such exists) that will drive the RDF CRUD processing. Operations are defined using the
-          <a href="#vocabulary">LDT vocabulary</a>, while the SPARQL commands are defined using SPIN RDF syntax.</p>
+          <a href="#vocabulary">LDT vocabulary</a>, while the SPARQL commands are defined using SPIN RDF syntax and use a "magic" variable <var>?this</var> which is bound to the request URI value.</p>
       </section>
       <section>
         <h3>Hypermedia</h3>
