@@ -53,7 +53,7 @@
       purpose of Linked Data Templates is to provide means to define read-write Linked Data APIs declaratively using SPARQL and specify a uniform
       interaction       protocol for them.</p>
       <p>LDT reconciles ontology-driven Semantic Web, read-write Linked Data and the SPARQL query language. LDT architecture decouples software from
-      domain- or application-specific operations, enabling reuse of the machine-processable operation descriptions (for composition, reasoning etc.) as
+      domain- or application-specific operations, enabling reuse of machine-processable operation descriptions (for composition, reasoning etc.) as
       well as generic implementations of both server and client software. It builds on existing standards; no changes or additions to other specifications
       are required.</p>
       <p>Ontology as a declarative representation of the application's operations, dependency on SPARQL and the formal valuation of interactions are the main features that distinguish LDT from other Linked Data specifications such as Linked Data Platform [[LDP]].</p>
@@ -783,7 +783,8 @@ INSERT DATA {
       <section id="get-example">
         <h3>Read over HTTP</h3>
         <p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.<br/>
-        The request dereferences the IRI and retrieves the same representation that was stored by the previous example.</p>
+        The request dereferences the IRI and retrieves the same representation that was stored by the previous example, to which the hypermedia state is
+            appended.</p>
         <div class="example">
           <p>HTTP GET request <code>getRequest</code> with query string arguments</p>
           <pre>GET /people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762 HTTP/1.1
