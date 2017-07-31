@@ -583,8 +583,8 @@ WHERE
       </section>
       <section id="put-example">
         <h4>Update over HTTP</h4>
-        <p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request on an LDT application. The evaluation result is a successful HTTP response and a SPARQL update execution.<br/>
-        SPARQL update execution replaces the existing description of the requested resource in the application dataset with the one from the request body. The updated application dataset is a side-effect of the <code>Update</code> operation.</p>
+        <p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request on an LDT application. The evaluation result is a successful HTTP response and a SPARQL update execution.</p>
+        <p>SPARQL update execution replaces the existing description of the requested resource in the application dataset with the one from the request body. The updated application dataset is a side-effect of the <code>Update</code> operation.</p>
         <div class="example">
           <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
           <pre>PUT /people/Berners-Lee HTTP/1.1
@@ -782,8 +782,8 @@ INSERT DATA {
       </section>
       <section id="get-example">
         <h3>Read over HTTP</h3>
-        <p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.<br/>
-        The request dereferences the IRI and retrieves the same representation that was stored by the previous example, to which the hypermedia state is
+        <p>The following example shows how an HTTP <code>GET</code> evaluates as Linked Data <code>Read</code> request on an LDT application. The evaluation result is a successful HTTP response with a body that is an RDF dataset. The dataset is a result of a SPARQL query execution on the application dataset, augmented with hypermedia arguments.</p>
+        <p>The request dereferences the IRI and retrieves the same representation that was stored by the previous example, to which the hypermedia state is
             appended.</p>
         <div class="example">
           <p>HTTP GET request <code>getRequest</code> with query string arguments</p>
