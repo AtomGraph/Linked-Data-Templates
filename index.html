@@ -517,7 +517,7 @@ WHERE
         <p>The following example shows the ontology of our example application. Operations used in response valuation are encoded as RDF terms using LDT <a href="#vocabulary">vocabulary</a> and SPIN vocabulary:</p>
         <div class="example">
           <pre>@prefix :     &lt;http://linkeddatahub.com/ns#&gt; .
-@prefix ldt:  &lt;http://www.w3.org/ns/ldt#&gt; .
+@prefix ldt:  &lt;https://www.w3.org/ns/ldt#&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
 @prefix sp:   &lt;http://spinrdf.org/sp#&gt; .
@@ -593,7 +593,7 @@ Accept: text/turtle, text/trig
 Content-Type: text/trig
 
 @base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
-@prefix ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt; .
+@prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 
@@ -656,7 +656,7 @@ execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, <code>describ
 <code>200 OK</code>
 <code>text/turtle</code>
 execUpdate(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>{ }</code>))), insertData(<code>@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
-@prefix ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt; .
+@prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 
@@ -691,7 +691,7 @@ WHERE
           }
       }
   }</code>, (<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -725,7 +725,7 @@ WHERE
           }
       }
   }</code>, <code>BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -761,7 +761,7 @@ WHERE
   } ;
 
 BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt;
+PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -887,8 +887,8 @@ WHERE
 Content-Type: text/trig
 
 @base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
-@prefix ldt:  &lt;http://www.w3.org/ns/ldt#&gt; .
-@prefix ldtc: &lt;http://www.w3.org/ns/ldt/core#&gt; .
+@prefix ldt:  &lt;https://www.w3.org/ns/ldt#&gt; .
+@prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
 @prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
@@ -929,7 +929,7 @@ Content-Type: text/trig
               <code>ldt:</code>
             </td>
             <td>
-              <code>http://www.w3.org/ns/ldt#</code>
+              <code>https://www.w3.org/ns/ldt#</code>
             </td>
           </tr>
           <tr>
