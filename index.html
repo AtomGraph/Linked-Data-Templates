@@ -529,7 +529,7 @@ WHERE
 
 :PersonItemTemplate a ldt:Template ;
   rdfs:label "Person item" ;
-  ldt:path "/people/{familyName}" ;
+  ldt:match "/people/{familyName}" ;
   ldt:param :GraphParam ;
   ldt:query :DescribeWithTopic ;
   ldt:update :DeleteWithTopic ;
@@ -1023,7 +1023,7 @@ Content-Type: text/trig
             <tr>
               <td><a data-lt="domain-Operation">Operation</a></td>
               <td>ldt:Template</td>
-              <td><strong>ldt:path</strong></td>
+              <td><strong>ldt:match</strong></td>
               <td>xsd:string</td>
               <td><a data-lt="domain-IRIPattern">IRIPattern</a></td>
               <td>1</td>
