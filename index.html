@@ -57,7 +57,7 @@
       well as generic implementations of both server and client software. It builds on existing standards; no changes or additions to other specifications
       are required.</p>
       <p>Ontology as a declarative representation of the application's operations, dependency on SPARQL, formal valuation of interactions and the support for HATEOAS hypermedia are the main features that distinguish LDT from other Linked Data specifications such as Linked Data Platform [[LDP]].</p>
-      <p>This document defines a precise semantics for SPARQL-backed Linked Data applications, providing a specification of how Create, Read, Update, Delete (CRUD) interactions change the state of their resources. It does so by establishing the following:</p>
+      <p>This document defines a precise semantics for SPARQL-backed Linked Data applications, providing a specification of how Append, Read, Update, Delete (CRUD) interactions change the state of their resources. It does so by establishing the following:</p>
       <ul>
         <li>an <a href="#ldt-syntax">abstract syntax</a> of REST and Linked Data</li>
         <li>a <a href="#ldt-domains">formal model</a> of Linked Data applications as well as operations that map interactions to SPARQL commands</li>
@@ -121,7 +121,7 @@
           <dd>Interaction-method</dd>
         </dl>
         <p class="grammar">Request  := Method IRI | Method IRI MediaType Body<br/>
-Response := Status MediaType Body | Status IRI</p>
+Response := Status MediaType Body</p>
       </section>
       <section id="linked-data-syntax">
         <h3>Linked Data</h3>
@@ -141,9 +141,9 @@ Response := Status MediaType Body | Status IRI</p>
           <dd>CRUD-status ⊂ Status</dd>
         </dl>
         <p class="grammar">LDRequest  := CRUDMethod IRI | CRUDMethod IRI RDFMediaType Dataset<br/>
-LDResponse := CRUDStatus RDFMediaType Dataset | CRUDStatus IRI<br/>
-CRUDMethod  := <code>Create</code> | <code>Read</code> | <code>Delete</code> | <code>Update</code><br/>
-CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</code> | <code>OK</code></p>
+LDResponse := CRUDStatus RDFMediaType Dataset<br/>
+CRUDMethod  := <code>Append</code> | <code>Read</code> | <code>Delete</code> | <code>Update</code><br/>
+CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code></p>
       </section>
     </section>
     <section id="ldt-semantics" class="semantics">
@@ -165,41 +165,39 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dt><dfn data-lt="domain-RDFMediaType" data-lt-noDefault>RDFMediaType</dfn></dt>
           <dd>{ <code>text/turtle</code>, <code>text/trig</code>, <code>application/n-triples</code>, <code>application/n-quads</code>, <code>application/ld+json</code>, <code>application/rdf+xml</code>, … } <a href="https://www.w3.org/TR/rdf11-primer/#section-graph-syntax">Writing RDF graphs</a> [[rdf11-primer]]</dd>
           <dt><dfn data-lt="domain-CRUDMethod" data-lt-noDefault>CRUDMethod</dfn></dt>
-          <dd>{ <code>Create</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
+          <dd>{ <code>Append</code>, <code>Read</code>, <code>Delete</code>, <code>Update</code> }</dd>
+          <dt><dfn data-lt="domain-CRUDStatus" data-lt-noDefault>CRUDStatus</dfn></dt>
+          <dd>{ <code>NotFound</code>, <code>NoContent</code>, <code>OK</code> }</dd>
           <dt><dfn data-lt="domain-Dataset" data-lt-noDefault>Dataset</dfn></dt>
           <dd><a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF dataset</a> [[!rdf11-concepts]][[!sparql11-query]]</dd>
           <dt><dfn data-lt="domain-LDRequest" data-lt-noDefault>LDRequest</dfn></dt>
           <dd><a data-lt="domain-CRUDMethod">CRUDMethod</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-RDFMediaType">RDFMediaType</a> × <a data-lt="domain-Dataset">Dataset</a></dd>
-          <dt><dfn data-lt="domain-CRUDStatus" data-lt-noDefault>CRUDStatus</dfn></dt>
-          <dd>{ <code>NotFound</code>, <code>Created</code>, <code>NoContent</code>, <code>OK</code> }</dd>
+          <dt><dfn data-lt="domain-LDResponse" data-lt-noDefault>LDResponse</dfn></dt>
+          <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> × <a data-lt="domain-RDFMediaType">RDFMediaType</a> × <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="domain-Ontology" data-lt-noDefault>Ontology</dfn></dt>
           <dd>{ <a data-lt="domain-Operation">Operation</a><sub>1</sub>, …, <a data-lt="domain-Operation">Operation</a><sub>N</sub> }  × Precedence × { <a data-lt="domain-Ontology">Ontology</a><sub>1</sub>, …, <a data-lt="domain-Ontology">Ontology</a><sub>M</sub> }</dd>
-              <!--
-              <dt><dfn>Service</a></dt>
-              <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
-              -->
+          <!--
+          <dt><dfn>Service</a></dt>
+          <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
+          -->
           <dt><dfn data-lt="domain-App" data-lt-noDefault>App</dfn></dt>
           <dd><a data-lt="domain-IRI">IRI</a> × <a data-lt="domain-Ontology">Ontology</a> × <a data-lt="domain-Dataset">Dataset</a></dd>
           <dd class="ednote">Here we define an ontology with a <a data-lt="domain-Dataset">Dataset</a>, yet the implementation/vocabulary uses a Service which is an interface for the Dataset.</dd>
-              <dt><dfn data-lt="domain-QueryVariable" data-lt-noDefault>QueryVariable</dfn></dt>
-              <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
-              <dt><dfn data-lt="domain-RDFTerm" data-lt-noDefault>RDFTerm</dfn></dt>
-              <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
+          <dt><dfn data-lt="domain-QueryVariable" data-lt-noDefault>QueryVariable</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlQueryVariables">Query Variable</a> [[!sparql11-query]]</dd>
+          <dt><dfn data-lt="domain-RDFTerm" data-lt-noDefault>RDFTerm</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/sparql11-query/#sparqlBasicTerms">RDF Term</a> [[!sparql11-query]]</dd>
           <dt><dfn data-lt="domain-QueryBinding" data-lt-noDefault>QueryBinding</dfn></dt>
           <dd><a data-lt="domain-QueryVariable">QueryVariable</a> × <a data-lt="domain-RDFTerm">RDFTerm</a></dd>
           <dt><dfn data-lt="domain-Describe" data-lt-noDefault>Describe</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-query/#describe">DESCRIBE</a> [[!sparql11-query]]</dd>
-              <dt><dfn data-lt="domain-Construct" data-lt-noDefault>Construct</dfn></dt>
-              <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
-              <dt><dfn data-lt="domain-Query" data-lt-noDefault>Query</dfn></dt>
+          <dt><dfn data-lt="domain-Construct" data-lt-noDefault>Construct</dfn></dt>
+          <dd><a href="https://www.w3.org/TR/sparql11-query/#construct">CONSTRUCT</a> [[!sparql11-query]]</dd>
+          <dt><dfn data-lt="domain-Query" data-lt-noDefault>Query</dfn></dt>
           <dd><a data-lt="domain-Describe">Describe</a> + <a data-lt="domain-Construct">Construct</a></dd>
           <dt data-lt="domain-Delete" data-lt-noDefault><dfn>Delete</dfn></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-update/#delete">DELETE</a> [[!sparql11-update]]</dd>
-              <dt><dfn data-lt="domain-InsertData" data-lt-noDefault>InsertData</dfn></dt>
-              <dd><a href="https://www.w3.org/TR/sparql11-update/#insertData">INSERT DATA</a> [[!sparql11-update]]</dd>
-              <dt><dfn data-lt="domain-Update" data-lt-noDefault>Update</dfn></dt>
-          <dd><a data-lt="domain-Delete">Delete</a> + <a data-lt="domain-InsertData">InsertData</a></dd>
-              <dt><dfn data-lt="domain-Command" data-lt-noDefault>Command</dfn></dt>
+          <dt><dfn data-lt="domain-Command" data-lt-noDefault>Command</dfn></dt>
           <dd><a data-lt="domain-Query">Query</a> + <a data-lt="domain-Delete">Delete</a></dd>
           <dt data-lt="domain-IRIPattern" data-lt-noDefault><dfn>IRIPattern</dfn></dt>
           <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
@@ -253,18 +251,10 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           for all app ∈ <a data-lt="domain-App">App</a> : app ≠ appminPath [[xpath-functions-31]]</dd>
           <dt><dfn data-lt="func-apply" data-lt-noDefault>apply</dfn></dt>
           <dd><a data-lt="domain-Command">Command</a> × <a data-lt="domain-QueryBinding">QueryBinding</a> → <a data-lt="domain-Command">Command</a></dd>
-          <dt><dfn data-lt="func-insertData" data-lt-noDefault>insertData</dfn></dt>
-          <dd><a data-lt="domain-Dataset">Dataset</a>Request → <a data-lt="domain-InsertData">InsertData</a></dd>
-          <!--
-          <dt><dfn>exec</dfn></dt>
-          <dd><a data-lt="domain-Command">Command</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a><sub>result</sub> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
-          -->
           <dt><dfn data-lt="func-execQuery" data-lt-noDefault>execQuery</dfn></dt>
           <dd><a data-lt="domain-Query">Query</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a></dd>
-          <dt><dfn data-lt="func-execUpdate" data-lt-noDefault>execUpdate</dfn></dt>
-          <dd><a data-lt="domain-Update">Update</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
-          <dt><dfn data-lt="func-join" data-lt-noDefault>join</dfn></dt>
-          <dd><a data-lt="domain-Update">Update</a> × <a data-lt="domain-Update">Update</a> → <a data-lt="domain-Update">Update</a>
+          <dt><dfn data-lt="func-execDelete" data-lt-noDefault>execDelete</dfn></dt>
+          <dd><a data-lt="domain-Delete">Delete</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
           <dt><dfn data-lt="func-name" data-lt-noDefault>name</dfn></dt>
           <dd><a data-lt="domain-Parameter">Parameter</a>↓1 → <a data-lt="domain-QueryVariable">QueryVariable</a></dd>
           <dt><dfn data-lt="func-valueType" data-lt-noDefault>valueType</dfn></dt>
@@ -294,7 +284,7 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dd class="ednote">Priority and conflict resolution have not been addressed yet</dd>
           <dt><dfn data-lt="func-reqMatch" data-lt-noDefault>reqMatch</dfn></dt>
           <dd><a data-lt="domain-Request">Request</a> × <a data-lt="domain-App">App</a> → <a data-lt="domain-Operation">Operation</a></dd>
-          <dd>reqMatch(request, app) = <a data-lt="func-match">match</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-base">base</a>(app), <a data-lt="func-ontology">match</a>(app))</dd>
+          <dd>reqMatch(request, app) = <a data-lt="func-match">match</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-base">base</a>(app), <a data-lt="func-match">match</a>(app))</dd>
           <dt><dfn data-lt="func-decodeUri" data-lt-noDefault>decodeUri</dfn></dt>
           <dd>String → String</dd>
           <dd>decodeUri(encoded) = decoded such that <a href="https://www.w3.org/TR/xpath-functions-31/#func-encode-for-uri">fn:encode-for-uri(decoded)</a> = encoded [[xpath-functions-31]]</dd>
@@ -313,23 +303,9 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dt><dfn data-lt="func-value" data-lt-noDefault>value</dfn></dt>
           <dd><a data-lt="domain-Argument">Argument</a>↓2 → <a data-lt="domain-RDFTerm">RDFTerm</a></dd>
           <dt><dfn data-lt="func-type" data-lt-noDefault>type</dfn></dt>
-          <dd><a data-lt="domain-RDFTerm">RDFTerm</a> → <a data-lt="domain-Class">Class</a></dd>
-          <dd>type(term) = class ∈ Class</dd>
-          <dt><dfn data-lt="func-skolemizeTerm" data-lt-noDefault>skolemizeTerm</dfn></dt>
-          <dd><a data-lt="domain-RDFTerm">RDFTerm</a> → <a data-lt="domain-IRI">IRI</a></dd>
-          <dd>skolemizeTerm(term) = <a href="https://www.w3.org/TR/sparql11-query/#func-isBlank">isBlank</a>(term) = <code>true</code> : build(pathTemplate(<a data-lt="func-type">type</a>(term)), propertyMap(term)) []<br/>
-            term [[!sparql11-query]]</dd>
-          <dd class="ednote">Skolemization definition not complete. See also <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Replacing Blank Nodes with IRIs</a> [[rdf11-concepts]]</dd>
-          <dt><dfn data-lt="func-skolemize" data-lt-noDefault>skolemize</dfn></dt>
-          <dd><a data-lt="domain-Dataset">Dataset</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
-          <dd>skolemize(dataset) = <a data-lt="func-skolemizeTerm">skolemizeTerm</a>(term), term ∈ dataset</dd>
           <dt><dfn data-lt="func-conNeg" data-lt-noDefault>conNeg</dfn></dt>
           <dd><a data-lt="domain-Request">Request</a> → <a data-lt="domain-MediaType">MediaType</a></dd>
           <dd>The processor MUST implement <a data-lt="func-conNeg">conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
-          <dt><dfn data-lt="func-created" data-lt-noDefault>created</dfn></dt>
-          <dd><a data-lt="domain-LDRequest">LDRequest</a> → <a data-lt="domain-IRI">IRI</a></dd>
-          <dd>created(rdfRequest) = iri ∈ <a data-lt="func-skolemize">skolemize</a>(<a data-lt="func-body">body</a>(rdfRequest))</dd>
-          <dd>The processor MUST provide an implementation of <a data-lt="func-created">created</a> that satisfies the above definition</dd>
           <dt><dfn data-lt="func-append" data-lt-noDefault>append</dfn></dt>
           <dd><a data-lt="domain-QueryBinding">QueryBinding</a> × <a data-lt="domain-QueryBinding">QueryBinding</a> → <a data-lt="domain-QueryBinding">QueryBinding</a></dd>
           <dd>append(binding<sub>1</sub>, binding<sub>2</sub>) = binding<sub>1</sub> + binding<sub>2</sub></dd>
@@ -338,7 +314,7 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dd>argBindings(arguments) = (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>1</sub>)), <a data-lt="func-value">value</a>(arg<sub>1</sub>)) + … + (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>N</sub>)), <a data-lt="func-value">value</a>(arg<sub>N</sub>)) : arg<sub>i</sub> ∈ arguments</dd>
           <dt><dfn data-lt="func-merge" data-lt-noDefault>merge</dfn></dt>
           <dd><a data-lt="domain-Dataset">Dataset</a> × <a data-lt="domain-Dataset">Dataset</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
-          <dd>merge(dataset<sub>1</sub>, dataset<sub>2</sub>) = dataset<sub>merged</sub> ∈ Dataset</dd>
+          <dd>merge(dataset<sub>1</sub>, dataset<sub>2</sub>) = dataset ∈ Dataset</dd>
           <dd>The processor MUST implement <a data-lt="func-merge">merge</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#sparqlDataset">RDF Dataset</a> [[!sparql11-query]]</dd>
           <dt><dfn data-lt="func-state" data-lt-noDefault>state</dfn></dt>
           <dd><a data-lt="domain-IRI">IRI</a> × { <a data-lt="domain-Argument">Argument</a><sub>1</sub>, …, <a data-lt="domain-Argument">Argument</a><sub>N</sub> } → <a data-lt="domain-Dataset">Dataset</a></dd>
@@ -355,33 +331,16 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (request)</dt>
           <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
           <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFMediaType">RDFMediaType</a>]] (app) (request) <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (app) (request)
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-IRI">IRI</a>]] (request)</dt>
-          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-IRI">IRI</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-IRI">IRI</a>]] (app) (request)</dt>
-          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (app) (request) <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (app) (request)
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (request)</dt>
-          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] (app) (request)</dt>
-          <dd><a data-lt="func-reqMatch">reqMatch</a>(request, app) = {} → <code>NotFound</code> []<br/>
-             <a data-lt="func-method">method</a>(request) = <code>Create</code> → <code>Created</code> []<br/>
-             <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
-             <code>OK</code>
-          </dd>
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-RDFMediaType">RDFMediaType</a>]] (app) (request)</dt>
-          <dd><a data-lt="func-conNeg">conNeg</a>(request)</dd>
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (app) (request)</dt>
-          <dd><a data-lt="func-method">method</a>(request) = <code>Create</code> → <a data-lt="func-created">created</a>(request) []<br/>
-            {}</dd>
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (request)</dt>
-          <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
-          <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (app) (request)</dt>
-          <dd><a data-lt="func-method">method</a>(request) = <code>Read</code>  → <a data-lt="func-merge">merge</a>(<a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))))), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))) []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Create</code> → <a data-lt="func-execUpdate">execUpdate</a>(<a data-lt="func-insertData">insertData</a>(<a data-lt="func-skolemize">skolemize</a>(<a data-lt="func-body">body</a>(request)))) []<br/>
-              <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-execUpdate">execUpdate</a>(<a data-lt="func-join">join</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-insertData">insertData</a>(<a data-lt="func-body">body</a>(request)))) []<br/>
-                <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-execUpdate">execUpdate</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))))) []<br/>
-            {}</dd>
-          <dd class="ednote">Does this address <a data-lt="domain-Dataset">Dataset</a><sub>after</sub> (<a data-lt="func-execUpdate">execUpdate</a> side-effects) properly? Maybe we can avoid them by defining <dfn>Service</dfn>? [[!sparql11-service-description]]</dd>
+          <dd>((<a data-lt="func-reqMatch">reqMatch</a>(request, app) = {} → <code>NotFound</code> []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
+            <code>OK</code>,<br/>
+            <a data-lt="func-conNeg">conNeg</a>(request),<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Read</code>  → <a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
+            {}),<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app))) []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
+            {})</dd>
         </dl>
       </section>
     </section>
@@ -400,9 +359,9 @@ CRUDStatus  := <code>NotFound</code> | <code>Created</code> | <code>NoContent</c
           <dd>HTTP-method ⊂ Method</dd>
         </dl>
         <p class="grammar">HTTPRequest  := HTTPMethod IRI | HTTPMethod IRI MediaType Body<br/>
-HTTPResponse := HTTPStatus MediaType Body | HTTPStatus IRI<br/>
+HTTPResponse := HTTPStatus MediaType Body<br/>
 HTTPMethod := <code>GET</code> | <code>POST</code> | <code>PUT</code> | <code>DELETE</code><br/>
-HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Content</code> | <code>404 Not Found</code> | <code>405 Method Not Allowed</code> | <code>406 Not Acceptable</code><br/>
+HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not Found</code> | <code>405 Method Not Allowed</code> | <code>406 Not Acceptable</code><br/>
 </p>
       </section>
       <section id="http-semantics" class="semantics">
@@ -413,11 +372,11 @@ HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Cont
             <dt><dfn data-lt="domain-HTTPRequest" data-lt-noDefault>HTTPRequest</dfn></dt>
             <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Body">Body</a></dd>
             <dt><dfn data-lt="domain-HTTPResponse" data-lt-noDefault>HTTPResponse</dfn></dt>
-            <dd><a data-lt="domain-HTTPStatus">HTTPStatus</a> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-IRI">IRI</a><sub>abs</sub> × <a data-lt="domain-Body">Body</a></dd>
+            <dd><a data-lt="domain-HTTPStatus">HTTPStatus</a> × <a data-lt="domain-MediaType">MediaType</a> × <a data-lt="domain-Body">Body</a></dd>
             <dt><dfn data-lt="domain-HTTPMethod" data-lt-noDefault>HTTPMethod</dfn></dt>
             <dd>{ <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-4">Request Methods</a> [[!HTTP11]]</dd>
             <dt><dfn data-lt="domain-HTTPStatus" data-lt-noDefault>HTTPStatus</dfn></dt>
-            <dd>{ <code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
+            <dd>{ <code>200 OK</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
           </dl>
         </section>
         <section id="http-functions" class="functions">
@@ -425,7 +384,7 @@ HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Cont
           <dl>
             <dt><dfn>httpMethodToCRUDMethod</dfn></dt>
             <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> → <a data-lt="domain-CRUDMethod">CRUDMethod</a></dd>
-            <dd>httpMethodToCRUDMethod(httpMethod) = httpMethod = <code>POST</code> → <code>Create</code> []<br/>
+            <dd>httpMethodToCRUDMethod(httpMethod) = httpMethod = <code>POST</code> → <code>Append</code> []<br/>
               httpMethod = <code>GET</code> → <code>Read</code> []<br/>
               httpMethod = <code>PUT</code> → <code>Update</code> []<br/>
               httpMethod = <code>DELETE</code> → <code>Delete</code> []<br/>
@@ -433,7 +392,6 @@ HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Cont
             <dt><dfn>crudStatusToHTTPStatus</dfn></dt>
             <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> → <a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
             <dd>crudStatusToHTTPStatus(status) = status = <code>NotFound</code> → <code>404 Not Found</code> []<br/>
-              status = <code>Created</code> → <code>201 Created</code> []<br/>
               status = <code>NoContent</code> → <code>204 No Content</code> []<br/>
               status = <code>OK</code> → <code>200 OK</code> []<br/>
               {}</dd>
@@ -443,13 +401,11 @@ HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Cont
           <h3>Valuation functions</h3>
           <p>Evaluation of response to request ∈ <a data-lt="domain-HTTPRequest">HTTPRequest</a>:</p>
           <p>
-            <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> → <a data-lt="domain-HTTPResponse">HTTPResponse</a>
+            <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-HTTPResponse">HTTPResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
           </p>
           <dl>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-MediaType">MediaType</a> <a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
             <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-MediaType">MediaType</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-Body">Body</a>]] (httpRequest)</dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-IRI">IRI</a>]] (httpRequest)</dt>
-            <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (httpRequest)</dd>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest)</dt>
             <dd><a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)) = {} → <code>405 Method Not Allowed</code> []<br/>
               <a data-lt="func-body">mediaType</a>(httpRequest) ∉ <a data-lt="domain-RDFMediaType">RDFMediaType</a> → <code>406 Not Acceptable</code> []<br/>
@@ -462,10 +418,6 @@ HTTPStatus := <code>200 OK</code> | <code>201 Created</code> | <code>204 No Cont
             <dd><a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)) = {} → {} []<br/>
               <a data-lt="func-body">body</a>(httpRequest) ∉ <a data-lt="domain-Dataset">Dataset</a> → {} []<br/>
               <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))
-            </dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (httpRequest)</dt>
-            <dd><a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)) = {} → {} []<br/>
-              <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-IRI">IRI</a>]] (<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))
             </dd>
           </dl>
         </section>
@@ -643,19 +595,19 @@ LDResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http:
 
 <code>200 OK</code>
 conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-execUpdate(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), argBindings(arguments(queryString(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))), reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)))))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) =
+execDelete(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), argBindings(arguments(queryString(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))), reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)))))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) =
 
 <code>200 OK</code>
 <code>text/turtle</code>
-execUpdate(join(apply(delete(<code>match</code>), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>match</code>))))), insertData(<code>putBody</code>))) =
+execDelete(join(apply(delete(<code>match</code>), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>match</code>))))), insertData(<code>putBody</code>))) =
 
 <code>200 OK</code>
 <code>text/turtle</code>
-execUpdate(join(apply(delete((<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>{ <code>graphParam</code> = (<var>?g</var>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>) }</code>, <code>0</code>)), append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>""</code>, <code>match</code>))))), insertData(<code>putBody</code>))) =
+execDelete(join(apply(delete((<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>{ <code>graphParam</code> = (<var>?g</var>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>) }</code>, <code>0</code>)), append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>""</code>, <code>match</code>))))), insertData(<code>putBody</code>))) =
 
 <code>200 OK</code>
 <code>text/turtle</code>
-execUpdate(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>{ }</code>))), insertData(<code>@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
+execDelete(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>{}</code>))), insertData(<code>@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
 @prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
@@ -674,7 +626,7 @@ execUpdate(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <c
 
 <code>200 OK</code>
 <code>text/turtle</code>
-execUpdate(join(apply(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+execDelete(join(apply(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   GRAPH ?g {
@@ -707,7 +659,7 @@ INSERT DATA {
 
 <code>200 OK</code>
 <code>text/turtle</code>
-execUpdate(join(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+execDelete(join(<code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
@@ -741,7 +693,7 @@ INSERT DATA {
 
 <code>200 OK</code>
 <code>text/turtle</code>
-execUpdate(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+execDelete(<code>BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
