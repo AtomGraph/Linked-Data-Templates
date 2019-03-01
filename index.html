@@ -11,7 +11,8 @@
         specStatus: "CG-DRAFT",
         editors: [{
           name: "Martynas Jusevičius",
-          url: "http://atomgraph.com",
+          mailto: "martynas@atomgraph.com",
+          companyURL: "https://atomgraph.com",
         }],
         subtitle: "Generic read-write Linked Data API",
         processVersion: 2017,
@@ -77,7 +78,7 @@
       </section>
       <section>
         <h3>Services</h3>
-        <p>A service is a datasource from which an LDT application retrieves, and in which it stores RDF data with resource representations. The only interface a service MUST provide is SPARQL 1.1 Protocol [[[!sparql11-protocol]]]. That way an application is agnostic to the service implementation
+        <p>A service is a datasource from which an LDT application retrieves, and in which it stores RDF data with resource representations. The only interface a service MUST provide is SPARQL 1.1 Protocol [[[sparql11-protocol]]]. That way an application is agnostic to the service implementation
           details: it can be a native RDF triplestore, an RDBMS or XML database with an RDF wrapper, or any other compliant datasource.</p>
       </section>
       <section>
@@ -89,6 +90,7 @@
         <h3>Operations</h3>
         <p>An operation maps a certain URI pattern to a certain SPARQL command. During request processing, an LDT processor matches request URI against operations and selects the best match (if such exists) that will drive the RDF CRUD processing. Operations are defined using the
           <a href="#vocabulary">LDT vocabulary</a>, while the SPARQL commands are defined using SPIN RDF syntax and use a "magic" variable <var>?this</var> which is bound to the request URI value.</p>
+        <p>Processes such as content negotiation, URI resolution, constraint validation etc. are separate from operations and out of scope of this document.</p>
       </section>
       <section>
         <h3>Hypermedia</h3>
@@ -254,7 +256,10 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt><dfn data-lt="func-execQuery" data-lt-noDefault>execQuery</dfn></dt>
           <dd><a data-lt="domain-Query">Query</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="func-execDelete" data-lt-noDefault>execDelete</dfn></dt>
-          <dd><a data-lt="domain-Delete">Delete</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
+          <dd><a data-lt="domain-Delete">Delete</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a><sub>after</sub></dd>
+          <dt><dfn data-lt="func-empty" data-lt-noDefault>empty</dfn></dt>
+          <dd><a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd>Empty RDF dataset [[!sparql11-update]]</dd>
           <dt><dfn data-lt="func-name" data-lt-noDefault>name</dfn></dt>
           <dd><a data-lt="domain-Parameter">Parameter</a>↓1 → <a data-lt="domain-QueryVariable">QueryVariable</a></dd>
           <dt><dfn data-lt="func-valueType" data-lt-noDefault>valueType</dfn></dt>
@@ -302,7 +307,6 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dd><a data-lt="domain-Argument">Argument</a>↓1 → <a data-lt="domain-Parameter">Parameter</a></dd>
           <dt><dfn data-lt="func-value" data-lt-noDefault>value</dfn></dt>
           <dd><a data-lt="domain-Argument">Argument</a>↓2 → <a data-lt="domain-RDFTerm">RDFTerm</a></dd>
-          <dt><dfn data-lt="func-type" data-lt-noDefault>type</dfn></dt>
           <dt><dfn data-lt="func-conNeg" data-lt-noDefault>conNeg</dfn></dt>
           <dd><a data-lt="domain-Request">Request</a> → <a data-lt="domain-MediaType">MediaType</a></dd>
           <dd>The processor MUST implement <a data-lt="func-conNeg">conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
@@ -327,6 +331,8 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
         <p>
           <dfn>LDResponse</dfn> : <a data-lt="domain-LDRequest">LDRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-LDResponse">LDResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
         </p>
+        <p>methodToResponseDatasetMapping = { (<code>Read</code>, <a data-lt="func-merge">merge</a>(<a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), (<code>Append</code>, <code>empty</code>), (<code>Update</code>, <code>empty</code>), (<code>Delete</code>, <code>empty</code>) }
+        </p>
         <dl>
           <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (request)</dt>
           <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
@@ -335,12 +341,13 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
             <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
             <code>OK</code>,<br/>
             <a data-lt="func-conNeg">conNeg</a>(request),<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Read</code>  → <a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))) []<br/>
             {}),<br/>
             <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app))) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
-            {})</dd>
+            <a data-lt="func-dataset">dataset</a>(app))</dd>
+          <dd class="ednote">The denotational <em>cases</em> operation is probably misused here as a switch statement.</dd>
         </dl>
       </section>
     </section>
@@ -361,7 +368,7 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
         <p class="grammar">HTTPRequest  := HTTPMethod IRI | HTTPMethod IRI MediaType Body<br/>
 HTTPResponse := HTTPStatus MediaType Body<br/>
 HTTPMethod := <code>GET</code> | <code>POST</code> | <code>PUT</code> | <code>DELETE</code><br/>
-HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not Found</code> | <code>405 Method Not Allowed</code> | <code>406 Not Acceptable</code><br/>
+HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not Found</code><br/>
 </p>
       </section>
       <section id="http-semantics" class="semantics">
@@ -376,7 +383,7 @@ HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not 
             <dt><dfn data-lt="domain-HTTPMethod" data-lt-noDefault>HTTPMethod</dfn></dt>
             <dd>{ <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-4">Request Methods</a> [[!HTTP11]]</dd>
             <dt><dfn data-lt="domain-HTTPStatus" data-lt-noDefault>HTTPStatus</dfn></dt>
-            <dd>{ <code>200 OK</code>, <code>204 No Content</code>, <code>404 Not Found</code>, <code>405 Method Not Allowed</code>, <code>406 Not Acceptable</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
+            <dd>{ <code>200 OK</code>, <code>204 No Content</code>, <code>404 Not Found</code> } ⊂ <a href="https://tools.ietf.org/html/rfc7231#section-6">Response Status Codes</a> [[!HTTP11]]</dd>
           </dl>
         </section>
         <section id="http-functions" class="functions">
@@ -384,17 +391,12 @@ HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not 
           <dl>
             <dt><dfn>httpMethodToCRUDMethod</dfn></dt>
             <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> → <a data-lt="domain-CRUDMethod">CRUDMethod</a></dd>
-            <dd>httpMethodToCRUDMethod(httpMethod) = httpMethod = <code>POST</code> → <code>Append</code> []<br/>
-              httpMethod = <code>GET</code> → <code>Read</code> []<br/>
-              httpMethod = <code>PUT</code> → <code>Update</code> []<br/>
-              httpMethod = <code>DELETE</code> → <code>Delete</code> []<br/>
-              {}</dd>
+            <dd>httpMethodToCRUDMethodMapping = { (<code>POST</code>, <code>Append</code>), (<code>GET</code>, <code>Read</code>), (<code>PUT</code>, <code>Update</code>), (<code>DELETE</code>, <code>Delete</code>) }</dd>
+            <dd>httpMethodToCRUDMethod(httpMethod) = methodPair↓2 : methodPair ∈ httpMethodToCRUDMethodMapping, methodPair↓1 = httpMethod</dd>
             <dt><dfn>crudStatusToHTTPStatus</dfn></dt>
             <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> → <a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
-            <dd>crudStatusToHTTPStatus(status) = status = <code>NotFound</code> → <code>404 Not Found</code> []<br/>
-              status = <code>NoContent</code> → <code>204 No Content</code> []<br/>
-              status = <code>OK</code> → <code>200 OK</code> []<br/>
-              {}</dd>
+            <dd>crudStatusToHTTPStatusMapping = { (<code>NotFound</code>, <code>404 Not Found</code>), (<code>NoContent</code>, <code>204 No Content</code>), (<code>OK</code>, <code>200 OK</code>) }</dd>
+            <dd>crudStatusToHTTPStatus(status) = statusPair↓2 : statusPair ∈ crudStatusToHTTPStatusMapping, statusPair↓1 = status</dd>
           </dl>
         </section>
         <section id="http-valuation" class="valuation-functions">
@@ -405,20 +407,7 @@ HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not 
           </p>
           <dl>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-MediaType">MediaType</a> <a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
-            <dd><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-MediaType">MediaType</a>]] (httpRequest) <a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-Body">Body</a>]] (httpRequest)</dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a>]] (httpRequest)</dt>
-            <dd><a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)) = {} → <code>405 Method Not Allowed</code> []<br/>
-              <a data-lt="func-body">mediaType</a>(httpRequest) ∉ <a data-lt="domain-RDFMediaType">RDFMediaType</a> → <code>406 Not Acceptable</code> []<br/>
-              <a data-lt="func-crudStatusToHTTPStatus">crudStatusToHTTPStatus</a>(<a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a>]] ((<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))))
-            </dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-MediaType">MediaType</a>]] (httpRequest)</dt>
-            <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-MediaType">RDFMediaType</a>]] (<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))
-            </dd>
-            <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-Body">Body</a>]] (httpRequest)</dt>
-            <dd><a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)) = {} → {} []<br/>
-              <a data-lt="func-body">body</a>(httpRequest) ∉ <a data-lt="domain-Dataset">Dataset</a> → {} []<br/>
-              <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))
-            </dd>
+            <dd>(<a data-lt="func-crudStatusToHTTPStatus">crudStatusToHTTPStatus</a>(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] ((<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest)))</dd>
           </dl>
         </section>
       </section>
@@ -563,51 +552,59 @@ Content-Type: text/trig
         </div>
         <div class="example">
           <p>Valuation of <code>putRequest</code></p>
-          <pre>HTTPResponse [[HTTPStatus MediaType Body]] (<code>putRequest</code>) = HTTPResponse [[HTTPStatus]] (<code>putRequest</code>) HTTPResponse [[MediaType]] (<code>putRequest</code>) HTTPResponse [[Body]] (<code>putRequest</code>) =
+          <pre>HTTPResponse [[HTTPStatus MediaType Body]] (putRequest) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(method(<code>putRequest</code>)), iri(<code>putRequest</code>), body(<code>putRequest</code>))))
-LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(method(<code>putRequest</code>)), iri(<code>putRequest</code>), body(<code>putRequest</code>))
-LDResponse [[Dataset]] (httpMethodToCRUDMethod(method(<code>putRequest</code>)), iri(<code>putRequest</code>), body(<code>putRequest</code>)) =
+(crudStatusToHTTPStatus(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = LDResponse  [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(httpRequest)), iri(httpRequest), mediaType(httpRequest), body(httpRequest)))
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)
-LDResponse [[Dataset]] (httpMethodToCRUDMethod(<code>PUT</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
+ldResponse = LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(httpRequest)), iri(httpRequest), mediaType(httpRequest), body(httpRequest))) =
+LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) =
+LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) =
+LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-LDResponse [[RDFMediaType]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)
-LDResponse [[Dataset]] (<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-LDResponse [[RDFMediaType]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-LDResponse [[Dataset]] (app(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), body(putRequest))))
+LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), body(putRequest))
+LDResponse [[Dataset]] (httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), body(putRequest)) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-LDResponse [[RDFMediaType]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-LDResponse [[Dataset]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
+LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)
+LDResponse [[Dataset]] (httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))
-LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-LDResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
+LDResponse [[RDFMediaType]] (Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)
+LDResponse [[Dataset]] (Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody) =
 
-<code>200 OK</code>
-LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-LDResponse [[Dataset]] (<code>app</code>) ((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (app(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
+LDResponse [[RDFMediaType]] (app(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
+LDResponse [[Dataset]] (app(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
 
-<code>200 OK</code>
-conNeg((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))
-execDelete(join(apply(delete(reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>)))), argBindings(arguments(queryString(iri((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))), reqMatch((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>), <code>app</code>)))))), insertData(data((<code>Update</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>, <code>putBody</code>))))) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (app(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
+LDResponse [[RDFMediaType]] (app(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
+LDResponse [[Dataset]] (app(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
 
-<code>200 OK</code>
-<code>text/turtle</code>
-execDelete(join(apply(delete(<code>match</code>), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>match</code>))))), insertData(<code>putBody</code>))) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
+LDResponse [[RDFMediaType]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
+LDResponse [[Dataset]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
 
-<code>200 OK</code>
-<code>text/turtle</code>
-execDelete(join(apply(delete((<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>{ <code>graphParam</code> = (<var>?g</var>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>) }</code>, <code>0</code>)), append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>""</code>, <code>match</code>))))), insertData(<code>putBody</code>))) =
+200 OK
+LDResponse [[RDFMediaType]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
+LDResponse [[Dataset]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
 
-<code>200 OK</code>
-<code>text/turtle</code>
-execDelete(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), <code>{}</code>))), insertData(<code>@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
+200 OK
+conNeg((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
+execDelete(join(apply(delete(reqMatch((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody), app)), append((<var>?this</var>, absolutePath(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))), argBindings(arguments(queryString(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))), reqMatch((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody), app)))))), insertData(data((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))))) =
+
+200 OK
+text/turtle
+execDelete(join(apply(delete(match), append((<var>?this</var>, absolutePath(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)), argBindings(arguments(queryString(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;), match))))), insertData(putBody))) =
+
+200 OK
+text/turtle
+execDelete(join(apply(delete(("/people/{familyName}", describeWithTopic, deleteWithTopic, { graphParam = (<var>?g</var>, &lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;, true) }, 0)), append((<var>?this</var>, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;), argBindings(arguments("", match))))), insertData(putBody))) =
+
+200 OK
+text/turtle
+execDelete(join(apply(deleteWithTopic, append((<var>?this</var>, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;), {}))), insertData(@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
 @prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
@@ -622,11 +619,11 @@ execDelete(join(apply(<code>deleteWithTopic</code>, append((<var>?this</var>, <c
     foaf:isPrimaryTopicOf &lt;&gt; ;
     owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
 
-}</code>))) =
+}))) =
 
-<code>200 OK</code>
-<code>text/turtle</code>
-execDelete(join(apply(<code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+200 OK
+text/turtle
+execDelete(join(apply(PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   GRAPH ?g {
@@ -642,7 +639,7 @@ WHERE
             ?primaryTopic ?primaryTopicP ?primaryTopicO
           }
       }
-  }</code>, (<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>)), <code>BASE    &lt;http://linkeddatahub.com/&gt;
+  }, (<var>?this</var>, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;)), BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -655,11 +652,11 @@ INSERT DATA {
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
   }
-}</code>)) =
+})) =
 
-<code>200 OK</code>
-<code>text/turtle</code>
-execDelete(join(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+200 OK
+text/turtle
+execDelete(join(BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
@@ -676,7 +673,7 @@ WHERE
             ?primaryTopic ?primaryTopicP ?primaryTopicO
           }
       }
-  }</code>, <code>BASE    &lt;http://linkeddatahub.com/&gt;
+  }, BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
 PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
@@ -689,11 +686,11 @@ INSERT DATA {
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
   }
-}</code>)) =
+})) =
 
-<code>200 OK</code>
-<code>text/turtle</code>
-execDelete(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+200 OK
+text/turtle
+execDelete(BASE    &lt;http://linkeddatahub.com/&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
@@ -725,7 +722,7 @@ INSERT DATA {
     &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
     &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
   }
-}</code>)</pre>
+})</pre>
         </div>
         <div class="example">
           <p>HTTP response</p>
