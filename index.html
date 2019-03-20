@@ -177,7 +177,8 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt><dfn data-lt="domain-LDResponse" data-lt-noDefault>LDResponse</dfn></dt>
           <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> × <a data-lt="domain-RDFMediaType">RDFMediaType</a> × <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="domain-Ontology" data-lt-noDefault>Ontology</dfn></dt>
-          <dd>{ <a data-lt="domain-Operation">Operation</a><sub>1</sub>, …, <a data-lt="domain-Operation">Operation</a><sub>N</sub> }  × Precedence × { <a data-lt="domain-Ontology">Ontology</a><sub>1</sub>, …, <a data-lt="domain-Ontology">Ontology</a><sub>M</sub> }</dd>
+          <dd><a data-lt="domain-Operation">Operation</a>* × <a data-lt="domain-Ontology">Ontology</a>*</dd>
+          <dd class="ednote">Denotational semantics do not allow recursive domain definitions such as the one above. This would need to be reworked to be strictly formal.</dd>
           <!--
           <dt><dfn>Service</a></dt>
           <dd><a href="https://www.w3.org/TR/sparql11-service-description/#terminology">SPARQL Service</a> [[!sparql11-service-description]]</dd>
@@ -204,13 +205,13 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt data-lt="domain-IRIPattern" data-lt-noDefault><dfn>IRIPattern</dfn></dt>
           <dd><a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=21">URI template</a> [[!JAX-RS]]</dd>
           <dt><dfn data-lt="domain-Parameter" data-lt-noDefault>Parameter</dfn></dt>
-          <dd><a data-lt="domain-QueryVariable">QueryVariable</a> × <a data-lt="domain-IRI">IRI</a> × Boolean</dd>
+          <dd>String × <a data-lt="domain-IRI">IRI</a> × Boolean</dd>
           <dt><dfn data-lt="domain-Operation" data-lt-noDefault>Operation</dfn></dt>
-          <dd><a data-lt="domain-IRIPattern">IRIPattern</a> × <a data-lt="domain-Query">Query</a> × <a data-lt="domain-Delete">Delete</a> × { <a data-lt="domain-Parameter">Parameter</a><sub>1</sub>, …, <a data-lt="domain-Parameter">Parameter</a><sub>N</sub> } × Priority<br/>
+          <dd><a data-lt="domain-IRIPattern">IRIPattern</a> × <a data-lt="domain-Query">Query</a> × <a data-lt="domain-Delete">Delete</a> × <a data-lt="domain-Parameter">Parameter</a>*</dd>
+          <dt><dfn data-lt="domain-OperationPrecedence" data-lt-noDefault>OperationPrecedence</dfn></dt>
+          <dd><a data-lt="domain-Operation">Operation</a> × Integer</dd>
           <dt><dfn data-lt="domain-Argument" data-lt-noDefault>Argument</dfn></dt>
           <dd><a data-lt="domain-Parameter">Parameter</a> × <a data-lt="domain-RDFTerm">RDFTerm</a></dd>
-          <dt><dfn data-lt="domain-Class" data-lt-noDefault>Class</dfn></dt>
-          <dd><a href="https://www.w3.org/TR/rdf11-mt/#dfn-class">Class</a> [[!RDF-MT]]</dd>
       </dl>
       </section>
       <section id="ldt-functions" class="functions">
@@ -231,11 +232,9 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt><dfn>body</dfn></dt>
           <dd><a data-lt="domain-Request">Request</a>↓4 → <a data-lt="domain-Body">Body</a></dd>
           <dt><dfn data-lt="func-operations" data-lt-noDefault>operations</dfn></dt>
-          <dd><a data-lt="domain-Ontology">Ontology</a>↓1 → { <a data-lt="domain-Operation">Operation</a><sub>1</sub>, …, <a data-lt="domain-Operation">Operation</a><sub>N</sub> }</dd>
-          <dt><dfn data-lt="func-precedence" data-lt-noDefault>precedence</dfn></dt>
-          <dd><a data-lt="domain-Ontology">Ontology</a>↓2 → Precedence</dd>
+          <dd><a data-lt="domain-Ontology">Ontology</a>↓1 → <a data-lt="domain-Operation">Operation</a>*</dd>
           <dt><dfn data-lt="func-imports" data-lt-noDefault>imports</dfn></dt>
-          <dd><a data-lt="domain-Ontology">Ontology</a>↓3 → { <a data-lt="domain-Ontology">Ontology</a><sub>1</sub>, …, <a data-lt="domain-Ontology">Ontology</a><sub>M</sub> }</dd>
+          <dd><a data-lt="domain-Ontology">Ontology</a>↓2 → <a data-lt="domain-Ontology">Ontology</a>*</dd>
           <dt><dfn data-lt="func-base" data-lt-noDefault>base</dfn></dt>
           <dd><a data-lt="domain-App">App</a>↓1 → <a data-lt="domain-IRI">IRI</a>
           <dt><dfn data-lt="func-ontology" data-lt-noDefault>ontology</dfn></dt>
@@ -252,7 +251,7 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
             <a href="https://www.w3.org/TR/xpath-functions-3/#func-string-length">fn:string-length</a>(<a data-lt="func-relativize">relativize</a>(<a data-lt="func-base">base</a>(appminPath), iri)) &#8804; <a href="https://www.w3.org/TR/xpath-functions-3/#func-string-length">fn:string-length</a>(<a data-lt="func-relativize">relativize</a>(<a data-lt="func-base">base</a>(app), iri))<br/>
           for all app ∈ <a data-lt="domain-App">App</a> : app ≠ appminPath [[xpath-functions-31]]</dd>
           <dt><dfn data-lt="func-apply" data-lt-noDefault>apply</dfn></dt>
-          <dd><a data-lt="domain-Command">Command</a> × <a data-lt="domain-QueryBinding">QueryBinding</a> → <a data-lt="domain-Command">Command</a></dd>
+          <dd><a data-lt="domain-Command">Command</a> × <a data-lt="domain-QueryBinding">QueryBinding</a>* → <a data-lt="domain-Command">Command</a></dd>
           <dt><dfn data-lt="func-execQuery" data-lt-noDefault>execQuery</dfn></dt>
           <dd><a data-lt="domain-Query">Query</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="func-execDelete" data-lt-noDefault>execDelete</dfn></dt>
@@ -261,7 +260,7 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dd><a data-lt="domain-Dataset">Dataset</a></dd>
           <dd>Empty RDF dataset [[!sparql11-update]]</dd>
           <dt><dfn data-lt="func-name" data-lt-noDefault>name</dfn></dt>
-          <dd><a data-lt="domain-Parameter">Parameter</a>↓1 → <a data-lt="domain-QueryVariable">QueryVariable</a></dd>
+          <dd><a data-lt="domain-Parameter">Parameter</a>↓1 → String</dd>
           <dt><dfn data-lt="func-valueType" data-lt-noDefault>valueType</dfn></dt>
           <dd><a data-lt="domain-Parameter">Parameter</a>↓2 → <a data-lt="domain-IRI">IRI</a></dd>
           <dt><dfn data-lt="func-optional" data-lt-noDefault>optional</dfn></dt>
@@ -273,23 +272,32 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt><dfn data-lt="func-delete" data-lt-noDefault>delete</dfn></dt>
           <dd><a data-lt="domain-Operation">Operation</a>↓3 → <a data-lt="domain-Delete">Delete</a></dd>
           <dt><dfn data-lt="func-parameters" data-lt-noDefault>parameters</dfn></dt>
-          <dd><a data-lt="domain-Operation">Operation</a>↓4 → { <a data-lt="domain-Parameter">Parameter</a><sub>1</sub>, …, <a data-lt="domain-Parameter">Parameter</a><sub>N</sub> }</dd>
-          <dt><dfn data-lt="func-priority" data-lt-noDefault>priority</dfn></dt>
-          <dd><a data-lt="domain-Operation">Operation</a>↓5 → <a>Priority</a></dd>
-          <dt><dfn data-lt="func-matchIRIPattern" data-lt-noDefault>matchIRIPattern</dfn></dt>
+          <dd><a data-lt="domain-Operation">Operation</a>↓4 → <a data-lt="domain-Parameter">Parameter</a>*</dd>
+          <dt><dfn data-lt="func-noMatch" data-lt-noDefault>noMatch</dfn></dt>
+          <dd><a data-lt="domain-Operation">Operation</a></dd>
+          <dt><dfn data-lt="func-matchPattern" data-lt-noDefault>matchPattern</dfn></dt>
           <dd><a data-lt="domain-IRI">IRI</a><sub>rel</sub> × <a data-lt="domain-IRIPattern">IRIPattern</a> → Boolean</dd>
-          <dd>The processor MUST implement <a data-lt="func-matchIRIPattern">matchIRIPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-2_0-fr-eval-spec/jsr339-jaxrs-2.0-final-spec.pdf#page=32">Request Matching</a>, using C = <a data-lt="domain-Ontology">Ontology</a>, T<sub>Z</sub> = <a data-lt="func-iriPattern">iriPattern</a>(operation) [[!JAX-RS]]</dd>
-          <dt><dfn data-lt="func-matchrel" data-lt-noDefault>matchrel</dfn></dt>
-          <dd><a data-lt="domain-IRI">IRI</a><sub>rel</sub> × <a data-lt="domain-Ontology">Ontology</a> → <a data-lt="domain-Operation">Operation</a></dd>
-          <dd>matchrel(irirel, ontology) = operation<sub>match</sub> ∈ Ontology :<br/>
-            <a data-lt="func-matchIRIPattern">matchIRIPattern</a>(irirel, <a data-lt="func-iriPattern">iriPattern</a>(operation<sub>match</sub>)) = <code>true</code></dd>
+          <dd>The processor MUST implement <a data-lt="func-matchPattern">matchPattern</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-2_0-fr-eval-spec/jsr339-jaxrs-2.0-final-spec.pdf#page=32">Request Matching</a>, using C = <a data-lt="domain-Ontology">Ontology</a>, T<sub>Z</sub> = <a data-lt="func-iriPattern">iriPattern</a>(operation) [[!JAX-RS]]</dd>
+          <dt><dfn data-lt="func-precedence" data-lt-noDefault>precedence</dfn></dt>
+          <dd><a data-lt="domain-Operation">Operation</a> × Integer → <a data-lt="domain-OperationPrecedence">OperationPrecedence</a></dd>
+          <dd>precedence(operation, precedence) = (operation, precedence)</dd>
+          <dt><dfn data-lt="func-matchOperations" data-lt-noDefault>matchOperations</dfn></dt>
+          <dd><a data-lt="domain-IRI">IRI</a><sub>rel</sub> × <a data-lt="domain-Operation">Operation</a>* × Integer → <a data-lt="domain-OperationPrecedence">OperationPrecedence</a>*</dd>
+          <dd>matchOperations(iri<sub>rel</sub>, operations, precedence) = cons(null(operations) → nil [] <a data-lt="func-matchPattern">matchPattern</a>(<a data-lt="func-iriPattern">iriPattern</a>(head(operations))) → <a data-lt="func-precedence">precedence</a>(head(operations), precedence * -1) [] nil, <a data-lt="func-matchOperations">matchOperations</a>(tail(operations), precedence))</dd>
+          <dd class="ednote">Denotational semantics do not allow recursive function definitions as the one above. This would need to be reworked to be strictly formal.</dd>
+          <dt><dfn data-lt="func-matchPrecedences" data-lt-noDefault>matchPrecedences</dfn></dt>
+          <dd><a data-lt="domain-IRI">IRI</a><sub>rel</sub> × <a data-lt="domain-Ontology">Ontology</a> × Integer → <a data-lt="domain-OperationPrecedence">OperationPrecedence</a>*</dd>
+          <dd>matchPrecedences(iri<sub>rel</sub>, ontology, importLevel) = cons(<a data-lt="func-matchOperations">matchOperations</a>(iri<sub>rel</sub>, <a data-lt="func-operations">operations</a>(ontology)), null(<a data-lt="func-imports">imports</a>(ontology)) → nil [] <a data-lt="func-matchPrecedences">matchPrecedences</a>(iri<sub>rel</sub>, head(<a data-lt="func-imports">imports</a>(ontology)), importLevel + 1))</dd>
+          <dd class="ednote">Denotational semantics do not allow recursive function definitions as the one above. This would need to be reworked to be strictly formal.</dd>
+          <dt><dfn data-lt="func-topMatch" data-lt-noDefault>topMatch</dfn></dt>
+          <dd><a data-lt="domain-OperationPrecedence">OperationPrecedence</a>* → <a data-lt="domain-Operation">Operation</a> + { <code>NoMatch</code> }</dd>
+          <dd>topMatch(opPrecedences) = null(opPrecedences) → <code>NoMatch</code> [] topMatch((operation<sub>1</sub>, precedence<sub>1</sub>), …, (operation<sub>i</sub>, precedence<sub>i</sub>), …, (operation<sub>n</sub>, precedence<sub>n</sub>)) = operation<sub>i</sub> : precedence<sub>i</sub> &#8805; precedence<sub>j</sub> for all i, j</dd>
           <dt><dfn data-lt="func-match" data-lt-noDefault>match</dfn></dt>
-          <dd><a data-lt="domain-IRI">IRI</a> × <a data-lt="domain-IRI">IRI</a> × <a data-lt="domain-Ontology">Ontology</a> → <a data-lt="domain-Operation">Operation</a></dd>
-          <dd>match(iri, base, ontology) = <a data-lt="func-matchrel">matchrel</a>(<a data-lt="func-relativize">relativize</a>(base, <a data-lt="func-absolutePath">absolutePath</a>(iri)), ontology) = operationmatch ∈ Operation</dd>
-          <dd class="ednote">Priority and conflict resolution have not been addressed yet</dd>
+          <dd><a data-lt="domain-IRI">IRI</a><sub>rel</sub> × <a data-lt="domain-Ontology">Ontology</a> → <a data-lt="domain-Operation">Operation</a> + { <code>NoMatch</code> }</dd>
+          <dd>match(iri<sub>rel</sub>, ontology) = <a data-lt="func-topMatch">topMatch</a>(<a data-lt="func-matchPrecedences">matchPrecedences</a>(iri<sub>rel</sub>, ontology, 0))</dd>
           <dt><dfn data-lt="func-reqMatch" data-lt-noDefault>reqMatch</dfn></dt>
-          <dd><a data-lt="domain-Request">Request</a> × <a data-lt="domain-App">App</a> → <a data-lt="domain-Operation">Operation</a></dd>
-          <dd>reqMatch(request, app) = <a data-lt="func-match">match</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-base">base</a>(app), <a data-lt="func-match">match</a>(app))</dd>
+          <dd><a data-lt="domain-Request">Request</a> × <a data-lt="domain-App">App</a> → <a data-lt="domain-Operation">Operation</a> + { <code>NoMatch</code> }</dd>
+          <dd>reqMatch(request, app) = <a data-lt="func-match">match</a>(<a data-lt="func-relativize">relativize</a>(<a data-lt="func-base">base</a>(app), <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))))</dd>
           <dt><dfn data-lt="func-decodeUri" data-lt-noDefault>decodeUri</dfn></dt>
           <dd>String → String</dd>
           <dd>decodeUri(encoded) = decoded such that <a href="https://www.w3.org/TR/xpath-functions-31/#func-encode-for-uri">fn:encode-for-uri(decoded)</a> = encoded [[xpath-functions-31]]</dd>
@@ -297,12 +305,24 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dd><a data-lt="domain-RDFTerm">RDFTerm</a> × <a data-lt="domain-IRI">IRI</a> → <a data-lt="domain-RDFTerm">RDFTerm</a></dd>
           <dd>cast(inputValue, targetType) = targetValue ∈ RDFTerm</dd>
           <dd>The processor MUST implement <a data-lt="func-cast">cast</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#FunctionMapping">XPath Constructor Functions</a> [[!sparql11-query]]</dd>
-          <dt><dfn data-lt="func-paramByName" data-lt-noDefault>paramByName</dfn></dt>
-          <dd><a>String</a> × <a data-lt="domain-Operation">Operation</a> → <a data-lt="domain-Parameter">Parameter</a></dd>
-          <dd>paramByName(name, operation) = param ∈ <a data-lt="func-parameters">parameters</a>(operation) : <a data-lt="func-name">name</a>(param) = name</dd>
-          <dt><dfn data-lt="func-arguments" data-lt-noDefault>arguments</dfn></dt>
-          <dd><a>String</a> × <a data-lt="domain-Operation">Operation</a> → { <a data-lt="domain-Argument">Argument</a><sub>1</sub>, …, <a data-lt="domain-Argument">Argument</a><sub>N</sub> }</dd>
-          <dd>arguments(queryString, operation) = { (<a data-lt="func-paramByName">paramByName</a>(<a data-lt="func-decodeUri">decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1)), <a data-lt="func-cast">cast</a>(<a data-lt="func-decodeUri">decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓2), <a data-lt="func-valueType">valueType</a>(<a data-lt="func-paramByName">paramByName</a>(<a data-lt="func-decodeUri">decodeUri</a>(<a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(argString, "<code>=</code>")↓1))))) } : argString ∈ <a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(queryString, "<code>&amp;</code>") [[xpath-functions-31]]</dd>
+          <dt><dfn data-lt="func-tokenize" data-lt-noDefault>tokenize</dfn></dt>
+          <dd>String → String*</dd>
+          <dd>tokenize(string, delimiter) = <a href="https://www.w3.org/TR/xpath-functions/#func-tokenize">fn:tokenize</a>(string, delimiter)</dd>
+          <dt><dfn data-lt="func-argumentPairs" data-lt-noDefault>argumentPairs</dfn></dt>
+          <dd>String* → (String × String)*</dd>
+          <dd>argumentPairs(string) = cons(null(string) → nil [] (<a data-lt="func-decodeUri">decodeUri</a>(head(<a data-lt="func-tokenize">tokenize</a>(head(string), "<code>=</code>"))), <a data-lt="func-decodeUri">decodeUri</a>(head(tail(<a data-lt="func-tokenize">tokenize</a>(head(string), "<code>=</code>"))))), <a data-lt="func-argumentPairs">argumentPairs</a>(tail(string)))</dd>
+          <dd class="ednote">Denotational semantics do not allow recursive function definitions as the one above. This would need to be reworked to be strictly formal.</dd>
+          <dt><dfn data-lt="func-argPairsByName" data-lt-noDefault>argPairsByName</dfn></dt>
+          <dd>(String × String)* × String → (String × String)*</a></dd>
+          <dd>argPairsByName(argumentPairs, name) = cons(null(argumentPairs) → nil [] head(argumentPairs)↓1 = name → head(argumentPairs) [] nil, <a data-lt="func-argPairsByName">argPairsByName</a>(tail(argumentPairs), name))</dd>
+          <dd class="ednote">Denotational semantics do not allow recursive function definitions as the one above. This would need to be reworked to be strictly formal.</dd>
+          <dt><dfn data-lt="func-paramArgs" data-lt-noDefault>paramArgs</dfn></dt>
+          <dd><a data-lt="domain-Parameter">Parameter</a> × (String × String)* → <a data-lt="domain-Argument">Argument</a>*</dd>
+          <dd>paramArgs(parameter, argumentPairs) = null(argumentPairs) → nil [] cons((parameter, <a data-lt="func-cast">cast</a>(head(<a data-lt="func-argPairsByName">argPairsByName</a>(argumentPairs, name(parameter)))↓2, <a data-lt="func-valueType">valueType</a>(parameter))), <a data-lt="func-paramArgs">paramArgs</a>(parameter, tail(argumentPairs)))</dd>
+          <dt><dfn data-lt="func-paramListArgs" data-lt-noDefault>paramListArgs</dfn></dt>
+          <dd><a data-lt="domain-Parameter">Parameter</a>* × (String × String)* → <a data-lt="domain-Argument">Argument</a>*</dd>
+          <dd>paramListArgs(parameters, argumentPairs) = null(parameters) → nil [] concat(<a data-lt="func-paramArgs">paramArgs</a>(head(parameters), argumentPairs), <a data-lt="func-paramListArgs">paramListArgs</a>(tail(parameters), argumentPairs))</dd>
+          <dd class="ednote">Denotational semantics do not allow recursive function definitions as the one above. This would need to be reworked to be strictly formal.</dd>
           <dt><dfn data-lt="func-parameter" data-lt-noDefault>parameter</dfn></dt>
           <dd><a data-lt="domain-Argument">Argument</a>↓1 → <a data-lt="domain-Parameter">Parameter</a></dd>
           <dt><dfn data-lt="func-value" data-lt-noDefault>value</dfn></dt>
@@ -310,44 +330,50 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt><dfn data-lt="func-conNeg" data-lt-noDefault>conNeg</dfn></dt>
           <dd><a data-lt="domain-Request">Request</a> → <a data-lt="domain-MediaType">MediaType</a></dd>
           <dd>The processor MUST implement <a data-lt="func-conNeg">conNeg</a> as defined in <a href="http://download.oracle.com/otn-pub/jcp/jaxrs-1.0-fr-eval-oth-JSpec/jaxrs-1.0-final-spec.pdf#page=28">Determining the MediaType of Responses</a> [[!JAX-RS]]</dd>
-          <dt><dfn data-lt="func-append" data-lt-noDefault>append</dfn></dt>
-          <dd><a data-lt="domain-QueryBinding">QueryBinding</a> × <a data-lt="domain-QueryBinding">QueryBinding</a> → <a data-lt="domain-QueryBinding">QueryBinding</a></dd>
-          <dd>append(binding<sub>1</sub>, binding<sub>2</sub>) = binding<sub>1</sub> + binding<sub>2</sub></dd>
+          <dt><dfn data-lt="func-variable" data-lt-noDefault>variable</dfn></dt>
+          <dd>String → <a data-lt="domain-QueryVariable">QueryVariable</a></dd>
           <dt><dfn data-lt="func-argBindings" data-lt-noDefault>argBindings</dfn></dt>
-          <dd> { <a data-lt="domain-Argument">Argument</a><sub>1</sub>, …, <a data-lt="domain-Argument">Argument</a><sub>N</sub> } → <a data-lt="domain-QueryBinding">QueryBinding</a></dd>
-          <dd>argBindings(arguments) = (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>1</sub>)), <a data-lt="func-value">value</a>(arg<sub>1</sub>)) + … + (<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(arg<sub>N</sub>)), <a data-lt="func-value">value</a>(arg<sub>N</sub>)) : arg<sub>i</sub> ∈ arguments</dd>
+          <dd> <a data-lt="domain-Argument">Argument</a>* → <a data-lt="domain-QueryBinding">QueryBinding</a>*</dd>
+          <dd>argBindings(arguments) = cons(null(arguments) → nil [] (<a data-lt="func-variable">variable</a>(<a data-lt="func-name">name</a>(<a data-lt="func-parameter">parameter</a>(head(arguments)))), <a data-lt="func-value">value</a>(head(arguments))), <a data-lt="func-argBindings">argBindings</a>(arguments))</dd>
           <dt><dfn data-lt="func-merge" data-lt-noDefault>merge</dfn></dt>
           <dd><a data-lt="domain-Dataset">Dataset</a> × <a data-lt="domain-Dataset">Dataset</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dd>merge(dataset<sub>1</sub>, dataset<sub>2</sub>) = dataset ∈ Dataset</dd>
           <dd>The processor MUST implement <a data-lt="func-merge">merge</a> as defined in <a href="https://www.w3.org/TR/sparql11-query/#sparqlDataset">RDF Dataset</a> [[!sparql11-query]]</dd>
           <dt><dfn data-lt="func-state" data-lt-noDefault>state</dfn></dt>
-          <dd><a data-lt="domain-IRI">IRI</a> × { <a data-lt="domain-Argument">Argument</a><sub>1</sub>, …, <a data-lt="domain-Argument">Argument</a><sub>N</sub> } → <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd><a data-lt="domain-IRI">IRI</a> × <a data-lt="domain-Argument">Argument</a>* → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dd class="ednote">This is the function that should describe the current application state. How do we convert from sets to triples? Parameters need to have IRIs.</dd>
+          <dt><dfn data-lt="func-readData" data-lt-noDefault>readData</dfn></dt>
+          <dd><a data-lt="domain-Request">Request</a> × <a data-lt="domain-App">App</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd>readData(request, app) = <a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), cons((<a data-lt="func-variable">variable</a>(<var>this</var>), <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-paramListArgs">paramListArgs</a>(<a data-lt="func-parameters">parameters</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-argumentPairs">argumentPairs</a>(<a data-lt="func-tokenize">tokenize</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)))))))), <a data-lt="func-dataset">dataset</a>(app))</dd>
+          <dt><dfn data-lt="func-deleteData" data-lt-noDefault>deleteData</dfn></dt>
+          <dd><a data-lt="domain-Request">Request</a> × <a data-lt="domain-App">App</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd>deleteData(request, app) = <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), cons((<a data-lt="func-variable">variable</a>(<var>this</var>), <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-paramListArgs">paramListArgs</a>(<a data-lt="func-parameters">parameters</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-argumentPairs">argumentPairs</a>(<a data-lt="func-tokenize">tokenize</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)))))))), <a data-lt="func-dataset">dataset</a>(app))</dd>
         </dl>
       </section>
       <section id="ldt-valuation" class="valuation-functions">
         <h3>Valuation functions</h3>
         <p>Evaluation of response to request ∈ <a data-lt="domain-LDRequest">LDRequest</a>:</p>
         <p>
-          <dfn>LDResponse</dfn> : <a data-lt="domain-LDRequest">LDRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-LDResponse">LDResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
-        </p>
-        <p>methodToResponseDatasetMapping = { (<code>Read</code>, <a data-lt="func-merge">merge</a>(<a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), (<code>Append</code>, <code>empty</code>), (<code>Update</code>, <code>empty</code>), (<code>Delete</code>, <code>empty</code>) }
+          <dfn>LDResponse</dfn> : <a data-lt="domain-LDRequest">LDRequest</a> → <a data-lt="domain-LDResponse">LDResponse</a> × <a data-lt="domain-Dataset">Dataset</a>
         </p>
         <dl>
           <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (request)</dt>
           <dd><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (<a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request))) (request)</dd>
           <dt><a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] (app) (request)</dt>
-          <dd>((<a data-lt="func-reqMatch">reqMatch</a>(request, app) = {} → <code>NotFound</code> []<br/>
+          <dd>((<a data-lt="func-reqMatch">reqMatch</a>(request, app) = <code>NoMatch</code> → <code>NotFound</code> []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <code>NoContent</code> []<br/>
             <code>OK</code>,<br/>
             <a data-lt="func-conNeg">conNeg</a>(request),<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-execQuery">execQuery</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-query">query</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app)))) []<br/>
-            {}),<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-readData">readData</a>(request, app), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-paramListArgs">paramListArgs</a>(<a data-lt="func-parameters">parameters</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-argumentPairs">argumentPairs</a>(<a data-lt="func-tokenize">tokenize</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request))))))) []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-empty">empty</a> []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-empty">empty</a> []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-empty">empty</a>,<br/>
+
+            <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-dataset">dataset</a>(app) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app))) []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-execDelete">execDelete</a>(<a data-lt="func-apply">apply</a>(<a data-lt="func-delete">delete</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-append">append</a>((<var>?this</var>, <a data-lt="func-absolutePath">absolutePath</a>(<a data-lt="func-iri">iri</a>(request))), <a data-lt="func-argBindings">argBindings</a>(<a data-lt="func-arguments">arguments</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request)), <a data-lt="func-reqMatch">reqMatch</a>(request, app))))), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
-            <a data-lt="func-dataset">dataset</a>(app))</dd>
-          <dd class="ednote">The denotational <em>cases</em> operation is probably misused here as a switch statement.</dd>
+            <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-deleteData">deleteData</a>(request, app)) []<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-deleteData">deleteData</a>(request, app))
+            )</dd>
         </dl>
       </section>
     </section>
@@ -998,7 +1024,7 @@ Content-Type: text/trig
               <td>ldt:Template</td>
               <td>ldt:update</td>
               <td>ldt:Update</td>
-              <td><a data-lt="domain-Update">Update</a></td>
+              <td><a data-lt="domain-Delete">Delete</a></td>
               <td>?</td>
             </tr>
             <tr>
