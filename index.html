@@ -627,29 +627,19 @@ Update = Append → merge(putBody, dataset((&lt;https://linkeddatahub.com/&gt;, 
 Update = Update → merge(putBody, deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))) []
 Update = Delete → deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset)))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete(apply(delete(reqMatch((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))), cons((variable(this), absolutePath(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))), argBindings(paramListArgs(parameters(reqMatch((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))), argumentPairs(tokenize(queryString(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody))))))))), dataset((&lt;https://linkeddatahub.com/&gt;, ontology, dataset)))))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete(apply(delete(match), cons((variable(this), absolutePath(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;)), argBindings(paramListArgs(parameters(match), argumentPairs(tokenize(queryString(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;))))))), dataset)))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete(apply(deleteWithTopic, cons((variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;), argBindings(paramListArgs((graphParam), argumentPairs(tokenize("")))))), dataset)))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete(apply("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
@@ -668,9 +658,7 @@ WHERE
       }
   }", cons((variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;), argBindings(paramListArgs((graphParam), argumentPairs(()))))), dataset)))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete(apply("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
@@ -689,9 +677,7 @@ WHERE
       }
   }", (variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;)), dataset)))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete(apply("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
@@ -710,9 +696,7 @@ WHERE
       }
   }", (variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;)), dataset)))↓1 =
 
-((OK,
-text/turtle,
-empty),
+((OK, text/turtle, empty),
 merge(putBody, execDelete("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
