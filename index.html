@@ -251,9 +251,9 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
           <dt><dfn data-lt="func-apply" data-lt-noDefault>apply</dfn></dt>
           <dd><a data-lt="domain-Command">Command</a> × <a data-lt="domain-QueryBinding">QueryBinding</a>* → <a data-lt="domain-Command">Command</a></dd>
           <dt><dfn data-lt="func-execQuery" data-lt-noDefault>execQuery</dfn></dt>
-          <dd><a data-lt="domain-Query">Query</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a></dd>
+          <dd><a data-lt="domain-Query">Query</a> × <a data-lt="domain-Dataset">Dataset</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="func-execDelete" data-lt-noDefault>execDelete</dfn></dt>
-          <dd><a data-lt="domain-Delete">Delete</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-Dataset">Dataset</a><sub>after</sub></dd>
+          <dd><a data-lt="domain-Delete">Delete</a> × <a data-lt="domain-Dataset">Dataset</a> → <a data-lt="domain-Dataset">Dataset</a></dd>
           <dt><dfn data-lt="func-empty" data-lt-noDefault>empty</dfn></dt>
           <dd><a data-lt="domain-Dataset">Dataset</a></dd>
           <dd>Empty RDF dataset [[!sparql11-update]]</dd>
@@ -412,25 +412,31 @@ HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not 
         <section id="http-functions" class="functions">
           <h4>Functions</h4>
           <dl>
+            <dt><dfn>httpMethodToCRUDMethodMapping</dfn></dt>
+            <dd>(<a data-lt="domain-CRUDMethod">CRUDMethod</a> × <a data-lt="domain-HTTPMethod">HTTPMethod</a>)*</dd>
+            <dd>((<code>POST</code>, <code>Append</code>), (<code>GET</code>, <code>Read</code>), (<code>PUT</code>, <code>Update</code>), (<code>DELETE</code>, <code>Delete</code>))</dd>
+            <dt><dfn>crudStatusToHTTPStatusMapping<dfn></dt>
+            <dd>(<a data-lt="domain-CRUDStatus">CRUDStatus</a> × <a data-lt="domain-HTTPStatus">HTTPStatus</a>)*</dd>
+            <dd>((<code>NotFound</code>, <code>404 Not Found</code>), (<code>NoContent</code>, <code>204 No Content</code>), (<code>OK</code>, <code>200 OK</code>))</dd>
             <dt><dfn>httpMethodToCRUDMethod</dfn></dt>
-            <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> → <a data-lt="domain-CRUDMethod">CRUDMethod</a></dd>
-            <dd>httpMethodToCRUDMethodMapping = { (<code>POST</code>, <code>Append</code>), (<code>GET</code>, <code>Read</code>), (<code>PUT</code>, <code>Update</code>), (<code>DELETE</code>, <code>Delete</code>) }</dd>
-            <dd>httpMethodToCRUDMethod(httpMethod) = methodPair↓2 : methodPair ∈ httpMethodToCRUDMethodMapping, methodPair↓1 = httpMethod</dd>
+            <dd><a data-lt="domain-HTTPMethod">HTTPMethod</a> × (<a data-lt="domain-CRUDMethod">CRUDMethod</a> × <a data-lt="domain-HTTPMethod">HTTPMethod</a>)* → <a data-lt="domain-CRUDMethod">CRUDMethod</a></dd>
+            <dd>httpMethodToCRUDMethod(httpMethod, methodMapping) = head(methodMapping)↓2 = httpMethod → head(methodMapping)↓1 [] httpMethodToCRUDMethod(httpMethod, tail(methodMapping))</dd>
+            <dd class="ednote">Denotational semantics do not allow recursive domain definitions such as the one above. This would need to be reworked to be strictly formal.</dd>
             <dt><dfn>crudStatusToHTTPStatus</dfn></dt>
-            <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> → <a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
-            <dd>crudStatusToHTTPStatusMapping = { (<code>NotFound</code>, <code>404 Not Found</code>), (<code>NoContent</code>, <code>204 No Content</code>), (<code>OK</code>, <code>200 OK</code>) }</dd>
-            <dd>crudStatusToHTTPStatus(status) = statusPair↓2 : statusPair ∈ crudStatusToHTTPStatusMapping, statusPair↓1 = status</dd>
+            <dd><a data-lt="domain-CRUDStatus">CRUDStatus</a> × (<a data-lt="domain-CRUDStatus">CRUDStatus</a> × <a data-lt="domain-HTTPStatus">HTTPStatus</a>)* → <a data-lt="domain-HTTPStatus">HTTPStatus</a></dd>
+            <dd>crudStatusToHTTPStatus(crudStatus, statusMapping) = head(statusMapping)↓1 = crudStatus → head(statusMapping)↓2 [] crudStatusToHTTPStatus(crudStatus, tail(statusMapping))</dd>
+            <dd class="ednote">Denotational semantics do not allow recursive domain definitions such as the one above. This would need to be reworked to be strictly formal.</dd>
           </dl>
         </section>
         <section id="http-valuation" class="valuation-functions">
           <h3>Valuation functions</h3>
           <p>Evaluation of response to request ∈ <a data-lt="domain-HTTPRequest">HTTPRequest</a>:</p>
           <p>
-            <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> → <a data-lt="domain-HTTPResponse">HTTPResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
+            <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> → <a data-lt="domain-HTTPResponse">HTTPResponse</a> × <a data-lt="domain-Dataset">Dataset</a>
           </p>
           <dl>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-MediaType">MediaType</a> <a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
-            <dd>(<a data-lt="func-crudStatusToHTTPStatus">crudStatusToHTTPStatus</a>(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = (<a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] ((<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))))↓1</dd>
+            <dd>(<a data-lt="func-crudStatusToHTTPStatus">crudStatusToHTTPStatus</a>(ldResponse↓1, <a data-lt="func-crudStatusToHTTPStatusMapping">crudStatusToHTTPStatusMapping</a>), ldResponse↓2, ldResponse↓3) : ldResponse = (<a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] ((<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest), <a data-lt="func-httpMethodToCRUDMethodMapping">httpMethodToCRUDMethodMapping</a>), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))))</dd>
           </dl>
         </section>
       </section>
@@ -579,11 +585,11 @@ Content-Type: text/trig
           <p>Valuation of <code>putRequest</code></p>
           <pre>HTTPResponse [[HTTPStatus MediaType Body]] (putRequest) =
 
-(crudStatusToHTTPStatus(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), mediaType(putRequest), body(putRequest))))↓1
+(crudStatusToHTTPStatus(ldResponse↓1, crudStatusToHTTPStatusMapping), ldResponse↓2, ldResponse↓3) : ldResponse = (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(putRequest), httpMethodToCRUDMethodMapping), iri(putRequest), mediaType(putRequest), body(putRequest))))↓1
 
-ldResponse = (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), mediaType(putRequest), body(putRequest))))↓1 =
+ldResponse = (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(putRequest), httpMethodToCRUDMethodMapping), iri(putRequest), mediaType(putRequest), body(putRequest))))↓1 =
 
-(LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(PUT), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(PUT, httpMethodToCRUDMethodMapping), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
 (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
@@ -725,7 +731,7 @@ WHERE
       }
   }", dataset)))↓1
 
-(crudStatusToHTTPStatus(ldResponse↓1), ldResponse↓2, ldResponse↓3) = (200 OK, text/turtle, empty)</pre>
+(crudStatusToHTTPStatus(ldResponse↓1, crudStatusToHTTPStatusMapping), ldResponse↓2, ldResponse↓3) = (200 OK, text/turtle, empty)</pre>
         </div>
         <div class="example">
           <p>HTTP response</p>
