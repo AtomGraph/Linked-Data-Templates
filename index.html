@@ -555,8 +555,8 @@ WHERE
       </section>
       <section id="put-example">
         <h4>Update over HTTP</h4>
-        <p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request on an LDT application. The evaluation result is a successful HTTP response and a SPARQL update execution.</p>
-        <p>SPARQL update execution replaces the existing description of the requested resource in the application dataset with the one from the request body. The updated application dataset is a side-effect of the <code>Update</code> operation.</p>
+        <p>The following example shows how an HTTP <code>PUT</code> request with an RDF dataset as its body evaluates as Linked Data <code>Update</code> request on an LDT application. The evaluation result is a successful HTTP response and operations on the application's dataset.</p>
+        <p>SPARQL update execution removes the existing description of the requested resource in the dataset. It is followed by a merge of the request body into the dataset. The updated application dataset is a side-effect of the interaction.</p>
         <div class="example">
           <p>HTTP PUT request <code>putRequest</code> with request body <code>putBody</code></p>
           <pre>PUT /people/Berners-Lee HTTP/1.1
@@ -737,8 +737,6 @@ WHERE
           <p>HTTP response</p>
           <pre>HTTP/1.1 200 OK</pre>
         </div>
-        <p><code>putRequest</code> was evaluated into a successful HTTP response with no body (i.e. response dataset is empty).</p>
-        <p>The side-effect of the request on the application's dataset is a SPARQL update execution followed by a merge of quads from the request dataset <code>putBody</code>.</p>
       </section>
       <section id="get-example">
         <h3>Read over HTTP</h3>
