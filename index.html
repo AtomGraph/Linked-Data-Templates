@@ -3,9 +3,7 @@
   <head>
     <meta charset='utf-8'>
     <title>Linked Data Templates</title>
-    <script
-     src='https://www.w3.org/Tools/respec/respec-w3c-common'
-     class='remove'></script>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
     <script class='remove'>
       var respecConfig = {
         specStatus: "CG-DRAFT",
@@ -367,13 +365,12 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
             <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-readData">readData</a>(request, app), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-paramListArgs">paramListArgs</a>(<a data-lt="func-parameters">parameters</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-argumentPairs">argumentPairs</a>(<a data-lt="func-tokenize">tokenize</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request))))))) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-empty">empty</a> []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-empty">empty</a> []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-empty">empty</a>,<br/>
+            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-empty">empty</a>),<br/>
 
             <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-dataset">dataset</a>(app) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-deleteData">deleteData</a>(request, app)) []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-deleteData">deleteData</a>(request, app))
-            )</dd>
+            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-deleteData">deleteData</a>(request, app))</dd>
         </dl>
       </section>
     </section>
@@ -429,11 +426,11 @@ HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not 
           <h3>Valuation functions</h3>
           <p>Evaluation of response to request ∈ <a data-lt="domain-HTTPRequest">HTTPRequest</a>:</p>
           <p>
-            <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> × <a data-lt="domain-Dataset">Dataset</a><sub>before</sub> → <a data-lt="domain-HTTPResponse">HTTPResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
+            <dfn>HTTPResponse</dfn> : <a data-lt="domain-HTTPRequest">HTTPRequest</a> → <a data-lt="domain-HTTPResponse">HTTPResponse</a> × <a data-lt="domain-Dataset">Dataset</a><sub>after</sub>
           </p>
           <dl>
             <dt><a data-lt="domain-HTTPResponse">HTTPResponse</a> [[<a data-lt="token-HTTPStatus">HTTPStatus</a> <a data-lt="domain-MediaType">MediaType</a> <a data-lt="domain-Body">Body</a>]] (httpRequest)</dt>
-            <dd>(<a data-lt="func-crudStatusToHTTPStatus">crudStatusToHTTPStatus</a>(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = <a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] ((<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest)))</dd>
+            <dd>(<a data-lt="func-crudStatusToHTTPStatus">crudStatusToHTTPStatus</a>(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = (<a data-lt="domain-LDResponse">LDResponse</a> [[<a data-lt="token-CRUDStatus">CRUDStatus</a> <a data-lt="token-RDFMediaType">RDFMediaType</a> <a data-lt="token-Dataset">Dataset</a>]] ((<a data-lt="func-httpMethodToCRUDMethod">httpMethodToCRUDMethod</a>(<a data-lt="func-method">method</a>(httpRequest)), <a data-lt="func-iri">iri</a>(httpRequest), <a data-lt="func-mediaType">mediaType</a>(httpRequest), <a data-lt="func-body">body</a>(httpRequest))))↓1</dd>
           </dl>
         </section>
       </section>
@@ -443,9 +440,11 @@ HTTPStatus := <code>200 OK</code> | <code>204 No Content</code> | <code>404 Not 
       <p>We will use the following set members for all the subsequent response valuation examples:</p>
       <dl class="domains">
         <dt><code>app</code> ∈ <a data-lt="domain-App">App</a></dt>
-        <dd><a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request)) = (<code>&lt;http://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
+        <dd><a data-lt="func-app">app</a>(<a data-lt="func-iri">iri</a>(request)) = (<code>&lt;https://linkeddatahub.com/&gt;</code>, <code>ontology</code>, <code>dataset</code>)</dd>
+        <dt><code>graphParam</code> ∈ <a data-lt="domain-Parameter">Parameter</a></dt>
+        <dd>(<code>"g"</code>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>)</dd>
         <dt><code>match</code> ∈ <a data-lt="domain-Operation">Operation</a></dt>
-        <dd><a data-lt="func-reqMatch">reqMatch</a>(request, app) = (<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, <code>{ <code>graphParam</code> = (<var>?g</var>, <code>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;</code>, <code>true</code>) }</code>, <code>0</code>)</dd>
+        <dd><a data-lt="func-reqMatch">reqMatch</a>(request, app) = (<code>"/people/{familyName}"</code>, <code>describeWithTopic</code>, <code>deleteWithTopic</code>, (<code>graphParam</code>))</dd>
         <dt><code>describeWithTopic</code> ∈ <a data-lt="domain-Describe">Describe</a></dt>
         <dd><pre><code>PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
@@ -483,7 +482,7 @@ WHERE
         <h4>Ontology</h4>
         <p>The following example shows the ontology of our example application. Operations used in response valuation are encoded as RDF terms using LDT <a href="#vocabulary">vocabulary</a> and SPIN vocabulary:</p>
         <div class="example">
-          <pre>@prefix :     &lt;http://linkeddatahub.com/ns#&gt; .
+          <pre>@prefix :     &lt;https://linkeddatahub.com/ns#&gt; .
 @prefix ldt:  &lt;https://www.w3.org/ns/ldt#&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
@@ -494,7 +493,7 @@ WHERE
   owl:imports ldt:, sp: ;
   rdfs:label "Example ontology" .
 
-:PersonItemTemplate a ldt:Template ;
+:PersonItem a ldt:Template ;
   rdfs:label "Person item" ;
   ldt:match "/people/{familyName}" ;
   ldt:param :GraphParam ;
@@ -559,15 +558,15 @@ Host: linkeddatahub.com
 Accept: text/turtle, text/trig
 Content-Type: text/trig
 
-@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
-@prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
+@base         &lt;https://linkeddatahub.com/people/Berners-Lee&gt; .
+@prefix c:    &lt;https://www.w3.org/ns/ldt/core/domain#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
 
 &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
 {
 
-  &lt;&gt; a ldtc:Document ;
+  &lt;&gt; a c:Document ;
     foaf:primaryTopic &lt;#this&gt; .
 
   &lt;#this&gt; a foaf:Person ;
@@ -580,76 +579,72 @@ Content-Type: text/trig
           <p>Valuation of <code>putRequest</code></p>
           <pre>HTTPResponse [[HTTPStatus MediaType Body]] (putRequest) =
 
-(crudStatusToHTTPStatus(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = LDResponse  [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(httpRequest)), iri(httpRequest), mediaType(httpRequest), body(httpRequest)))
+(crudStatusToHTTPStatus(ldResponse↓1), ldResponse↓2, ldResponse↓3) : ldResponse = (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), mediaType(putRequest), body(putRequest))))↓1
 
-ldResponse = LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(httpRequest)), iri(httpRequest), mediaType(httpRequest), body(httpRequest))) =
-LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) =
-LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) =
-LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) =
+ldResponse = (LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), mediaType(putRequest), body(putRequest))))↓1 =
 
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] ((httpMethodToCRUDMethod(PUT), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), body(putRequest))))
-LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), body(putRequest))
-LDResponse [[Dataset]] (httpMethodToCRUDMethod(method(putRequest)), iri(putRequest), body(putRequest)) =
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
-LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)
-LDResponse [[Dataset]] (httpMethodToCRUDMethod(PUT), &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody) =
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] ((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
-LDResponse [[RDFMediaType]] (Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)
-LDResponse [[Dataset]] (Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody) =
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] (app(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))) ((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
-LDResponse [[RDFMediaType]] (app(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
-LDResponse [[Dataset]] (app(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] (app(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
-LDResponse [[RDFMediaType]] (app(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
-LDResponse [[Dataset]] (app(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
+(LDResponse [[CRUDStatus RDFMediaType Dataset]] ((&lt;https://linkeddatahub.com/&gt;, ontology, dataset)) ((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))↓1 =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))
-LDResponse [[RDFMediaType]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
-LDResponse [[Dataset]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
+((reqMatch((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset)) = NoMatch → NotFound []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Delete → NoContent []
+OK,
+conNeg((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)),
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Read → merge(readData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset)), state(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)), paramListArgs(parameters(reqMatch((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))), argumentPairs(tokenize(queryString(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))))))) []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Append → empty []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Update → empty []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Delete → empty),
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Read → dataset((&lt;https://linkeddatahub.com/&gt;, ontology, dataset)) []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Append → merge(body((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)), dataset((&lt;https://linkeddatahub.com/&gt;, ontology, dataset))) []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Update → merge(body((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)), deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))) []
+method((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)) = Delete → deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset)))↓1 =
 
-200 OK
-LDResponse [[RDFMediaType]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
-LDResponse [[Dataset]] (app) ((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)) =
+((match = NoMatch → NotFound []
+Update = Delete → NoContent []
+OK,
+text/turtle,
+Update = Read → merge(readData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset)), state(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;, paramListArgs(parameters(match), argumentPairs(tokenize(queryString(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;)))))) []
+Update = Append → empty []
+Update = Update → empty []
+Update = Delete → empty),
+Update = Read → dataset((&lt;https://linkeddatahub.com/&gt;, ontology, dataset)) []
+Update = Append → merge(putBody, dataset((&lt;https://linkeddatahub.com/&gt;, ontology, dataset))) []
+Update = Update → merge(putBody, deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))) []
+Update = Delete → deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset)))↓1 =
 
-200 OK
-conNeg((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))
-execDelete(join(apply(delete(reqMatch((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody), app)), append((<var>?this</var>, absolutePath(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody)))), argBindings(arguments(queryString(iri((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))), reqMatch((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody), app)))))), insertData(data((Update, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;, putBody))))) =
+((OK,
+text/turtle,
+empty),
+merge(putBody, deleteData((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))))↓1 =
 
-200 OK
-text/turtle
-execDelete(join(apply(delete(match), append((<var>?this</var>, absolutePath(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;)), argBindings(arguments(queryString(&lt;http://linkeddatahub.com/people/Berners-Lee&gt;), match))))), insertData(putBody))) =
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete(apply(delete(reqMatch((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))), cons((variable(this), absolutePath(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody)))), argBindings(paramListArgs(parameters(reqMatch((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody), (&lt;https://linkeddatahub.com/&gt;, ontology, dataset))), argumentPairs(tokenize(queryString(iri((Update, &lt;https://linkeddatahub.com/people/Berners-Lee&gt;, text/trig, putBody))))))))), dataset((&lt;https://linkeddatahub.com/&gt;, ontology, dataset)))))↓1 =
 
-200 OK
-text/turtle
-execDelete(join(apply(delete(("/people/{familyName}", describeWithTopic, deleteWithTopic, { graphParam = (<var>?g</var>, &lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;, true) }, 0)), append((<var>?this</var>, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;), argBindings(arguments("", match))))), insertData(putBody))) =
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete(apply(delete(match), cons((variable(this), absolutePath(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;)), argBindings(paramListArgs(parameters(match), argumentPairs(tokenize(queryString(&lt;https://linkeddatahub.com/people/Berners-Lee&gt;))))))), dataset)))↓1 =
 
-200 OK
-text/turtle
-execDelete(join(apply(deleteWithTopic, append((<var>?this</var>, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;), {}))), insertData(@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
-@prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
-@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
-@prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete(apply(deleteWithTopic, cons((variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;), argBindings(paramListArgs((graphParam), argumentPairs(tokenize("")))))), dataset)))↓1 =
 
-&lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
-{
-
-  &lt;&gt; a ldtc:Document ;
-    foaf:primaryTopic &lt;#this&gt; .
-
-  &lt;#this&gt; a foaf:Person ;
-    foaf:isPrimaryTopicOf &lt;&gt; ;
-    owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-
-}))) =
-
-200 OK
-text/turtle
-execDelete(join(apply(PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete(apply("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   GRAPH ?g {
@@ -665,95 +660,79 @@ WHERE
             ?primaryTopic ?primaryTopicP ?primaryTopicO
           }
       }
-  }, (<var>?this</var>, &lt;http://linkeddatahub.com/people/Berners-Lee&gt;)), BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
-PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+  }", cons((variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;), argBindings(paramListArgs((graphParam), argumentPairs(()))))), dataset)))↓1 =
 
-INSERT DATA {
-  GRAPH &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt; {
-    &lt;people/Berners-Lee&gt; a ldtc:Document .
-    &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
-    &lt;people/Berners-Lee#this&gt; a foaf:Person .
-    &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
-    &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-  }
-})) =
-
-200 OK
-text/turtle
-execDelete(join(BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete(apply("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   GRAPH ?g {
-    &lt;people/Berners-Lee&gt; ?p ?o .
+    ?this ?p ?o .
     ?primaryTopic ?primaryTopicP ?primaryTopicO .
   }
 }
 WHERE
   { GRAPH ?g
-      { &lt;people/Berners-Lee&gt; ?p ?o
+      { ?this ?p ?o
         OPTIONAL
-          { &lt;people/Berners-Lee&gt; foaf:primaryTopic ?primaryTopic .
+          { ?this foaf:primaryTopic ?primaryTopic .
             ?primaryTopic ?primaryTopicP ?primaryTopicO
           }
       }
-  }, BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
-PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+  }", (variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;)), dataset)))↓1 =
 
-INSERT DATA {
-  GRAPH &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt; {
-    &lt;people/Berners-Lee&gt; a ldtc:Document .
-    &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
-    &lt;people/Berners-Lee#this&gt; a foaf:Person .
-    &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
-    &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
-  }
-})) =
-
-200 OK
-text/turtle
-execDelete(BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete(apply("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DELETE {
   GRAPH ?g {
-    &lt;people/Berners-Lee&gt; ?p ?o .
+    ?this ?p ?o .
     ?primaryTopic ?primaryTopicP ?primaryTopicO .
   }
 }
 WHERE
   { GRAPH ?g
-      { &lt;people/Berners-Lee&gt; ?p ?o
+      { ?this ?p ?o
         OPTIONAL
-          { &lt;people/Berners-Lee&gt; foaf:primaryTopic ?primaryTopic .
+          { ?this foaf:primaryTopic ?primaryTopic .
             ?primaryTopic ?primaryTopicP ?primaryTopicO
           }
       }
-  } ;
+  }", (variable(this), &lt;https://linkeddatahub.com/people/Berners-Lee&gt;)), dataset)))↓1 =
 
-BASE    &lt;http://linkeddatahub.com/&gt;
-PREFIX  ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt;
-PREFIX  owl:  &lt;http://www.w3.org/2002/07/owl#&gt;
-PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+((OK,
+text/turtle,
+empty),
+merge(putBody, execDelete("PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
-INSERT DATA {
-  GRAPH &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt; {
-    &lt;people/Berners-Lee&gt; a ldtc:Document .
-    &lt;people/Berners-Lee&gt; foaf:primaryTopic &lt;people/Berners-Lee#this&gt; .
-    &lt;people/Berners-Lee#this&gt; a foaf:Person .
-    &lt;people/Berners-Lee#this&gt; foaf:isPrimaryTopicOf &lt;people/Berners-Lee&gt; .
-    &lt;people/Berners-Lee#this&gt; owl:sameAs &lt;https://www.w3.org/People/Berners-Lee/card#i&gt; .
+DELETE {
+  GRAPH ?g {
+    &lt;https://linkeddatahub.com/people/Berners-Lee&gt; ?p ?o .
+    ?primaryTopic ?primaryTopicP ?primaryTopicO .
   }
-})</pre>
+}
+WHERE
+  { GRAPH ?g
+      { &lt;https://linkeddatahub.com/people/Berners-Lee&gt; ?p ?o
+        OPTIONAL
+          { &lt;https://linkeddatahub.com/people/Berners-Lee&gt; foaf:primaryTopic ?primaryTopic .
+            ?primaryTopic ?primaryTopicP ?primaryTopicO
+          }
+      }
+  }", dataset)))↓1
+
+(crudStatusToHTTPStatus(ldResponse↓1), ldResponse↓2, ldResponse↓3) = (200 OK, text/turtle, empty)</pre>
         </div>
         <div class="example">
           <p>HTTP response</p>
           <pre>HTTP/1.1 200 OK</pre>
         </div>
+        <p><code>putRequest</code> was evaluated into a successful HTTP response with no body (i.e. response dataset is empty).</p>
+        <p>The side-effect of the request on the application's dataset is a SPARQL update execution followed by a merge of quads from the request dataset <code>putBody</code>.</p>
       </section>
       <section id="get-example">
         <h3>Read over HTTP</h3>
@@ -774,54 +753,54 @@ crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(method(<co
 LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(method(<code>getRequest</code>)), iri(<code>getRequest</code>), body(<code>getRequest</code>))
 LDResponse [[Dataset]] (httpMethodToCRUDMethod(method(<code>getRequest</code>)), iri(<code>getRequest</code>), body(<code>getRequest</code>)) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)
-LDResponse [[Dataset]] (httpMethodToCRUDMethod(<code>GET</code>), <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
+crudStatusToHTTPStatus(LDResponse [[Status]] ((httpMethodToCRUDMethod(<code>GET</code>), <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFMediaType]] (httpMethodToCRUDMethod(<code>GET</code>), <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)
+LDResponse [[Dataset]] (httpMethodToCRUDMethod(<code>GET</code>), <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-LDResponse [[RDFMediaType]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)
-LDResponse [[Dataset]] (<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFMediaType]] (<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)
+LDResponse [[Dataset]] (<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-LDResponse [[RDFMediaType]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
-LDResponse [[Dataset]] (app(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (app(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFMediaType]] (app(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
+LDResponse [[Dataset]] (app(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-LDResponse [[RDFMediaType]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
-LDResponse [[Dataset]] (app(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (app(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFMediaType]] (app(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
+LDResponse [[Dataset]] (app(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
-crudStatusToHTTPStatus(LDResponse [[Status]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
-LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
-LDResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
-
-<code>200 OK</code>
-LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
-LDResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
+crudStatusToHTTPStatus(LDResponse [[Status]] (<code>app</code>) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))
+LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
+LDResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
 <code>200 OK</code>
-conNeg((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
-merge(execQuery(apply(query(reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))), argBindings(arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))))), state(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)), arguments(queryString(iri((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))) =
+LDResponse [[RDFMediaType]] (<code>app</code>) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
+LDResponse [[Dataset]] (<code>app</code>) ((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)) =
 
 <code>200 OK</code>
-<code>text/trig</code>
-merge(execQuery(apply(query(match), append((<var>?this</var>, absolutePath(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)), argBindings(arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), <code>match</code>))))),
-state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(queryString(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), <code>match</code>))) =
+conNeg((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))
+merge(execQuery(apply(query(reqMatch((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)), append((<var>?this</var>, absolutePath(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)))), argBindings(arguments(queryString(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))))), state(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>)), arguments(queryString(iri((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>))), reqMatch((<code>Read</code>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, <code>getBody</code>), <code>app</code>)))) =
 
 <code>200 OK</code>
 <code>text/trig</code>
-merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>match</code>))))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>match</code>))) =
+merge(execQuery(apply(query(match), append((<var>?this</var>, absolutePath(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)), argBindings(arguments(queryString(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), <code>match</code>))))),
+state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(queryString(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>), <code>match</code>))) =
 
 <code>200 OK</code>
 <code>text/trig</code>
-merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ (paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1)), cast(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓2), valueType(paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1))))) })))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1)), cast(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓2), valueType(paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1))))) })) =
+merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings(arguments(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>match</code>))))), state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, arguments(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>match</code>))) =
 
 <code>200 OK</code>
 <code>text/trig</code>
-merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ (paramByName(<code>"g"</code>), cast(<code>"http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762"</code>, valueType(paramByName(<code>"g"</code>)))) })))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (paramByName(<code>"g"</code>), cast(<code>"http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762"</code>, valueType(paramByName(<code>"g"</code>)))) })) =
+merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ (paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1)), cast(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓2), valueType(paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1))))) })))), state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1)), cast(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓2), valueType(paramByName(decodeUri(fn:tokenize(<code>"g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762"</code>, <code>"="</code>)↓1))))) })) =
 
 <code>200 OK</code>
 <code>text/trig</code>
-merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), (<var>?g</var>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) =
+merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee&gt;</code>), argBindings({ (paramByName(<code>"g"</code>), cast(<code>"https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762"</code>, valueType(paramByName(<code>"g"</code>)))) })))), state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (paramByName(<code>"g"</code>), cast(<code>"https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762"</code>, valueType(paramByName(<code>"g"</code>)))) })) =
+
+<code>200 OK</code>
+<code>text/trig</code>
+merge(execQuery(apply(<code>describeWithTopic</code>, append((<var>?this</var>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee&gt;</code>), (<var>?g</var>, <code>&lt;https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)))), state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) =
 
 <code>200 OK</code>
 <code>text/trig</code>
@@ -837,11 +816,11 @@ WHERE
                       ?primaryTopicP     ?primaryTopicO
           }
       }
-  }</code>, append((<var>?this</var>, <code>&lt;http://linkeddatahub.com/people/Berners-Lee&gt;</code>), (<var>?g</var>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)))), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) =
+  }</code>, append((<var>?this</var>, <code>&lt;https://linkeddatahub.com/people/Berners-Lee&gt;</code>), (<var>?g</var>, <code>&lt;https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>)))), state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) })) =
 
 <code>200 OK</code>
 <code>text/trig</code>
-merge(execQuery(<code>BASE    &lt;http://linkeddatahub.com/&gt;
+merge(execQuery(<code>BASE    &lt;https://linkeddatahub.com/&gt;
 PREFIX  foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
 
 DESCRIBE &lt;people/Berners-Lee&gt; ?primaryTopic
@@ -854,16 +833,16 @@ WHERE
                       ?primaryTopicP     ?primaryTopicO
           }
       }
-  }</code>), state(<code>&lt;http://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) }))</pre>
+  }</code>), state(<code>&lt;https://linkeddatahub.com/people/Berners-Lee?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt;</code>, { (<code>graphParam</code>, <code>&lt;https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;</code>) }))</pre>
         </div>
         <div class="example">
           <p>HTTP response</p>
           <pre>HTTP/1.1 200 OK
 Content-Type: text/trig
 
-@base         &lt;http://linkeddatahub.com/people/Berners-Lee&gt; .
+@base         &lt;https://linkeddatahub.com/people/Berners-Lee&gt; .
 @prefix ldt:  &lt;https://www.w3.org/ns/ldt#&gt; .
-@prefix ldtc: &lt;https://www.w3.org/ns/ldt/core#&gt; .
+@prefix c:    &lt;https://www.w3.org/ns/ldt/core/domain#&gt; .
 @prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
 @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .
@@ -871,7 +850,7 @@ Content-Type: text/trig
 &lt;../graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
 {
 
-  &lt;&gt; a ldtc:Document ;
+  &lt;&gt; a c:Document ;
     foaf:primaryTopic &lt;#this&gt; .
 
   &lt;#this&gt; a foaf:Person ;
@@ -881,9 +860,9 @@ Content-Type: text/trig
 }
 
 &lt;?g=http%3A%2F%2Flinkeddatahub.com%2Fgraphs%2Fc5f34fe9-0456-48e8-a371-04be71529762&gt; ldt:arg [
-  a &lt;http://linkeddatahub.com/ns#GraphParam&gt; ;
+  a &lt;https://linkeddatahub.com/ns#GraphParam&gt; ;
   ldt:paramName "g" ;
-  rdf:value &lt;http://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
+  rdf:value &lt;https://linkeddatahub.com/graphs/c5f34fe9-0456-48e8-a371-04be71529762&gt;
 ] .</pre>
         </div>
       </section>
