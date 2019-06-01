@@ -50,12 +50,13 @@
       <h2>Introduction</h2>
       <p>Linked Data is a method for publishing structured data, including relationships between data, on the Web using a common data model (RDF). The
       purpose of Linked Data Templates is to provide means to define read-write Linked Data APIs declaratively using SPARQL and specify a uniform
-      interaction       protocol for them.</p>
+      interaction protocol for them.</p>
       <p>LDT reconciles ontology-driven Semantic Web, read-write Linked Data and the SPARQL query language. LDT architecture decouples software from
       domain- or application-specific operations, enabling reuse of machine-processable operation descriptions (for composition, reasoning etc.) as
       well as generic implementations of both server and client software. It builds on existing standards; no changes or additions to other specifications
       are required.</p>
-      <p>Ontology as a declarative representation of the application's operations, dependency on SPARQL, formal valuation of interactions and the support for HATEOAS hypermedia are the main features that distinguish LDT from other Linked Data specifications such as Linked Data Platform [[LDP]].</p>
+      <p>Ontology as a declarative representation of the application's operations, dependency on SPARQL, formal valuation of interactions and the support for HATEOAS hypermedia are the main features that distinguish LDT from other Linked Data specifications such as Linked Data Platform [[LDP]]. Rather than prescribing a single CRUD interaction model as does LDP,
+      LDT specifies ontology structure and processing rules that allow applications to define custom interaction models.</p>
       <p>This document defines a precise semantics for SPARQL-backed Linked Data applications, providing a specification of how Append, Read, Update, Delete (CRUD) interactions change the state of their resources. It does so by establishing the following:</p>
       <ul>
         <li>an <a href="#ldt-syntax">abstract syntax</a> of REST and Linked Data</li>
