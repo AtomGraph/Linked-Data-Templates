@@ -364,10 +364,7 @@ CRUDStatus  := <code>NotFound</code> | <code>NoContent</code> | <code>OK</code><
             <code>OK</code>,<br/>
             <a data-lt="func-conNeg">conNeg</a>(request),<br/>
             <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-readData">readData</a>(request, app), <a data-lt="func-state">state</a>(<a data-lt="func-iri">iri</a>(request), <a data-lt="func-paramListArgs">paramListArgs</a>(<a data-lt="func-parameters">parameters</a>(<a data-lt="func-reqMatch">reqMatch</a>(request, app)), <a data-lt="func-argumentPairs">argumentPairs</a>(<a data-lt="func-tokenize">tokenize</a>(<a data-lt="func-queryString">queryString</a>(<a data-lt="func-iri">iri</a>(request))))))) []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-empty">empty</a> []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-empty">empty</a> []<br/>
-            <a data-lt="func-method">method</a>(request) = <code>Delete</code> → <a data-lt="func-empty">empty</a>),<br/>
-
+            <a data-lt="func-empty">empty</a>),<br/>
             <a data-lt="func-method">method</a>(request) = <code>Read</code> → <a data-lt="func-dataset">dataset</a>(app) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Append</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-dataset">dataset</a>(app)) []<br/>
             <a data-lt="func-method">method</a>(request) = <code>Update</code> → <a data-lt="func-merge">merge</a>(<a data-lt="func-body">body</a>(request), <a data-lt="func-deleteData">deleteData</a>(request, app)) []<br/>
