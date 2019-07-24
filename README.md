@@ -6,6 +6,10 @@ LDT can be used to design ontology-driven Web application programming interfaces
 
 LDT specification draft is published by the [Declarative Linked Data Apps Community Group](https://www.w3.org/community/declarative-apps/) and hosted on https://github.com/AtomGraph/Linked-Data-Templates/
 
+## Architecture
+
+![LDT architecture](https://atomgraph.github.io/Linked-Data-Templates/images/components.svg "LDT architecture")
+
 ## Example
 
 This is an example of an LDT ontology with templates and queries:
