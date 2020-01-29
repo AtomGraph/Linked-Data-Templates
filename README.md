@@ -4,7 +4,7 @@ Linked Data Templates (LDT) is a uniform protocol for read-write Linked Data. Th
 
 LDT can be used to design ontology-driven Web application programming interfaces (APIs). It provides facilities to define interactions with application resources declaratively using SPARQL commands. It also provides a standard method to evaluate requests into responses over application ontology and dataset.
 
-LDT specification draft is published by the [Declarative Linked Data Apps Community Group](https://www.w3.org/community/declarative-apps/) and hosted on https://github.com/AtomGraph/Linked-Data-Templates/
+**LDT specification draft is published by the [Declarative Linked Data Apps Community Group](https://www.w3.org/community/declarative-apps/) and hosted on https://github.com/AtomGraph/Linked-Data-Templates/**
 
 ## Architecture
 
